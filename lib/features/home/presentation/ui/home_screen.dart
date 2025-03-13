@@ -4,7 +4,20 @@ import 'package:ani4h_app/features/home/presentation/ui/tabs/main_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final selectedTabIndexProvider = StateProvider<int>((ref) => 0);
+// TabStateNotifier for managing tab state more flexibly
+class TabStateNotifier extends StateNotifier<int> {
+  TabStateNotifier() : super(0);
+
+  void selectTab(int index) {
+    state = index;
+  }
+}
+
+// Define the provider
+final tabStateProvider = StateNotifierProvider<TabStateNotifier, int>((ref) {
+  return TabStateNotifier();
+});
+
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -19,14 +32,14 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: IndexedStack(
-        index: ref.watch(selectedTabIndexProvider),
+        index: ref.watch(tabStateProvider),
         children: tabs,
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.deepOrange,
-        currentIndex: ref.watch(selectedTabIndexProvider),
+        currentIndex: ref.watch(tabStateProvider),
         onTap: (index) {
-          ref.read(selectedTabIndexProvider.notifier).state = index;
+          ref.read(tabStateProvider.notifier).selectTab(index);
         },
         items: const [
           BottomNavigationBarItem(
