@@ -1,3 +1,4 @@
 const String loginRoute = "/login";
-const String homeRoute = "/home";
+const String mainRoute = "/main";
 const String signupRoute = "/signup";
+const String movieDetailRoute = "/movie-detail";

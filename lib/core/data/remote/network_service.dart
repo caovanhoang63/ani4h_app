@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final networkServiceProvider = Provider<Dio>((ref) {
   final options = BaseOptions(
-    baseUrl: "Hehe",
+    baseUrl: "https://api.ani4h.site",
     connectTimeout: const Duration(seconds: 60),
     receiveTimeout: const Duration(seconds: 60),
     sendTimeout: const Duration(seconds: 60),
@@ -13,10 +13,12 @@ final networkServiceProvider = Provider<Dio>((ref) {
 
   final dio = Dio(options);
   final networkServiceInterceptor =
-  ref.watch(networkServiceInterceptorProvider);
+  ref.watch(networkServiceInterceptorProvider(dio));
 
   dio.interceptors.addAll([
-    HttpFormatter(),
+    HttpFormatter(
+        loggingFilter: (request, response, error) => true,
+    ),
     networkServiceInterceptor,
   ]);
   return dio;

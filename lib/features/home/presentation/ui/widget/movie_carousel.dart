@@ -1,4 +1,4 @@
-import 'package:ani4h_app/features/home/presentation/widget/movie_card.dart';
+import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // Correct import for CarouselSlider v5.0.0
 import 'package:flutter_riverpod/flutter_riverpod.dart';
