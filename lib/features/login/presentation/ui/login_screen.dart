@@ -1,6 +1,4 @@
-import 'package:ani4h_app/core/route/go_router_provider.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
