@@ -1,4 +1,5 @@
 import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/favorite/presentation/ui/favorite_screen.dart';
 import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
 import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
@@ -28,6 +29,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: movieDetailRoute,
         name: movieDetailRoute,
         builder: (context, state) => const MovieDetailScreen()
+    ),
+    GoRoute(
+        path: favoriteRoute,
+        name: favoriteRoute,
+        builder: (context, state) => const FavoriteScreen()
     )
   ]);
 });

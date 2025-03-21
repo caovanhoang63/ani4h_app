@@ -24,7 +24,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           children: [
             ElevatedButton(
               onPressed: () {
-                context.push(movieDetailRoute);
+                context.push(favoriteRoute);
               },
               child: Text('Go to Movie Detail')
             )
