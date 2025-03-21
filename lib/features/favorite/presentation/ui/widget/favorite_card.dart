@@ -19,7 +19,6 @@ class FavoriteItem {
 
 class FavoriteCard extends ConsumerWidget {
   final FavoriteItem item;
-
   const FavoriteCard({super.key, required this.item});
 
   @override
@@ -67,7 +66,7 @@ class FavoriteCard extends ConsumerWidget {
           //Space
           const SizedBox(width: 8),
 
-          //Name & Nation
+          //Name & Nation & tags
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
