@@ -198,7 +198,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        toolbarHeight: 76,
+        toolbarHeight: 76
       ),
       body: Container(
         color: Color(0xFF121212),

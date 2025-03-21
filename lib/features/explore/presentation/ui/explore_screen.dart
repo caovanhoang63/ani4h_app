@@ -34,6 +34,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 },
                 child: Text('Go to History')
             ),
+            ElevatedButton(
+                onPressed: () {
+                  context.push(searchRoute);
+                },
+                child: Text('Go to Search')
+            ),
           ],
         ),
       ),
