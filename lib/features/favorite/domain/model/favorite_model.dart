@@ -6,9 +6,9 @@ part 'favorite_model.freezed.dart';
 sealed class FavoriteModel with _$FavoriteModel {
   const factory FavoriteModel({
     required String id,
-    required String userId,
-    required String movieId,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    required String name,
+    required String national,
+    required String imageUrl,
+    required List<String> tags,
   }) = _FavoriteModel;
 }

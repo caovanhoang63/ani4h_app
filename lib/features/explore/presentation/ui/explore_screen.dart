@@ -118,10 +118,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   final List<String> categories = ["Hot nhất", "Mới nhất", "Đánh giá"];
   final List<String> genres = ["Tất cả", "Phim truyền hình", "Anime", "Phim điện ảnh", "Phim hoạt hình", "Phim lẻ"];
   final List<String> years = ["Tất cả", "2024", "2023", "2022", "2021"];
+  final List<String> types = ["Tất cả", "Vip", "Miễn phi"];
 
   int selectedCategory = 0;
   int selectedGenre = 0;
   int selectedYear = 0;
+  int selectedType = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -250,6 +252,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 TagSelector(tags: genres, selecetedIndex: selectedGenre, onTagSelected: (index) {
                   setState(() {
                     selectedGenre = index;
+                  });
+                }),
+                // Type
+                TagSelector(tags: types, selecetedIndex: selectedType, onTagSelected: (index) {
+                  setState(() {
+                    selectedType = index;
                   });
                 }),
                 // Year
