@@ -227,7 +227,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
     ),
   ];
-  final String searchQuery = '1';
+  final String searchQuery = '';
 
 
   @override
@@ -327,18 +327,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       ),
         
                       Flexible(
-                        child: Container(
-                          color: Color(0xFF121212),
-                          child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            itemCount: topSearchItems.length,
-                            itemBuilder: (context, index) {
-                              final item = topSearchItems[index];
-                              return TopSearchCard(item: item);
-                            },
-                          ),
-                          ),
+                        child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          itemCount: topSearchItems.length,
+                          itemBuilder: (context, index) {
+                            final item = topSearchItems[index];
+                            return TopSearchCard(item: item);
+                          },
+                        ),
                         ),
                       ),
                     ],

@@ -110,8 +110,8 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         ),
       ),
 
-      body: Container(
-        color: Color(0xFF121212),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
           itemCount: historyItems.length,
           itemBuilder: (context, index){

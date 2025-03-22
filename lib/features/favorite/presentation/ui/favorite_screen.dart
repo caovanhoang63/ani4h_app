@@ -200,17 +200,14 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
         ),
         toolbarHeight: 76
       ),
-      body: Container(
-        color: Color(0xFF121212),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            itemCount: favoriteItems.length,
-            itemBuilder: (context, index) {
-              final item = favoriteItems[index];
-              return FavoriteCard(item: item);
-            },
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: favoriteItems.length,
+          itemBuilder: (context, index) {
+            final item = favoriteItems[index];
+            return FavoriteCard(item: item);
+          },
         ),
       )
     );
