@@ -6,9 +6,9 @@ sealed class SearchResultModel with _$SearchResultModel {
   const factory SearchResultModel({
     required String id,
     required String name,
-    required String nation,
+    required String national,
     required String imageUrl,
-    required String tags,
+    required List<String> tags,
     required String description,
   }) = _SearchResultModel;
 }

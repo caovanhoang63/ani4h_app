@@ -3,7 +3,7 @@ import 'package:ani4h_app/features/history/application/ihistory_service.dart';
 import 'package:ani4h_app/features/history/data/dto/history_response/history_response.dart';
 import 'package:ani4h_app/features/history/data/repository/history_repository.dart';
 import 'package:ani4h_app/features/history/data/repository/ihistory_repository.dart';
-import 'package:ani4h_app/features/history/domain/mapper/history_mapper.dart';
+import 'package:ani4h_app/features/history/domain/mapper/ihistory_model_mapper.dart';
 import 'package:ani4h_app/features/history/domain/model/history_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -13,7 +13,7 @@ final historyServiceProvider = Provider<IHistoryService>((ref) {
   return HistoryService(historyRepository);
 });
 
-final class HistoryService implements IHistoryService, IHistoryMapper {
+final class HistoryService implements IHistoryService, IHistoryModelMapper {
   final IHistoryRepository _historyRepository;
 
   HistoryService(this._historyRepository);

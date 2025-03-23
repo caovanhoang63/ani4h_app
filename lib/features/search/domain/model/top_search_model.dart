@@ -7,8 +7,8 @@ sealed class TopSearchModel with _$TopSearchModel {
   const factory TopSearchModel({
     required String id,
     required String name,
-    required String nation,
+    required String national,
     required String imageUrl,
-    required String tags,
+    required List<String> tags,
   }) = _TopSearchModel;
 }
