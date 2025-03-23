@@ -227,7 +227,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
     ),
   ];
-  final String searchQuery = '';
+  String searchQuery = '';
 
 
   @override
@@ -236,127 +236,132 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Search bar
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 16),
-                        padding: const EdgeInsets.only(right: 16),
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF121212),
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Icon(
-                                Icons.search,
-                                color: Colors.grey,
-                                size: 30,
-                              ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Search bar
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 16),
+                      padding: const EdgeInsets.only(right: 16),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF121212),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.grey,
+                              size: 30,
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: TextField(
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    searchQuery = value;
+                                  });
+                                },
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Tìm kiếm',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey,
                                     fontSize: 18,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Tìm kiếm',
-                                    hintStyle: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 18,
-                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Button Text (Cancel)
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'Hủy',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Search result or Top search
+            Expanded(
+              child: searchQuery.isEmpty
+                ?
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left:12),
+                      child: Text(
+                        'Tìm kiếm hàng đầu',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
 
-                    // Button Text (Cancel)
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'Hủy',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 18,
-                        ),
+                    Flexible(
+                      child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                        itemCount: topSearchItems.length,
+                        itemBuilder: (context, index) {
+                          final item = topSearchItems[index];
+                          return TopSearchCard(item: item);
+                        },
+                      ),
                       ),
                     ),
                   ],
-                ),
-              ),
-        
-              // Search result or Top search
-              Expanded(
-                child: searchQuery.isEmpty
-                  ?
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(left:12),
-                        child: Text(
-                          'Tìm kiếm hàng đầu',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-        
-                      Flexible(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                          itemCount: topSearchItems.length,
-                          itemBuilder: (context, index) {
-                            final item = topSearchItems[index];
-                            return TopSearchCard(item: item);
-                          },
-                        ),
-                        ),
-                      ),
-                    ],
-                  )
-        
-                  :
-                  Container(
-                    color: Color(0xFF121212),
-                    child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                      itemCount: searchResultItems.length,
-                      itemBuilder: (context, index) {
-                        final item = searchResultItems[index];
-                        return SearchResultCard(item: item);
-                      },
-                    ),
-                  ),
                 )
-              ),
-            ]
+
+                :
+                Container(
+                  color: Color(0xFF121212),
+                  child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: searchResultItems.length,
+                    itemBuilder: (context, index) {
+                      final item = searchResultItems[index];
+                      return SearchResultCard(item: item);
+                    },
+                  ),
+                ),
+              )
+            ),
+          ]
         ),
       ),
     );

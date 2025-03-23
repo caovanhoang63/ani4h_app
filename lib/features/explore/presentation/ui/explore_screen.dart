@@ -168,74 +168,54 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             ),
 
             //Debug area
-          //   Row(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          //           minimumSize: const Size(0, 0),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(12),
-          //           ),
-          //         ),
-          //         onPressed: () {
-          //           context.push(favoriteRoute);
-          //         },
-          //         child: Text(
-          //             'Favorite',
-          //             style: TextStyle(
-          //                 color: Colors.white,
-          //                 fontWeight: FontWeight.bold
-          //             )
-          //         )
-          //     ),
-          //
-          //     const SizedBox(width: 8),
-          //
-          //     ElevatedButton(
-          //         style: ElevatedButton.styleFrom(
-          //           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          //           minimumSize: const Size(0, 0),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(12),
-          //           ),
-          //         ),
-          //         onPressed: () {
-          //           context.push(historyRoute);
-          //         },
-          //         child: Text(
-          //             'History',
-          //             style: TextStyle(
-          //                 color: Colors.white,
-          //                 fontWeight: FontWeight.bold
-          //             )
-          //         )
-          //     ),
-          //
-          //     const SizedBox(width: 8),
-          //
-          //     ElevatedButton(
-          //       style: ElevatedButton.styleFrom(
-          //         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-          //         minimumSize: const Size(0, 0),
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //       ),
-          //       onPressed: () {
-          //         context.push(searchRoute);
-          //       },
-          //       child: Text(
-          //           'Search',
-          //           style: TextStyle(
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.bold
-          //           )
-          //       )
-          //     ),
-          //   ],
-          // ),
+            Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(width: 16),
+
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    minimumSize: const Size(0, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    context.push(favoriteRoute);
+                  },
+                  child: Text(
+                      'Favorite',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                      )
+                  )
+              ),
+
+              const SizedBox(width: 8),
+
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    minimumSize: const Size(0, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: () {
+                    context.push(historyRoute);
+                  },
+                  child: Text(
+                      'History',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                      )
+                  )
+              ),
+            ],
+          ),
 
             // List of filter
 
