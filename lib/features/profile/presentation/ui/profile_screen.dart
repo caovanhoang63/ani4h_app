@@ -1,5 +1,7 @@
+import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -47,62 +49,77 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
         ],
       ),
+
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.fromLTRB(16,20,16,20),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Color.fromRGBO(255, 255, 255, 0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              spacing: 12,
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey[700],
-                  child: Text(
-                    user[0],
-                    style: const TextStyle(fontSize: 24, color: Colors.white),
+          GestureDetector(
+            onTap: () {
+              context.push(loginRoute);
+            },
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(16,20,16,20),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                spacing: 12,
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey[700],
+                    child: Text(
+                      user[0],
+                      style: const TextStyle(fontSize: 24, color: Colors.white),
+                    ),
                   ),
-                ),
-                Text(
-                  user,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ],
+                  Text(
+                    user,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ),
 
           Expanded(
             child: ListView(
-              children: const [
-                AccountOption(title: 'Lịch sử'),
-                AccountOption(title: 'Yêu thích'),
-                AccountOption(title: 'Trợ giúp và phản hồi'),
-                AccountOption(title: 'Cài đặt'),
+              children: [
+              ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
+                title: const Text("Lịch sử", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                onTap: () {
+                },
+              ),
+                ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
+                title: const Text("Yêu thích", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                onTap: () {
+                },
+              ),
+                ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
+                title: const Text("Trợ giúp và phản hồi", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                onTap: () {
+                },
+              ),
+                ListTile(
+                contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
+                title: const Text("Cài đặt", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                onTap: () {
+                  context.pushNamed(settingRoute);
+                },
+              )
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class AccountOption extends StatelessWidget {
-  final String title;
-
-  const AccountOption({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.fromLTRB(16,0,16,0),
-      title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
-      onTap: () {},
     );
   }
 }
