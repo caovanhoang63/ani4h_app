@@ -5,5 +5,5 @@ import 'package:multiple_result/multiple_result.dart';
 abstract interface class IFavoriteService {
   Future<Result<List<FavoriteModel>, Failure>> getFavorites(int page, int pageSize);
   Future<Result<bool, Failure>> addFavorite(int id);
-  Future<Result<bool, Failure>> removeFavorite(int id);
+  Future<Result<bool, Failure>> deleteFavorite(int id);
 }

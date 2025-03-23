@@ -52,7 +52,7 @@ class FavoriteController extends AutoDisposeNotifier<FavoriteState> {
         hasError: false,
       );
 
-      final result = await ref.read(favoriteServiceProvider).removeFavorite(id);
+      final result = await ref.read(favoriteServiceProvider).deleteFavorite(id);
 
       result.when(
         (success) {

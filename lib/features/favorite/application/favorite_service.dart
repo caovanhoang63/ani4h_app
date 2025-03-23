@@ -58,7 +58,7 @@ final class FavoriteService implements IFavoriteService, IFavoriteModelMapper {
   }
 
   @override
-  Future<Result<bool, Failure>> removeFavorite(int id) async {
+  Future<Result<bool, Failure>> deleteFavorite(int id) async {
     try {
       await _favoriteRepository.deleteFavorite(id);
       return const Result.success(true);

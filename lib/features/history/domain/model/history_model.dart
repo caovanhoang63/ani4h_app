@@ -6,7 +6,9 @@ part 'history_model.freezed.dart';
 sealed class HistoryModel with _$HistoryModel {
   const factory HistoryModel({
     required String id,
-    required String userId,
-    required String movieId,
+    required String name,
+    required String national,
+    required String imageUrl,
+    required List<String> tags,
   }) = _HistoryModel;
 }
