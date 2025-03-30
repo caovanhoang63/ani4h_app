@@ -1,32 +1,16 @@
 
+import 'package:ani4h_app/features/search/domain/model/search_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchResultItem {
-  final String id;
-  final String name;
-  final String nation;
-  final String imageUrl;
-  final List<String> tags;
-  final String description;
-
-  SearchResultItem({
-    required this.id,
-    required this.name,
-    required this.nation,
-    required this.imageUrl,
-    required this.tags,
-    required this.description,
-  });
-}
 
 class SearchResultCard extends ConsumerWidget {
-  final SearchResultItem item;
+  final SearchResultModel item;
   const SearchResultCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context, WidgetRef ref){
-    final cardHeight = 180.0;
+    final cardHeight = 160.0;
     final widthScreen = MediaQuery.of(context).size.width;
 
     return Container(
@@ -44,7 +28,7 @@ class SearchResultCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
               item.imageUrl,
-              width: cardHeight*2/3,
+              width: cardHeight*3/4,
               height: cardHeight,
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
@@ -59,6 +43,7 @@ class SearchResultCard extends ConsumerWidget {
                 return Container(
                   color: Colors.grey[300],
                   height: cardHeight,
+                  width: cardHeight*3/4,
                   child: const Center(
                     child: Icon(Icons.broken_image, color: Colors.white, size: 50),
                   ),
@@ -75,23 +60,20 @@ class SearchResultCard extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.name,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                item.nation,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
+              SizedBox(
+                width: widthScreen - cardHeight*3/4 - 40,
+                child: Text(
+                  item.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               Row(
-                children: item.tags.map((tag) {
+                children: item.genres.take(3).map((genre) {
                   return Container(
                     margin: const EdgeInsets.only(right: 8, top: 4),
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -100,7 +82,7 @@ class SearchResultCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      tag,
+                      genre,
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,
@@ -113,9 +95,9 @@ class SearchResultCard extends ConsumerWidget {
               const SizedBox(height: 2),
               //Description
               SizedBox(
-                width: widthScreen - cardHeight*2/3 - 40,
+                width: widthScreen - cardHeight*3/4 - 40,
                 child: Text(
-                  item.description,
+                  item.synopsis,
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(

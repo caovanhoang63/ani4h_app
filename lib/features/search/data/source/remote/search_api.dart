@@ -18,9 +18,9 @@ final searchApiProvider = Provider<SearchApi>((ref) {
 abstract class SearchApi {
   factory SearchApi(Dio dio) => _SearchApi(dio);
 
-  @GET(searchEndPoint)
+  @GET("$searchEndPoint/suggest")
   Future<SearchResultResponse> search(
-      @Query("query") String query,
+      @Query("keyword") String query,
       @Query("page") int page,
       @Query("pageSize") int pageSize
   );

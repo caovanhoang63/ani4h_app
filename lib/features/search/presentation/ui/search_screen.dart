@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:ani4h_app/features/search/presentation/controller/search_controller.dart';
 import 'package:ani4h_app/features/search/presentation/ui/widget/search_result_card.dart';
 import 'package:ani4h_app/features/search/presentation/ui/widget/top_search_card.dart';
 import 'package:flutter/material.dart';
@@ -97,138 +101,24 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       tags: ['Action', 'Adventure', 'Fantasy'],
     ),
   ];
-  final List<SearchResultItem> searchResultItems = [
-    SearchResultItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-      description: 'Naruto là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Kishimoto Masashi. Bộ truyện kể về câu chuyện của Naruto Uzumaki, một ninja thiếu niên tìm kiếm sự công nhận từ mọi người và ước mơ trở thành Hokage, người đứng đầu làng Lá.',
-    ),
-    SearchResultItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'One Piece là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Oda Eiichiro. Bộ truyện kể về cuộc hành trình của Monkey D. Luffy và nhóm hải tặc Mũ Rơm của anh ta trong việc tìm kiếm kho báu One Piece để trở thành Vua Hải Tặc.',
-    ),
-    SearchResultItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-      description: 'Attack on Titan là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Isayama Hajime. Bộ truyện kể về cuộc chiến giữa con người và người khổng lồ khát thịt, cũng như bí mật đằng sau thế giới mà họ sống.',
-    ),
-    SearchResultItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
-    ),
-    SearchResultItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-      description: 'Naruto là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Kishimoto Masashi. Bộ truyện kể về câu chuyện của Naruto Uzumaki, một ninja thiếu niên tìm kiếm sự công nhận từ mọi người và ước mơ trở thành Hokage, người đứng đầu làng Lá.',
-    ),
-    SearchResultItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'One Piece là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Oda Eiichiro. Bộ truyện kể về cuộc hành trình của Monkey D. Luffy và nhóm hải tặc Mũ Rơm của anh ta trong việc tìm kiếm kho báu One Piece để trở thành Vua Hải Tặc.',
-    ),
-    SearchResultItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-      description: 'Attack on Titan là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Isayama Hajime. Bộ truyện kể về cuộc chiến giữa con người và người khổng lồ khát thịt, cũng như bí mật đằng sau thế giới mà họ sống.',
-    ),
-    SearchResultItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
-    ),
-    SearchResultItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-      description: 'Naruto là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Kishimoto Masashi. Bộ truyện kể về câu chuyện của Naruto Uzumaki, một ninja thiếu niên tìm kiếm sự công nhận từ mọi người và ước mơ trở thành Hokage, người đứng đầu làng Lá.',
-    ),
-    SearchResultItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'One Piece là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Oda Eiichiro. Bộ truyện kể về cuộc hành trình của Monkey D. Luffy và nhóm hải tặc Mũ Rơm của anh ta trong việc tìm kiếm kho báu One Piece để trở thành Vua Hải Tặc.',
-    ),
-    SearchResultItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-      description: 'Attack on Titan là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Isayama Hajime. Bộ truyện kể về cuộc chiến giữa con người và người khổng lồ khát thịt, cũng như bí mật đằng sau thế giới mà họ sống.',
-    ),
-    SearchResultItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
-    ),
-    SearchResultItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-      description: 'Naruto là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Kishimoto Masashi. Bộ truyện kể về câu chuyện của Naruto Uzumaki, một ninja thiếu niên tìm kiếm sự công nhận từ mọi người và ước mơ trở thành Hokage, người đứng đầu làng Lá.',
-    ),
-    SearchResultItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'One Piece là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Oda Eiichiro. Bộ truyện kể về cuộc hành trình của Monkey D. Luffy và nhóm hải tặc Mũ Rơm của anh ta trong việc tìm kiếm kho báu One Piece để trở thành Vua Hải Tặc.',
-    ),
-    SearchResultItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-      description: 'Attack on Titan là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Isayama Hajime. Bộ truyện kể về cuộc chiến giữa con người và người khổng lồ khát thịt, cũng như bí mật đằng sau thế giới mà họ sống.',
-    ),
-    SearchResultItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-      description: 'My Hero Academia là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Horikoshi Kouhei. Bộ truyện kể về câu chuyện của Izuku Midoriya, một học sinh trung học không có siêu năng lực trong một thế giới nơi hầu hết mọi người có siêu năng lực.',
-    ),
-  ];
   String searchQuery = '';
+  bool isSearched = false;
+  Timer? _debounce;
 
+
+  @override
+  void initState() {
+    super.initState();
+    //ref.read(searchControllerProvider.notifier).search("Piece", 0, 10);
+    log("initState");
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _debounce?.cancel();
+    log("dispose");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,6 +162,18 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                                 onChanged: (value) {
                                   setState(() {
                                     searchQuery = value;
+                                  });
+
+                                  if(value.isEmpty) {
+                                    _debounce?.cancel();
+                                    isSearched = false;
+                                    return;
+                                  }
+
+                                  _debounce?.cancel();
+                                  _debounce = Timer(const Duration(milliseconds: 300), () {
+                                    ref.read(searchControllerProvider.notifier).search(searchQuery, 0, 10);
+                                    isSearched = true;
                                   });
                                 },
                                 style: const TextStyle(
@@ -347,19 +249,49 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 )
 
                 :
-                Container(
-                  color: Color(0xFF121212),
-                  child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: searchResultItems.length,
-                    itemBuilder: (context, index) {
-                      final item = searchResultItems[index];
-                      return SearchResultCard(item: item);
-                    },
-                  ),
-                ),
-              )
+                Consumer(
+                  builder: (context, ref, child) {
+                    if (ref.watch(searchControllerProvider).isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    else if (ref.watch(searchControllerProvider).hasError) {
+                      return Center(
+                        child: Text(
+                          "Lỗi: ${ref.watch(searchControllerProvider).errorMessage}",
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 18,
+                          ),
+                        ),
+                      );
+                    }
+                    else if (ref.watch(searchControllerProvider).searchResults.isEmpty && isSearched) {
+                      return Center(
+                        child: Text(
+                          'Không tìm thấy kết quả',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      );
+                    }
+                    else {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          itemCount: ref.watch(searchControllerProvider).searchResults.length,
+                          itemBuilder: (context, index) {
+                            final item = ref.watch(searchControllerProvider).searchResults[index];
+                            return SearchResultCard(item: item);
+                          },
+                        ),
+                      );
+                    }
+                  }
+                )
             ),
           ]
         ),

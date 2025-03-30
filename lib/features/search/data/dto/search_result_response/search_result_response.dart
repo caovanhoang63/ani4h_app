@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'search_result_response.freezed.dart';
@@ -17,11 +18,10 @@ sealed class SearchResultResponse with _$SearchResultResponse {
 sealed class SearchResult with _$SearchResult {
   const factory SearchResult({
     required String id,
-    required String name,
-    required String national,
-    required String imageUrl,
-    required String description,
-    required List<String> tags,
+    required String title,
+    required String synopsis,
+    required List<Image> images,
+    required List<String> genres,
   }) = _SearchResult;
 
   factory SearchResult.fromJson(Map<String, dynamic> json) =>

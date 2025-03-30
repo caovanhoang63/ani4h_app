@@ -66,11 +66,10 @@ final class SearchService implements ISearchService, ISearchResultModelMapper, I
   List<SearchResultModel> mapToSearchResultModel(SearchResultResponse response) {
     return response.data.map((e) => SearchResultModel(
       id: e.id,
-      name: e.name,
-      description: e.description,
-      imageUrl: e.imageUrl,
-      national: e.national,
-      tags: e.tags,
+      title: e.title,
+      synopsis: e.synopsis,
+      imageUrl: e.images.length > 0 ? e.images[0].url : "",
+      genres: e.genres,
     )).toList();
   }
 
