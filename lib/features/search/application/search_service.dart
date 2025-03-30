@@ -45,9 +45,11 @@ final class SearchService implements ISearchService, ISearchResultModelMapper, I
   @override
   Future<Result<List<TopSearchModel>, Failure>> getTopSearch() async {
     try {
-      final response = await _searchRepository.getTopSearch();
+      //final response = await _searchRepository.getTopSearch();
+      //final models = mapToTopSearchModel(response);
 
-      final models = mapToTopSearchModel(response);
+      final response = await _searchRepository.search("Conan", 0, 10);
+      final models = mapToTopSearchModelTest(response);
 
       return Result.success(models);
     } on Failure catch (e) {
@@ -77,10 +79,20 @@ final class SearchService implements ISearchService, ISearchResultModelMapper, I
   List<TopSearchModel> mapToTopSearchModel(TopSearchResponse response) {
     return response.data.map((e) => TopSearchModel(
       id: e.id,
-      name: e.name,
-      national: e.national,
-      imageUrl: e.imageUrl,
-      tags: e.tags,
+      title: e.title,
+      synopsis: e.synopsis,
+      imageUrl: e.images.length > 0 ? e.images[0].url : "",
+      genres: e.genres,
+    )).toList();
+  }
+
+  List<TopSearchModel> mapToTopSearchModelTest(SearchResultResponse response) {
+    return response.data.map((e) => TopSearchModel(
+      id: e.id,
+      title: e.title,
+      synopsis: e.synopsis,
+      imageUrl: e.images.length > 0 ? e.images[0].url : "",
+      genres: e.genres,
     )).toList();
   }
 }

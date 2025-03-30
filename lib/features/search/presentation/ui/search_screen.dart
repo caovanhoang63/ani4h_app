@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:ani4h_app/common/widget/loading_state_widget.dart';
 import 'package:ani4h_app/features/search/presentation/controller/search_controller.dart';
 import 'package:ani4h_app/features/search/presentation/ui/widget/search_result_card.dart';
 import 'package:ani4h_app/features/search/presentation/ui/widget/top_search_card.dart';
@@ -15,92 +16,6 @@ class SearchScreen extends ConsumerStatefulWidget{
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
-  final List<TopSearchItem> topSearchItems = [
-    TopSearchItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    TopSearchItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    TopSearchItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    TopSearchItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    TopSearchItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    TopSearchItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    TopSearchItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-  ];
   String searchQuery = '';
   bool isSearched = false;
   Timer? _debounce;
@@ -109,7 +24,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    //ref.read(searchControllerProvider.notifier).search("Piece", 0, 10);
+    Future.microtask(() {
+      ref.read(searchControllerProvider.notifier).getTopSearch();
+    });
     log("initState");
   }
 
@@ -122,7 +39,6 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -233,63 +149,58 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       ),
                     ),
 
-                    Flexible(
-                      child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder(
-                        itemCount: topSearchItems.length,
-                        itemBuilder: (context, index) {
-                          final item = topSearchItems[index];
-                          return TopSearchCard(item: item);
-                        },
-                      ),
-                      ),
-                    ),
+                    Consumer(
+                        builder: (context, ref, child) {
+                          final searchController = ref.watch(searchControllerProvider);
+
+                          return
+                            LoadingStateWidget(
+                              isLoading: searchController.isLoading,
+                              hasError: searchController.hasError,
+                              errorMessage: searchController.errorMessage,
+                              dataIsEmpty: searchController.topSearches.isEmpty,
+                              child: Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListView.builder(
+                                    itemCount: ref.watch(searchControllerProvider).topSearches.length,
+                                    itemBuilder: (context, index) {
+                                      final item = ref.watch(searchControllerProvider).topSearches[index];
+                                      return TopSearchCard(item: item);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                        }
+                    )
+
+
                   ],
                 )
 
                 :
                 Consumer(
                   builder: (context, ref, child) {
-                    if (ref.watch(searchControllerProvider).isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    else if (ref.watch(searchControllerProvider).hasError) {
-                      return Center(
-                        child: Text(
-                          "Lỗi: ${ref.watch(searchControllerProvider).errorMessage}",
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                          ),
-                        ),
-                      );
-                    }
-                    else if (ref.watch(searchControllerProvider).searchResults.isEmpty && isSearched) {
-                      return Center(
-                        child: Text(
-                          'Không tìm thấy kết quả',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                      );
-                    }
-                    else {
-                      return Padding(
+                    final searchController = ref.watch(searchControllerProvider);
+
+                    return
+                    LoadingStateWidget(
+                      isLoading: searchController.isLoading,
+                      hasError: searchController.hasError,
+                      errorMessage: searchController.errorMessage,
+                      dataIsEmpty: searchController.searchResults.isEmpty && isSearched,
+                      child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
-                          itemCount: ref.watch(searchControllerProvider).searchResults.length,
+                          itemCount: searchController.searchResults.length,
                           itemBuilder: (context, index) {
-                            final item = ref.watch(searchControllerProvider).searchResults[index];
+                            final item = searchController.searchResults[index];
                             return SearchResultCard(item: item);
                           },
                         ),
-                      );
-                    }
+                      ),
+                    );
                   }
                 )
             ),

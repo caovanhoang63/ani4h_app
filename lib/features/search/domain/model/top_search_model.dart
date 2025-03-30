@@ -6,9 +6,9 @@ part 'top_search_model.freezed.dart';
 sealed class TopSearchModel with _$TopSearchModel {
   const factory TopSearchModel({
     required String id,
-    required String name,
-    required String national,
+    required String title,
+    required String synopsis,
     required String imageUrl,
-    required List<String> tags,
+    required List<String> genres,
   }) = _TopSearchModel;
 }

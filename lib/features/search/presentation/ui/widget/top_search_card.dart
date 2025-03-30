@@ -1,25 +1,10 @@
 
+import 'package:ani4h_app/features/search/domain/model/top_search_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TopSearchItem {
-  final String id;
-  final String name;
-  final String nation;
-  final String imageUrl;
-  final List<String> tags;
-
-  TopSearchItem({
-    required this.id,
-    required this.name,
-    required this.nation,
-    required this.imageUrl,
-    required this.tags,
-  });
-}
-
 class TopSearchCard extends ConsumerWidget {
-  final TopSearchItem item;
+  final TopSearchModel item;
   const TopSearchCard({super.key, required this.item});
 
   @override
@@ -72,22 +57,19 @@ class TopSearchCard extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                item.name,
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                item.nation,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
+              SizedBox(
+                width: MediaQuery.of(context).size.width - cardHeight*1.5 - 16 - 8 - 16,
+                child: Text(
+                  item.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Row(
-                children: item.tags.map((tag) {
+                children: item.genres.take(3).map((genre) {
                   return Container(
                     margin: const EdgeInsets.only(right: 8, top: 4),
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -96,7 +78,7 @@ class TopSearchCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      tag,
+                      genre,
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,

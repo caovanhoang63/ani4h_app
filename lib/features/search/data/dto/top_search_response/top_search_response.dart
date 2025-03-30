@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'top_search_response.freezed.dart';
@@ -17,10 +18,10 @@ abstract class TopSearchResponse with _$TopSearchResponse {
 abstract class TopSearch with _$TopSearch {
   const factory TopSearch({
     required String id,
-    required String name,
-    required String national,
-    required String imageUrl,
-    required List<String> tags,
+    required String title,
+    required String synopsis,
+    required List<Image> images,
+    required List<String> genres,
   }) = _TopSearch;
 
   factory TopSearch.fromJson(Map<String, dynamic> json) =>
