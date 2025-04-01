@@ -54,6 +54,28 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
     }
   }
 
+  // fetch more search result
+  Future<void> fetchMoreSearch(String query, int page, int pageSize) async {
+    try {
+      final result = await ref.read(searchServiceProvider).search(query, page, pageSize);
+
+      result.when(
+        (success) {
+          log("Search Result: $success");
+          state = state.copyWith(
+            searchResults: state.searchResults + success,
+          );
+        },
+        (failure) {
+          log("Failure: $failure");
+        },
+      );
+
+    } catch (e) {
+      log("Error: $e");
+    }
+  }
+
   Future<void> getTopSearch() async {
     try {
       state = state.copyWith(

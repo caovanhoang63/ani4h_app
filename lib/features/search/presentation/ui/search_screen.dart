@@ -16,9 +16,14 @@ class SearchScreen extends ConsumerStatefulWidget{
 }
 
 class _SearchScreenState extends ConsumerState<SearchScreen> {
+  final ScrollController _scrollController = ScrollController();
   String searchQuery = '';
-  bool isSearched = false;
+  bool _isSearched = false;
+  bool _isLoading = false;
   Timer? _debounce;
+  int _page = 0;
+  final int _pageSize = 10;
+
 
 
   @override
@@ -28,13 +33,36 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       ref.read(searchControllerProvider.notifier).getTopSearch();
     });
     log("initState");
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    super.dispose();
-    _debounce?.cancel();
     log("dispose");
+    _debounce?.cancel();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !_isLoading) {
+      log("Load more");
+      _fetchMore();
+    }
+  }
+
+  Future<void> _fetchMore() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    await ref.read(searchControllerProvider.notifier).fetchMoreSearch(searchQuery, _page + 1, _pageSize);
+
+    setState(() {
+      _isLoading = false;
+      _page++;
+    });
   }
 
   @override
@@ -82,14 +110,14 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                                   if(value.isEmpty) {
                                     _debounce?.cancel();
-                                    isSearched = false;
+                                    _isSearched = false;
                                     return;
                                   }
 
                                   _debounce?.cancel();
                                   _debounce = Timer(const Duration(milliseconds: 300), () {
                                     ref.read(searchControllerProvider.notifier).search(searchQuery, 0, 10);
-                                    isSearched = true;
+                                    _isSearched = true;
                                   });
                                 },
                                 style: const TextStyle(
@@ -189,12 +217,19 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       isLoading: searchController.isLoading,
                       hasError: searchController.hasError,
                       errorMessage: searchController.errorMessage,
-                      dataIsEmpty: searchController.searchResults.isEmpty && isSearched,
+                      dataIsEmpty: searchController.searchResults.isEmpty && _isSearched,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
-                          itemCount: searchController.searchResults.length,
+                          controller: _scrollController,
+                          itemCount: searchController.searchResults.length + (_isLoading ? 1 : 0),
                           itemBuilder: (context, index) {
+                            if(index == searchController.searchResults.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+
                             final item = searchController.searchResults[index];
                             return SearchResultCard(item: item);
                           },
