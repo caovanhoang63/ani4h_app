@@ -59,10 +59,13 @@ class SettingScreen extends ConsumerWidget {
               title: Text("Ani4h", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          const ListTile(
-              contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
-              title: Text("Terms of Service", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              trailing: Icon(Icons.arrow_forward_ios)
+          ListTile(
+              contentPadding:  const EdgeInsets.fromLTRB(16,0,16,0),
+              title: const Text("Terms of Service", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: (){
+                context.pushNamed(termsOfServiceRoute);
+              },
           ),
         ],
       ),

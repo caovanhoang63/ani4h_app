@@ -3,6 +3,7 @@ import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
+import 'package:ani4h_app/features/profile/presentation/ui/terms_of_service_screen.dart';
 import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
               path: accountRoute,
               name: accountRoute,
               builder: (context,state) => const AccountScreen(),
-            )
+            ),
+            GoRoute(
+              path: termsOfServiceRoute,
+              name: termsOfServiceRoute,
+              builder: (context,state) => const TermsOfServiceScreen(),
+            ),
           ]
         ),
       ]
