@@ -1,6 +1,7 @@
 import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
 import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,8 +29,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         GoRoute(
           path: settingRoute,
           name: settingRoute,
-          builder: (context, state) => const SettingScreen()
-        )
+          builder: (context, state) => const SettingScreen(),
+          routes: [
+            GoRoute(
+              path: accountRoute,
+              name: accountRoute,
+              builder: (context,state) => const AccountScreen(),
+            )
+          ]
+        ),
       ]
     ),
     GoRoute(
@@ -37,10 +45,5 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: movieDetailRoute,
         builder: (context, state) => const MovieDetailScreen()
     ),
-    /*GoRoute(
-        path: settingRoute,
-        name: settingRoute,
-        builder: (context, state) => const SettingScreen()
-    )*/
   ]);
 });

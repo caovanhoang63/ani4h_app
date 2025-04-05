@@ -1,3 +1,4 @@
+import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,41 +22,44 @@ class SettingScreen extends ConsumerWidget {
         ),
       ),
       body: ListView(
-        children: const [
+        children: [
           ListTile(
-              contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
-              title: Text("Account", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              trailing: Icon(Icons.arrow_forward_ios)
+              contentPadding:  const EdgeInsets.fromLTRB(16,0,16,0),
+              title: const Text("Account", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap:() {
+                context.pushNamed(accountRoute);
+              },
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Device Management", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Language", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle: Text("English"),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Appearance", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               subtitle: Text("Dark"),
               subtitleTextStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Notifications", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Ani4h", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               trailing: Icon(Icons.arrow_forward_ios)
           ),
-          ListTile(
+          const ListTile(
               contentPadding:  EdgeInsets.fromLTRB(16,0,16,0),
               title: Text("Terms of Service", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               trailing: Icon(Icons.arrow_forward_ios)
