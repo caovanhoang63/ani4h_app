@@ -88,28 +88,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               children: [
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
-                title: const Text("Lịch sử", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                title: const Text("History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 onTap: () {
                 },
               ),
                 ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
-                title: const Text("Yêu thích", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                title: const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 onTap: () {
                 },
               ),
                 ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
-                title: const Text("Trợ giúp và phản hồi", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                title: const Text("Help & Report", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 onTap: () {
                 },
               ),
                 ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
-                title: const Text("Cài đặt", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                title: const Text("Settings", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 onTap: () {
                   context.pushNamed(settingRoute);
