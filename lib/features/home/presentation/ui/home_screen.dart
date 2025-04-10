@@ -148,7 +148,7 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                 child: Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      context.push(movieDetailRoute);
+                      context.pushNamed(movieDetailRoute);
                     },
                     child: Container(
                       height: 40,
