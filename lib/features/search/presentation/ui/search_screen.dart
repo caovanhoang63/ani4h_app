@@ -21,17 +21,13 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   bool _isSearched = false;
   bool _isLoading = false;
   Timer? _debounce;
-  int _page = 0;
-  final int _pageSize = 10;
-
-
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(searchControllerProvider.notifier).getTopSearch();
-    });
+    // Future.microtask(() {
+    //   ref.read(searchControllerProvider.notifier).getTopSearch();
+    // });
     log("initState");
     _scrollController.addListener(_scrollListener);
   }
@@ -57,11 +53,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       _isLoading = true;
     });
 
-    await ref.read(searchControllerProvider.notifier).fetchMoreSearch(searchQuery, _page + 1, _pageSize);
+    await ref.read(searchControllerProvider.notifier).fetchMoreSearch(searchQuery);
 
     setState(() {
       _isLoading = false;
-      _page++;
     });
   }
 
@@ -116,7 +111,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
                                   _debounce?.cancel();
                                   _debounce = Timer(const Duration(milliseconds: 300), () {
-                                    ref.read(searchControllerProvider.notifier).search(searchQuery, 0, 10);
+                                    ref.read(searchControllerProvider.notifier).search(searchQuery);
                                     _isSearched = true;
                                   });
                                 },

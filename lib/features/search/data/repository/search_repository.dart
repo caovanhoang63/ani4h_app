@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
+import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
-import 'package:ani4h_app/features/search/data/dto/top_search_response/top_search_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,25 +20,12 @@ final class SearchRepository with DioExpceptionMapper implements ISearchReposito
   SearchRepository(this._searchApi);
 
   @override
-  Future<SearchResultResponse> search(String query, int page, int pageSize) async {
+  Future<SearchResultResponse> search(SearchRequest request) async {
     try {
-      final response = await _searchApi.search(query, page, pageSize);
-      return response;
-    } on DioException catch (e, s) {
-      throw mapDioExceptionToFailure(e, s);
-    } catch (e, s) {
-      throw Failure(
-        message: "An unexpected error occurred",
-        exception: e as Exception,
-        stackTrace: s,
-      );
-    }
-  }
+      log("Search Response: start");
 
-  @override
-  Future<TopSearchResponse> getTopSearch() async {
-    try {
-      final response = await _searchApi.getTopSearch();
+      final response = await _searchApi.search(request.title?.toString() ?? "");
+      log("Search Response: success");
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);

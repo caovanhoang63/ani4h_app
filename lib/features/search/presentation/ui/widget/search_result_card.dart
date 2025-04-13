@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class SearchResultCard extends ConsumerWidget {
-  final SearchResultModel item;
+  final FilmCardModel item;
   const SearchResultCard({super.key, required this.item});
 
   @override

@@ -17,20 +17,21 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
     log("Reset");
   }
 
-  Future<void> search(String query, int page, int pageSize) async {
+  Future<void> search(String query) async {
     try {
       state = state.copyWith(
         isLoading: true,
         hasError: false,
       );
 
-      final result = await ref.read(searchServiceProvider).search(query, page, pageSize);
+      final result = await ref.read(searchServiceProvider).search(query, state.pageCur);
 
       result.when(
         (success) {
           log("Search Result: $success");
           state = state.copyWith(
-            searchResults: success,
+            searchResults: success.data,
+            pageCur: success.paging,
             isLoading: false,
             hasError: false,
           );
@@ -55,15 +56,16 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
   }
 
   // fetch more search result
-  Future<void> fetchMoreSearch(String query, int page, int pageSize) async {
+  Future<void> fetchMoreSearch(String query) async {
     try {
-      final result = await ref.read(searchServiceProvider).search(query, page, pageSize);
+      final result = await ref.read(searchServiceProvider).search(query, state.pageCur);
 
       result.when(
         (success) {
           log("Search Result: $success");
           state = state.copyWith(
-            searchResults: state.searchResults + success,
+            searchResults: state.searchResults + success.data,
+            pageCur: success.paging,
           );
         },
         (failure) {
@@ -73,40 +75,6 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
 
     } catch (e) {
       log("Error: $e");
-    }
-  }
-
-  Future<void> getTopSearch() async {
-    try {
-      state = state.copyWith(
-        isLoading: true,
-        hasError: false,
-      );
-
-      final result = await ref.read(searchServiceProvider).getTopSearch();
-
-      result.when(
-        (success) {
-          state = state.copyWith(
-            topSearches: success,
-            isLoading: false,
-            hasError: false,
-          );
-        },
-        (failure) {
-          state = state.copyWith(
-            isLoading: false,
-            hasError: true,
-            errorMessage: failure.message,
-          );
-        },
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        hasError: true,
-        errorMessage: e.toString(),
-      );
     }
   }
 }

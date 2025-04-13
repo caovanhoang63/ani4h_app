@@ -7,11 +7,22 @@ part 'search_result_response.g.dart';
 @freezed
 sealed class SearchResultResponse with _$SearchResultResponse {
   const factory SearchResultResponse({
-    required List<SearchResult> data,
+    required SearchResponse data,
   }) = _SearchResultResponse;
 
   factory SearchResultResponse.fromJson(Map<String, dynamic> json) =>
       _$SearchResultResponseFromJson(json);
+}
+
+@freezed
+sealed class SearchResponse with _$SearchResponse {
+  const factory SearchResponse({
+    required List<SearchResult> data,
+    required PagingSearch paging,
+  }) = _SearchResponse;
+
+  factory SearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchResponseFromJson(json);
 }
 
 @freezed
@@ -26,4 +37,15 @@ sealed class SearchResult with _$SearchResult {
 
   factory SearchResult.fromJson(Map<String, dynamic> json) =>
       _$SearchResultFromJson(json);
+}
+
+@freezed
+sealed class PagingSearch with _$PagingSearch {
+  const factory PagingSearch({
+    required String uid,
+    required double score,
+  }) = _PagingSearch;
+
+  factory PagingSearch.fromJson(Map<String, dynamic> json) =>
+      _$PagingSearchFromJson(json);
 }

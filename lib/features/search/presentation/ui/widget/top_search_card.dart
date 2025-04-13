@@ -1,10 +1,10 @@
 
-import 'package:ani4h_app/features/search/domain/model/top_search_model.dart';
+import 'package:ani4h_app/features/search/domain/model/search_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TopSearchCard extends ConsumerWidget {
-  final TopSearchModel item;
+  final FilmCardModel item;
   const TopSearchCard({super.key, required this.item});
 
   @override

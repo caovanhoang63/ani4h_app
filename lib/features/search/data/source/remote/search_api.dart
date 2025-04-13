@@ -1,7 +1,6 @@
 import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
-import 'package:ani4h_app/features/search/data/dto/top_search_response/top_search_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/error_logger.dart';
@@ -18,13 +17,8 @@ final searchApiProvider = Provider<SearchApi>((ref) {
 abstract class SearchApi {
   factory SearchApi(Dio dio) => _SearchApi(dio);
 
-  @GET("$searchEndPoint/suggest")
+  @GET(searchEndPoint)
   Future<SearchResultResponse> search(
-      @Query("keyword") String query,
-      @Query("page") int page,
-      @Query("pageSize") int pageSize
+      @Query('title') String query
   );
-
-  @GET("$searchEndPoint/top-search")
-  Future<TopSearchResponse> getTopSearch();
 }
