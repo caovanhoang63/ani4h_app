@@ -24,7 +24,7 @@ final class SearchRepository with DioExpceptionMapper implements ISearchReposito
     try {
       log("Search Response: start");
 
-      final response = await _searchApi.search(request.title?.toString() ?? "");
+      final response = await _searchApi.search(request.toJson());
       log("Search Response: success");
       return response;
     } on DioException catch (e, s) {

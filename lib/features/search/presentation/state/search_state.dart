@@ -9,7 +9,7 @@ sealed class SearchState with _$SearchState{
   const factory SearchState({
     @Default([]) List<FilmCardModel> searchResults,
     @Default([]) List<FilmCardModel> topSearches,
-    @Default(PagingSearch(uid: "", score: 0)) PagingSearch pageCur,
+    @Default(PagingSearch(uid: "", score: 0, total: 0)) PagingSearch pageCur,
     @Default(false) bool isLoading,
     @Default(false) bool hasError,
     @Default('') String errorMessage,

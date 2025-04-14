@@ -19,6 +19,6 @@ abstract class SearchApi {
 
   @GET(searchEndPoint)
   Future<SearchResultResponse> search(
-      @Query('title') String query
+      @Queries() Map<String, dynamic> queries
   );
 }

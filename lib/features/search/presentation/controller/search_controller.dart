@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ani4h_app/features/search/application/search_service.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/presentation/state/search_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,6 +58,11 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
 
   // fetch more search result
   Future<void> fetchMoreSearch(String query) async {
+    if(state.searchResults.length == state.pageCur.total) {
+      log("No more data");
+      return;
+    }
+
     try {
       final result = await ref.read(searchServiceProvider).search(query, state.pageCur);
 
@@ -76,5 +82,11 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
     } catch (e) {
       log("Error: $e");
     }
+  }
+
+  void resetPageCur() {
+    state = state.copyWith(
+      pageCur: PagingSearch(uid: "", score: 0, total: 0),
+    );
   }
 }

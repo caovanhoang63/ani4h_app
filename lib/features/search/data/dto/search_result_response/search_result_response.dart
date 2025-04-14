@@ -42,8 +42,9 @@ sealed class SearchResult with _$SearchResult {
 @freezed
 sealed class PagingSearch with _$PagingSearch {
   const factory PagingSearch({
-    required String uid,
+    String? uid,
     required double score,
+    required int total,
   }) = _PagingSearch;
 
   factory PagingSearch.fromJson(Map<String, dynamic> json) =>

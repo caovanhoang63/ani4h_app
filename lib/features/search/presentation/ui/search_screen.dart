@@ -103,6 +103,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                                     searchQuery = value;
                                   });
 
+                                  // reset PageCur
+                                  ref.read(searchControllerProvider.notifier).resetPageCur();
+
                                   if(value.isEmpty) {
                                     _debounce?.cancel();
                                     _isSearched = false;
