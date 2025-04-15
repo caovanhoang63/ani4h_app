@@ -1,10 +1,11 @@
+import 'package:ani4h_app/core/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/features/movie_detail/domain/model/movie_model.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_player.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-final introVisibilityProvider = StateProvider<bool>((ref) => false);
+import '../controller/movie_detail_controller.dart';
 
 class MovieDetailScreen extends ConsumerStatefulWidget {
   const MovieDetailScreen({super.key});
@@ -15,17 +16,25 @@ class MovieDetailScreen extends ConsumerStatefulWidget {
 
 class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool isIntroVisible = ref.watch(introVisibilityProvider.state).state;
+    MovieModel? currentMovie = ref.watch(currentMovieControllerProvider.select((state) => state.movieDetail));
+
+    bool isIntroVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isIntroPanelOn));
+    bool isPlaylistVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isPlaylistPanelOn));
+    bool isCommentVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isCommentPanelOn));
 
     return Scaffold(
       body: Stack(
         children: [
+          currentMovie == null
+              ?
+          const Center(child: CircularProgressIndicator())
+              :
           Column(
             children: [
               const SizedBox(height: 50),
@@ -36,22 +45,27 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            ref.read(introVisibilityProvider.notifier).state = !isIntroVisible;
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Movie Title',
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.65,
+                              child: Text(
+                                currentMovie.title,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
+                                overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                maxLines: 1,  // Ensures the text stays on a single line
                               ),
-                              Row(
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                ref.read(movieDetailControllerProvider.notifier).openIntroPanel();
+                              },
+                              child: Row(
                                 children: [
                                   Text(
                                     'Introduce',
@@ -60,24 +74,36 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   const SizedBox(width: 8),
                                   Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
                                 ]
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
                         const SizedBox(height: 8),
-                        Row(
-                          spacing: 8,
-                          children: [
-                            MovieTag(tag: "Action"),
-                            MovieTag(tag: "Adventure"),
-                            MovieTag(tag: "Fantasy"),
-                            MovieTag(tag: "Drama"),
-                          ],
+                        (currentMovie.genres == null || currentMovie.genres!.isEmpty)
+                            ? const SizedBox(height: 8)
+                            : SizedBox(
+                          height: 30,
+                          child: ListView.separated(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: currentMovie.genres?.length ?? 0, // Ensure itemCount is safe
+                            itemBuilder: (context, index) {
+                              // Safely access the genre data and ensure we don't use movie data mistakenly
+                              final genre = currentMovie.genres![index]; // Assuming genres is not null here
+
+                              return MovieTag(tag: genre);
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(width: 8);  // Add 8px spacing between items
+                            },
+                          )
                         ),
                         const SizedBox(height: 20),
                         // Playlist row
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            ref.read(movieDetailControllerProvider.notifier).openPlaylistPanel();
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -122,7 +148,9 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                         const SizedBox(height: 20),
                         // Comment Row
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            ref.read(movieDetailControllerProvider.notifier).openCommentPanel();
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -159,7 +187,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                       ],
                     )
                   ),
-                  // The introduction component that slides in from top to bottom
+                  // Introduction Panel
                   AnimatedPositioned(
                     duration: Duration(milliseconds: 300),
                     top: isIntroVisible ? 0 : -(MediaQuery.of(context).size.height - (170)), // This controls the slide-in
@@ -167,40 +195,151 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                     right: 0,
                     child: Container(
                       color: Colors.black,
-                      height: MediaQuery.of(context).size.height - 50 - 100, // Full height minus movie player
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 50 - 100,
                       padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Movie Title',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  ref.read(introVisibilityProvider.notifier).state = !isIntroVisible;
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Introduce',
-                                      style: TextStyle(color: Colors.white70),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.65,
+                                  child: Text(
+                                    currentMovie.title,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    const SizedBox(width: 6),
-                                    Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
-                                  ]
+                                    overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                    maxLines: 1,  // Ensures the text stays on a single line
+                                  ),
                                 ),
+                                GestureDetector(
+                                  onTap: () {
+                                    ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
+                                  },
+                                  child: Row(
+                                      children: [
+                                        Text(
+                                          'Introduce',
+                                          style: TextStyle(color: Colors.white70),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
+                                      ]
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            (currentMovie.genres == null || currentMovie.genres!.isEmpty)
+                                ? const SizedBox(height: 8)
+                                : SizedBox(
+                                height: 30,
+                                child: ListView.separated(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: currentMovie.genres?.length ?? 0, // Ensure itemCount is safe
+                                  itemBuilder: (context, index) {
+                                    // Safely access the genre data and ensure we don't use movie data mistakenly
+                                    final genre = currentMovie.genres![index]; // Assuming genres is not null here
+
+                                    return MovieTag(tag: genre);
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(width: 8);  // Add 8px spacing between items
+                                  },
+                                )
+                            ),
+                            const SizedBox(height: 12),
+                            // Synopsis
+                            currentMovie.synopsis != null
+                                ? Text(
+                              currentMovie.synopsis!,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                height: 1.5,
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                              overflow: TextOverflow.visible,
+                            ) : const SizedBox(height: 8),
+                          ],
+                        ),
+                      )
+                    ),
+                  ),
+                  // Playlist Panel
+                  AnimatedPositioned(
+                    duration: Duration(milliseconds: 300),
+                    top: isPlaylistVisible ? 0 : -(MediaQuery.of(context).size.height - (170)), // This controls the slide-in
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.black,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 50 - 100,
+                      padding: EdgeInsets.all(16),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Playlist',
+                                    style: TextStyle(color: Colors.white, fontSize: 18),
+                                  ),
+                                  Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ),
+                  ),
+                  // Comment Panel
+                  AnimatedPositioned(
+                    duration: Duration(milliseconds: 300),
+                    top: isCommentVisible ? 0 : -(MediaQuery.of(context).size.height - (170)),
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.black,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 50 - 100,
+                      padding: EdgeInsets.all(16),
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Comment',
+                                    style: TextStyle(color: Colors.white, fontSize: 18),
+                                  ),
+                                  Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ),
                   ),
                 ],
@@ -214,6 +353,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
               icon: Icon(Icons.arrow_back),
               color: Colors.white,
               onPressed: () {
+                ref.read(currentMovieControllerProvider.notifier).clearCurrentMovie();
                 context.pop();
               },
             ),
@@ -221,10 +361,5 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
         ]
       )
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

@@ -1,7 +1,9 @@
+import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/home/application/ihome_service.dart';
 import 'package:ani4h_app/features/home/data/dto/movies_response/movies_response.dart';
 import 'package:ani4h_app/features/home/domain/mapper/imovie_model_mapper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:multiple_result/multiple_result.dart';
 import '../data/repository/home_repository.dart';
 import '../data/repository/ihome_repository.dart';
 import '../domain/model/movie_model.dart';
@@ -17,15 +19,23 @@ final class HomeService implements IHomeService, IMovieModelMapper {
   HomeService(this._homeRepository);
 
   @override
-  Future<List<MovieModel>> getMovies(int page, int pageSize) async {
+  Future<Result<List<MovieModel>, Failure>> getMovies(int page, int pageSize) async {
     try {
       final response = await _homeRepository.getMovies(page, pageSize);
 
       final models = mapToMovieModel(response);
 
-      return models;
-    } catch (e) {
-      rethrow;
+      return Result.success(models);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: toException(e),
+          stackTrace: s,
+        ),
+      );
     }
   }
 
@@ -33,10 +43,9 @@ final class HomeService implements IHomeService, IMovieModelMapper {
   List<MovieModel> mapToMovieModel(MoviesResponse response) {
     return response.data.map((e) => MovieModel(
       id: e.id,
-      name: e.name,
-      horizontalImage: e.horizontalImage,
-      verticalImage: e.verticalImage,
-      type: e.type,
+      title: e.title,
+      images: e.images,
+      state: e.state,
     )).toList();
   }
 }

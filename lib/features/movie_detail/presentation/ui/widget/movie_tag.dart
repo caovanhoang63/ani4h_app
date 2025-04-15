@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/dto/movie_response/movie_response.dart';
+
 class MovieTag extends ConsumerWidget {
-  final String tag;
+  final Genre tag;
 
   const MovieTag({super.key, required this.tag});
 
@@ -15,7 +17,7 @@ class MovieTag extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        tag,
+        tag.name,
         style: TextStyle(color: Colors.white70, fontSize: 12),
       ),
     );

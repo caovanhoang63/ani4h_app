@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import '../exception/failure.dart';
 
-mixin DioExpceptionMapper {
+mixin DioExceptionMapper {
   Failure mapDioExceptionToFailure(DioException e, StackTrace s) {
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
