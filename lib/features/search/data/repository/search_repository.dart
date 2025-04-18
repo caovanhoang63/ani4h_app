@@ -20,19 +20,18 @@ final class SearchRepository with DioExpceptionMapper implements ISearchReposito
   SearchRepository(this._searchApi);
 
   @override
-  Future<SearchResultResponse> search(SearchRequest request) async {
+  Future<SearchResultResponse> search(SearchRequest request, PagingSearch paging) async {
     try {
       log("Search Response: start");
 
-      final response = await _searchApi.search(request.toJson());
+      final response = await _searchApi.search(request.toJson(), paging.toJson());
       log("Search Response: success");
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);
     } catch (e, s) {
       throw Failure(
-        message: "An unexpected error occurred",
-        exception: e as Exception,
+        message: e.toString(),
         stackTrace: s,
       );
     }

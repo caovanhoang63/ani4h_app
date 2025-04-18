@@ -82,7 +82,7 @@ class SearchResultCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      genre,
+                      genre.name,
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.white,

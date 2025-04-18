@@ -8,8 +8,9 @@ sealed class SearchRequest with _$SearchRequest {
   const factory SearchRequest({
     String? title,
     String? genre,
-    String? uid,
-    double? score,
+    String? season,
+    int? year,
+    String? state,
   }) = _SearchRequest;
 
   factory SearchRequest.fromJson(Map<String, dynamic> json) =>

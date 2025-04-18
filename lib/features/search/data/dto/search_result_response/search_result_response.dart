@@ -32,7 +32,7 @@ sealed class SearchResult with _$SearchResult {
     required String title,
     required String synopsis,
     required List<Image> images,
-    required List<String> genres,
+    required List<Genre> genres,
   }) = _SearchResult;
 
   factory SearchResult.fromJson(Map<String, dynamic> json) =>
@@ -42,11 +42,22 @@ sealed class SearchResult with _$SearchResult {
 @freezed
 sealed class PagingSearch with _$PagingSearch {
   const factory PagingSearch({
-    String? uid,
-    required double score,
-    required int total,
+    String? cursor,
+    String? nextCursor,
+    required int page,
+    required int pageSize,
   }) = _PagingSearch;
 
   factory PagingSearch.fromJson(Map<String, dynamic> json) =>
       _$PagingSearchFromJson(json);
+}
+
+@freezed
+sealed class Genre with _$Genre {
+  const factory Genre({
+    required String id,
+    required String name,
+  }) = _Genre;
+
+  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 }

@@ -19,6 +19,7 @@ abstract class SearchApi {
 
   @GET(searchEndPoint)
   Future<SearchResultResponse> search(
-      @Queries() Map<String, dynamic> queries
+      @Queries() Map<String, dynamic> queryParams,
+      @Queries() Map<String, dynamic> pagingParams,
   );
 }

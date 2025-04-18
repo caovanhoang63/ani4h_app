@@ -21,10 +21,16 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
   SearchService(this._searchRepository);
 
   @override
-  Future<Result<SearchResultModel, Failure>> search(String query, PagingSearch pageCur) async {
+  Future<Result<SearchResultModel, Failure>> search(SearchRequest request, PagingSearch paging) async {
     try{
-      final searchRequest = mapToSearchRequest(query, "", pageCur);
-      final response = await _searchRepository.search(searchRequest);
+      PagingSearch pagingRequest = PagingSearch(
+        cursor: paging.nextCursor,
+        nextCursor: paging.nextCursor,
+        page: paging.page,
+        pageSize: paging.pageSize,
+      );
+
+      final response = await _searchRepository.search(request, pagingRequest);
 
       final models = mapToSearchResultModel(response);
 
@@ -55,14 +61,5 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
       paging: response.data.paging,
     );
     return searchResultModel;
-  }
-
-  SearchRequest mapToSearchRequest(String title, String genre, PagingSearch paging) {
-    return SearchRequest(
-      title: title,
-      genre: genre,
-      score: paging.score == 0 ? null : paging.score,
-      uid: paging.uid == "" ? null : paging.uid,
-    );
   }
 }

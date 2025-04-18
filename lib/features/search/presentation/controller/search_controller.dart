@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ani4h_app/features/search/application/search_service.dart';
+import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/presentation/state/search_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,21 +19,26 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
     log("Reset");
   }
 
-  Future<void> search(String query) async {
+  Future<void> search(String title) async {
     try {
       state = state.copyWith(
         isLoading: true,
         hasError: false,
       );
 
-      final result = await ref.read(searchServiceProvider).search(query, state.pageCur);
+      SearchRequest request = SearchRequest(
+        title: title,
+        year: 0,
+      );
+
+      final result = await ref.read(searchServiceProvider).search(request, state.paging);
 
       result.when(
         (success) {
           log("Search Result: $success");
           state = state.copyWith(
             searchResults: success.data,
-            pageCur: success.paging,
+            paging: success.paging,
             isLoading: false,
             hasError: false,
           );
@@ -57,21 +63,26 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
   }
 
   // fetch more search result
-  Future<void> fetchMoreSearch(String query) async {
-    if(state.searchResults.length == state.pageCur.total) {
+  Future<void> fetchMoreSearch(String title) async {
+    if(state.paging.nextCursor == null) {
       log("No more data");
       return;
     }
 
     try {
-      final result = await ref.read(searchServiceProvider).search(query, state.pageCur);
+      SearchRequest request = SearchRequest(
+        title: title,
+        year: 0,
+      );
+
+      final result = await ref.read(searchServiceProvider).search(request, state.paging);
 
       result.when(
         (success) {
           log("Search Result: $success");
           state = state.copyWith(
             searchResults: state.searchResults + success.data,
-            pageCur: success.paging,
+            paging: success.paging,
           );
         },
         (failure) {
@@ -86,7 +97,12 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
 
   void resetPageCur() {
     state = state.copyWith(
-      pageCur: PagingSearch(uid: "", score: 0, total: 0),
+      paging: PagingSearch(
+        cursor: "",
+        nextCursor: "",
+        page: 1,
+        pageSize: 10,
+      ),
     );
   }
 }

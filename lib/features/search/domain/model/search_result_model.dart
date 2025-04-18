@@ -1,4 +1,3 @@
-import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -18,6 +17,6 @@ sealed class FilmCardModel with _$FilmCardModel {
     required String title,
     required String synopsis,
     required String imageUrl,
-    required List<String> genres,
+    required List<Genre> genres,
   }) = _FilmCardModel;
 }
