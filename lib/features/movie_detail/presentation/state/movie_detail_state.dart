@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../domain/model/movie_model.dart';
+
 part 'movie_detail_state.freezed.dart';
 
 @freezed

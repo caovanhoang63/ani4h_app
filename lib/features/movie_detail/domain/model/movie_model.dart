@@ -8,7 +8,7 @@ sealed class MovieModel with _$MovieModel {
   const factory MovieModel({
     required String id,
     required String title,
-    required DateTime startDate,
+    required DateTime? startDate,
     required DateTime? endDate,
     required String? synopsis,
     required List<Image>? images,
@@ -21,11 +21,11 @@ sealed class MovieModel with _$MovieModel {
     required int? averageEpisodeDuration,
     required String? ageRatingId,
     required int status,
-    required String state,
+    required State state,
     required AgeRating? ageRating,
     required List<Genre>? genres,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    required DateTime? createdAt,
+    required DateTime? updatedAt,
     required dynamic seriesId,
   }) = _MovieModel;
 }

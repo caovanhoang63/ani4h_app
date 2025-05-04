@@ -6,6 +6,7 @@ import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
 import '../../dto/movie_response/movie_response.dart';
+import '../../dto/movies_response/movies_response.dart';
 
 part 'movie_detail_api.g.dart';
 
@@ -20,4 +21,10 @@ abstract class MovieDetailApi {
 
   @GET("$filmEndPoint/{id}")
   Future<MovieResponse> getMovieDetail(@Path("id") String id);
+
+  @GET(filmEndPoint)
+  Future<MoviesResponse> getMovies(
+    @Query("page") int page,
+    @Query("pageSize") int pageSize,
+  );
 }

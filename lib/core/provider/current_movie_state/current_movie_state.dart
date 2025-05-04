@@ -7,6 +7,7 @@ part 'current_movie_state.freezed.dart';
 sealed class CurrentMovieState with _$CurrentMovieState {
   const factory CurrentMovieState({
     @Default(null) MovieModel? movieDetail,
+    @Default([]) List<MovieModel> suggestedMovies,
     @Default(false) bool isLoading,
     @Default(false) bool hasError,
     @Default('') String errorMessage,

@@ -5,4 +5,5 @@ import '../domain/model/movie_model.dart';
 
 abstract interface class IMovieDetailService {
   Future<Result<MovieModel, Failure>> getMovieDetail(String id);
+  Future<Result<List<MovieModel>, Failure>> getSuggestedMovies(int page, int pageSize);
 }

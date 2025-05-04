@@ -82,7 +82,7 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Có lẽ bạn sẽ thích',
+                        'You may like',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

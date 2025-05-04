@@ -5,6 +5,7 @@ import 'package:ani4h_app/features/movie_detail/domain/mapper/imovie_model_mappe
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
+import '../data/dto/movies_response/movies_response.dart';
 import '../data/repository/imovie_detail_repository.dart';
 import '../data/repository/movie_detail_repository.dart';
 
@@ -27,7 +28,27 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
 
       return Result.success(model);
     } on Failure catch (e) {
-      print("Failure: ${e.message}");
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: toException(e),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<List<MovieModel>, Failure>> getSuggestedMovies(int page, int pageSize) async {
+    try {
+      final response = await _movieDetailRepository.getMovies(page, pageSize);
+
+      final models = mapToListMovieModel(response);
+
+      return Result.success(models);
+    } on Failure catch (e) {
       return Error(e);
     } catch (e, s) {
       return Error(
@@ -65,5 +86,32 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
       updatedAt: response.data.updatedAt,
       seriesId: response.data.seriesId,
     );
+  }
+
+  @override
+  List<MovieModel> mapToListMovieModel(MoviesResponse response) {
+    return response.data.map((e) => MovieModel(
+      id: e.id,
+      title: e.title,
+      startDate: null,
+      endDate: null,
+      synopsis: e.synopsis,
+      images: e.images,
+      avgStar: e.avgStar,
+      totalStar: e.totalStar,
+      maxEpisodes: e.maxEpisodes,
+      numEpisodes: e.numEpisodes,
+      year: null,
+      season: null,
+      averageEpisodeDuration: null,
+      ageRatingId: e.ageRatingId,
+      status: e.status,
+      state: e.state,
+      ageRating: e.ageRating,
+      genres: null,
+      createdAt: null,
+      updatedAt: null,
+      seriesId: e.seriesId,
+    )).toList();
   }
 }

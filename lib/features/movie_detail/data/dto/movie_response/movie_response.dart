@@ -30,7 +30,7 @@ sealed class Data with _$Data {
     required int? averageEpisodeDuration,
     required String? ageRatingId,
     required int status,
-    required String state,
+    required State state,
     required AgeRating? ageRating,
     required List<Genre>? genres,
     required DateTime createdAt,
@@ -77,4 +77,28 @@ sealed class Image with _$Image {
   }) = _Image;
 
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
+}
+
+enum State {
+  finished,
+  on_air,
+  upcoming
+}
+
+final stateValues = EnumValues({
+  "finished": State.finished,
+  "on_air": State.on_air,
+  "upcoming": State.upcoming
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
