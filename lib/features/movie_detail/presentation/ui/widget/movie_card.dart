@@ -1,12 +1,12 @@
 import 'package:ani4h_app/common/utils/capitalize.dart';
-import 'package:ani4h_app/features/home/data/dto/movies_response/movies_response.dart' as response;
-import 'package:ani4h_app/features/home/domain/model/movie_model.dart';
+import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/provider/current_movie_state/current_movie_controller.dart';
 import '../../../../../core/route/route_name.dart';
+import '../../../data/dto/movie_response/movie_response.dart' as response;
+import '../../../domain/model/movie_model.dart';
 
 class MovieItem {
   final String name;
@@ -30,8 +30,7 @@ class MovieCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
-        ref.read(currentMovieControllerProvider.notifier).fetchSuggestedMovies();
-        context.pushNamed(movieDetailRoute);
+        context.replaceNamed(movieDetailRoute);
       },
       child: Container(
         width: cardWidth,
@@ -94,6 +93,7 @@ class MovieCard extends ConsumerWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontSize: 6,
                   ),
                 ),
               ),
@@ -110,7 +110,7 @@ class MovieCard extends ConsumerWidget {
                   item.title,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 10,
                     fontWeight: FontWeight.normal,
                   ),
                   overflow: TextOverflow.ellipsis, // To handle long titles

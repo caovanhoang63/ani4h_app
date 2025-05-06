@@ -1,9 +1,8 @@
-import 'package:ani4h_app/features/movie_detail/data/dto/login_request/login_request.dart';
-import 'package:ani4h_app/features/movie_detail/data/dto/login_response/login_response.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/movie_response/movie_response.dart';
 
-import '../dto/users_response/users_response.dart';
+import '../dto/movies_response/movies_response.dart';
 
 abstract interface class IMovieDetailRepository {
-  Future<UsersResponse> getUsers(int page, int pageSize);
-  Future<LoginResponse> login(LoginRequest request);
+  Future<MovieResponse> getMovieDetail(String id);
+  Future<MoviesResponse> getMovies(int page, int pageSize);
 }

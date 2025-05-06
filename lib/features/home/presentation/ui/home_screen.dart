@@ -1,9 +1,8 @@
-import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/home/presentation/controller/home_controller.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +18,9 @@ class _MainTabState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    Future.microtask(() {
+      ref.read(homeControllerProvider.notifier).fetchMovies();
+    });
     _scrollController.addListener(_scrollListener);
   }
 
@@ -58,11 +60,16 @@ class _MainTabState extends ConsumerState<HomeScreen> {
       ),
     ];
 
+    final homeState = ref.watch(homeControllerProvider);
+
     return Scaffold(
       body: Stack(
         children: [
           // Body content
           RefreshIndicator(
+            onRefresh: () async {
+              ref.read(homeControllerProvider.notifier).fetchMovies();
+            },
             child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.only(top: 0),
@@ -70,26 +77,32 @@ class _MainTabState extends ConsumerState<HomeScreen> {
               children: [
                 MovieCarousel(items: items),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Có lẽ bạn sẽ thích',
+                        'You may like',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(
+                      (homeState.suggestedMovies.isNotEmpty)
+                          ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: items.length,
+                          itemCount: homeState.suggestedMovies.length,
                           itemBuilder: (context, index) {
-                            return MovieCard(item: items[index]);
+                            return MovieCard(item: homeState.suggestedMovies[index]);
                           },
+                        ),
+                      ) : const SizedBox(
+                        height: 150,
+                        child: Center(
+                          child: CircularProgressIndicator(),
                         ),
                       ),
                     ],
@@ -107,15 +120,21 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(
+                      (ref.read(homeControllerProvider.select((value) => value.suggestedMovies.length)) > 0)
+                          ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: items.length,
+                          itemCount: ref.read(homeControllerProvider.select((value) => value.suggestedMovies.length)),
                           itemBuilder: (context, index) {
-                            return MovieCard(item: items[index]);
+                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.suggestedMovies))[index]);
                           },
+                        ),
+                      ) : const SizedBox(
+                        height: 150,
+                        child: Center(
+                          child: CircularProgressIndicator(),
                         ),
                       ),
                     ],
@@ -123,9 +142,6 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            onRefresh: () async {
-              await Future<void>.delayed(const Duration(seconds: 1));
-            },
           ),
           // AppBar with scroll opacity effect
           Positioned(
@@ -145,36 +161,34 @@ class _MainTabState extends ConsumerState<HomeScreen> {
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
-                child: Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      context.push(movieDetailRoute);
-                    },
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withAlpha((127).toInt()), // Adjust opacity of the text holder
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Tìm kiếm',
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14,
-                            ),
-                          ),
-                          Icon(
-                            Icons.search,
+                child: GestureDetector(
+                  onTap: () {
+                    // context.pushNamed();
+                  },
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withAlpha((127).toInt()), // Adjust opacity of the text holder
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tìm kiếm',
+                          style: TextStyle(
                             color: Colors.black87,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
                           ),
-                        ],
-                      ),
+                        ),
+                        Icon(
+                          Icons.search,
+                          color: Colors.black87,
+                        ),
+                      ],
                     ),
                   ),
                 ),
