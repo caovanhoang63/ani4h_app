@@ -11,7 +11,7 @@ final historyRepositoryProvider = Provider<IHistoryRepository>((ref) {
   return HistoryRepository(historyApi);
 });
 
-final class HistoryRepository with DioExpceptionMapper implements IHistoryRepository {
+final class HistoryRepository with DioExceptionMapper implements IHistoryRepository {
   final HistoryApi _historyApi;
 
   HistoryRepository(this._historyApi);

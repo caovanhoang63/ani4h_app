@@ -12,7 +12,7 @@ final exploreRepositoryProvider = Provider<IExploreRepository>((ref) {
   return ExploreRepository(exploreApi);
 });
 
-final class ExploreRepository with DioExpceptionMapper implements IExploreRepository {
+final class ExploreRepository with DioExceptionMapper implements IExploreRepository {
   final ExploreApi _exploreApi;
   ExploreRepository(this._exploreApi);
 

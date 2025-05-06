@@ -11,7 +11,7 @@ final favoriteRepositoryProvider = Provider<IFavoriteRepository>((ref) {
   return FavoriteRepository(favoriteApi);
 });
 
-final class FavoriteRepository with DioExpceptionMapper implements IFavoriteRepository {
+final class FavoriteRepository with DioExceptionMapper implements IFavoriteRepository {
   final FavoriteApi _favoriteApi;
 
   FavoriteRepository(this._favoriteApi);

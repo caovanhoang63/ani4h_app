@@ -14,7 +14,7 @@ final searchRepositoryProvider = Provider<ISearchRepository>((ref) {
   return SearchRepository(searchApi);
 });
 
-final class SearchRepository with DioExpceptionMapper implements ISearchRepository {
+final class SearchRepository with DioExceptionMapper implements ISearchRepository {
   final SearchApi _searchApi;
 
   SearchRepository(this._searchApi);

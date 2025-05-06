@@ -91,8 +91,8 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
         autoPlay: true,
         // Disable built-in controls to use custom ones
         controlsConfiguration: BetterPlayerControlsConfiguration(
-          showControls: true,
-          showControlsOnInitialize: true,
+          showControls: false,
+          showControlsOnInitialize: false,
         ),
       ),
       betterPlayerDataSource: betterPlayerDataSource,
