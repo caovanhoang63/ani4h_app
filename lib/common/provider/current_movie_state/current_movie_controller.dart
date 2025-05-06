@@ -1,4 +1,4 @@
-import 'package:ani4h_app/core/provider/current_movie_state/current_movie_state.dart';
+import 'package:ani4h_app/common/provider/current_movie_state/current_movie_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/movie_detail/application/movie_detail_service.dart';

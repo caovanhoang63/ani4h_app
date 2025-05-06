@@ -1,4 +1,4 @@
-import 'package:ani4h_app/core/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_model.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_card.dart';

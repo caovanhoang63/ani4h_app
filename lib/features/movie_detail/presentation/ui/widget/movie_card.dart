@@ -1,5 +1,5 @@
 import 'package:ani4h_app/common/utils/capitalize.dart';
-import 'package:ani4h_app/core/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

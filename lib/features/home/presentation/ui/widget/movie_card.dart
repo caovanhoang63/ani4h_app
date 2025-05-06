@@ -1,11 +1,11 @@
 import 'package:ani4h_app/common/utils/capitalize.dart';
-import 'package:ani4h_app/core/provider/current_movie_state/current_movie_controller.dart';
 import 'package:ani4h_app/features/home/data/dto/movies_response/movies_response.dart' as response;
 import 'package:ani4h_app/features/home/domain/model/movie_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common/provider/current_movie_state/current_movie_controller.dart';
 import '../../../../../core/route/route_name.dart';
 
 class MovieItem {
