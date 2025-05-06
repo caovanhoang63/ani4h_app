@@ -3,6 +3,9 @@ import 'package:ani4h_app/features/favorite/presentation/ui/favorite_screen.dart
 import 'package:ani4h_app/features/history/presentation/ui/history_screen.dart';
 import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
+import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
+import 'package:ani4h_app/features/profile/presentation/ui/terms_of_service_screen.dart';
 import 'package:ani4h_app/features/search/presentation/ui/search_screen.dart';
 import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +29,25 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       path: mainRoute,
       name: mainRoute,
       builder: (context, state) => const MainScreen(),
+      routes: [
+        GoRoute(
+          path: settingRoute,
+          name: settingRoute,
+          builder: (context, state) => const SettingScreen(),
+          routes: [
+            GoRoute(
+              path: accountRoute,
+              name: accountRoute,
+              builder: (context,state) => const AccountScreen(),
+            ),
+            GoRoute(
+              path: termsOfServiceRoute,
+              name: termsOfServiceRoute,
+              builder: (context,state) => const TermsOfServiceScreen(),
+            ),
+          ]
+        ),
+      ]
     ),
     GoRoute(
         path: movieDetailRoute,
