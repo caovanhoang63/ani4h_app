@@ -11,6 +11,7 @@ sealed class FavoriteState with _$FavoriteState {
     @Default("3w5rMJ7r2JjRwM") String userId,
     @Default(false) bool isLoading,
     @Default(false) bool hasError,
+    @Default(true) bool hasMore,
     @Default('') String errorMessage,
   }) = _FavoriteState;
 }

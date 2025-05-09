@@ -45,6 +45,49 @@ class FavoriteController extends AutoDisposeNotifier<FavoriteState> {
     }
   }
 
+  Future<void> fetchMoreFavorites() async {
+    if(state.hasMore == false) return;
+
+    try {
+      state = state.copyWith(
+        hasError: false,
+      );
+      state = state.copyWith(
+        paging: Paging(
+          pageSize: state.paging.pageSize,
+          page: state.paging.page + 1,
+        ),
+      );
+
+      final result = await ref.read(favoriteServiceProvider).getFavorites(state.userId, state.paging);
+
+      result.when(
+        (success) {
+          state = state.copyWith(
+            favorites: state.favorites + success,
+            hasError: false,
+          );
+          if(success.isEmpty) {
+            state = state.copyWith(
+              hasMore: false,
+            );
+          }
+        },
+            (failure) {
+          state = state.copyWith(
+            hasError: true,
+            errorMessage: failure.message,
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        hasError: true,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
   Future<void> removeFavorite(int id) async {
     try {
       state = state.copyWith(

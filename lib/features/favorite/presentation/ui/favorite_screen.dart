@@ -13,6 +13,7 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 }
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -20,7 +21,20 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
     Future.microtask(() {
       ref.read(favoriteControllerProvider.notifier).fetchFavorites();
     });
+    _scrollController.addListener(_scrollListener);
+  }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !ref.read(favoriteControllerProvider).isLoading) {
+      ref.read(favoriteControllerProvider.notifier).fetchMoreFavorites();
+    }
   }
 
   @override
@@ -47,6 +61,7 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
                 errorMessage: state.errorMessage,
                 dataIsEmpty: state.favorites.isEmpty && !state.isLoading,
                 child: ListView.builder(
+                    controller: _scrollController,
                     itemCount: state.favorites.length + (state.isLoading ? 1 : 0),
                     itemBuilder: (context, index) {
                       if(index == state.favorites.length) {
