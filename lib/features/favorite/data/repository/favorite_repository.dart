@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
 import 'package:ani4h_app/features/favorite/data/dto/favorite_response/favorite_response.dart';
@@ -17,9 +18,9 @@ final class FavoriteRepository with DioExceptionMapper implements IFavoriteRepos
   FavoriteRepository(this._favoriteApi);
 
   @override
-  Future<FavoriteResponse> getFavorites(int page, int pageSize)async {
+  Future<FavoriteResponse> getFavorites(String userId, Paging paging) async {
    try{
-     final response = await _favoriteApi.getFavorites(page, pageSize);
+     final response = await _favoriteApi.getFavorites(userId, paging.page, paging.pageSize);
       return response;
    } on DioException catch (e, s) {
      throw mapDioExceptionToFailure(e, s);

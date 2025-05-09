@@ -1,24 +1,10 @@
+import 'package:ani4h_app/features/favorite/domain/model/favorite_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FavoriteItem {
-  final String id;
-  final String name;
-  final String nation;
-  final String imageUrl;
-  final List<String> tags;
-
-  FavoriteItem({
-    required this.id,
-    required this.name,
-    required this.nation,
-    required this.imageUrl,
-    required this.tags,
-  });
-}
 
 class FavoriteCard extends ConsumerWidget {
-  final FavoriteItem item;
+  final FavoriteModel item;
   const FavoriteCard({super.key, required this.item});
 
   @override
@@ -66,28 +52,34 @@ class FavoriteCard extends ConsumerWidget {
           //Space
           const SizedBox(width: 8),
 
-          //Name & Nation & tags
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  item.name,
+                  item.title,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white,
                   ),
                 ),
-                Text(
-                  item.nation,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      item.avgStar.toString(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(Icons.star, color: Colors.yellow[700], size: 16),
+                  ],
                 ),
                 Row(
-                  children: item.tags.map((tag) {
+                  children: item.genres.take(3).map((genre) {
                     return Container(
                       margin: const EdgeInsets.only(right: 8, top: 4),
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -96,7 +88,7 @@ class FavoriteCard extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        tag,
+                        genre.name,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,
@@ -109,15 +101,16 @@ class FavoriteCard extends ConsumerWidget {
             ),
           ),
 
-          //Favorite Button size 20x20
-          IconButton(
-              onPressed: () {
-                print('Remove ${item.name} from favorite');
-              },
-              style: IconButton.styleFrom(
-                fixedSize: Size(24, 24),
-              ),
-              icon: Icon(Icons.remove_circle_outline, color: Colors.grey, size: 24)
+          Container(
+            width: 24,
+            height: 24,
+            child: IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  print('Remove ${item.title} from favorite');
+                },
+                icon: Icon(Icons.remove_circle_outline, color: Colors.grey, size: 24)
+            ),
           )
         ],
       ),

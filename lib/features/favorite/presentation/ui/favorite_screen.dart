@@ -1,3 +1,6 @@
+import 'package:ani4h_app/common/dtos/paging.dart';
+import 'package:ani4h_app/common/widget/loading_state_widget.dart';
+import 'package:ani4h_app/features/favorite/presentation/controller/favorite_controller.dart';
 import 'package:ani4h_app/features/favorite/presentation/ui/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,183 +13,15 @@ class FavoriteScreen extends ConsumerStatefulWidget {
 }
 
 class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
-  final List<FavoriteItem> favoriteItems = [
-    FavoriteItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    FavoriteItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(favoriteControllerProvider.notifier).fetchFavorites();
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,13 +37,29 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: favoriteItems.length,
-          itemBuilder: (context, index) {
-            final item = favoriteItems[index];
-            return FavoriteCard(item: item);
-          },
-        ),
+        child: Consumer(builder: (context, ref, child) {
+          final state = ref.watch(favoriteControllerProvider);
+
+          return
+              LoadingStateWidget(
+                isLoading: state.isLoading,
+                hasError: state.hasError,
+                errorMessage: state.errorMessage,
+                dataIsEmpty: state.favorites.isEmpty && !state.isLoading,
+                child: ListView.builder(
+                    itemCount: state.favorites.length + (state.isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if(index == state.favorites.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final item = state.favorites[index];
+                      return FavoriteCard(item: item);
+                    }
+                ),
+              );
+        })
       )
     );
   }

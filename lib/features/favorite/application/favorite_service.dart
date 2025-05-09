@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/favorite/application/ifavorite_service.dart';
 import 'package:ani4h_app/features/favorite/data/dto/favorite_response/favorite_response.dart';
@@ -19,9 +20,9 @@ final class FavoriteService implements IFavoriteService, IFavoriteModelMapper {
   FavoriteService(this._favoriteRepository);
 
   @override
-  Future<Result<List<FavoriteModel>, Failure>> getFavorites(int page, int pageSize) async {
+  Future<Result<List<FavoriteModel>, Failure>> getFavorites(String userId, Paging paging) async {
     try {
-      final response = await _favoriteRepository.getFavorites(page, pageSize);
+      final response = await _favoriteRepository.getFavorites(userId, paging);
 
       final models = mapToFavoriteModel(response);
 
@@ -79,10 +80,19 @@ final class FavoriteService implements IFavoriteService, IFavoriteModelMapper {
   List<FavoriteModel> mapToFavoriteModel(FavoriteResponse response) {
     return response.data.map((e) => FavoriteModel(
       id: e.id,
-      name: e.name,
-      national: e.national,
-      imageUrl: e.imageUrl,
-      tags: e.tags,
+      title: e.title,
+      synopsis: e.synopsis,
+      synonyms: e.synonyms,
+      jaName: e.jaName,
+      enName: e.enName,
+      imageUrl: e.images.isNotEmpty ? e.images.first.url : '',
+      genres: e.genres,
+      avgStar: e.avgStar,
+      totalStar: e.totalStar,
+      maxEpisodes: e.maxEpisodes,
+      numEpisodes: e.numEpisodes,
+      year: e.year,
+      season: e.season,
     )).toList();
   }
 }
