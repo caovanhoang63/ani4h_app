@@ -32,7 +32,7 @@ sealed class SearchResult with _$SearchResult {
     required String title,
     required String synopsis,
     required List<Image> images,
-    required List<Genre> genres,
+    List<Genre>? genres,
   }) = _SearchResult;
 
   factory SearchResult.fromJson(Map<String, dynamic> json) =>

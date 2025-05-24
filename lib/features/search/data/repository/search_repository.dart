@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
+import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +28,24 @@ final class SearchRepository with DioExceptionMapper implements ISearchRepositor
 
       final response = await _searchApi.search(request.toJson(), paging.toJson());
       log("Search Response: success");
+      return response;
+    } on DioException catch (e, s) {
+      throw mapDioExceptionToFailure(e, s);
+    } catch (e, s) {
+      throw Failure(
+        message: e.toString(),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  Future<TopHotResponse> getTopHot(Paging paging) async {
+    try {
+      log("Get Top Hot Response: start");
+
+      final response = await _searchApi.getTopHot(paging.page, paging.pageSize);
+      log("Get Top Hot Response: success");
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);

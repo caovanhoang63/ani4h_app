@@ -25,9 +25,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    // Future.microtask(() {
-    //   ref.read(searchControllerProvider.notifier).getTopSearch();
-    // });
+    Future.microtask(() {
+      ref.read(searchControllerProvider.notifier).fetchTopHot();
+    });
     log("initState");
     _scrollController.addListener(_scrollListener);
   }

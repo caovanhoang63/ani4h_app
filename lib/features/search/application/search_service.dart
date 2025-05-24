@@ -1,7 +1,9 @@
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/search/application/isearch_service.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
+import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:ani4h_app/features/search/data/repository/search_repository.dart';
 import 'package:ani4h_app/features/search/domain/mapper/isearch_result_model_mapper.dart';
@@ -56,10 +58,51 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
         title: e.title,
         synopsis: e.synopsis,
         imageUrl: e.images.length > 0 ? e.images[0].url : "",
-        genres: e.genres,
+        genres: e.genres ?? const [],
       )).toList(),
       paging: response.data.paging,
     );
     return searchResultModel;
+  }
+
+  @override
+  SearchResultModel mapToSearchResultModelFromTopHotResponse(TopHotResponse response){
+    SearchResultModel searchResultModel = SearchResultModel(
+      data: response.data.map((e) => FilmCardModel(
+        id: e.id,
+        title: e.title,
+        synopsis: e.synopsis,
+        imageUrl: e.images.length > 0 ? e.images[0].url : "",
+        genres: e.genres ?? const [],
+      )).toList(),
+      paging: PagingSearch(
+        cursor: "",
+        nextCursor: "",
+        page: 1,
+        pageSize: 10,
+      ),
+    );
+    return searchResultModel;
+  }
+
+  @override
+  Future<Result<SearchResultModel, Failure>> getTopHot(Paging paging) async {
+    try{
+      final response = await _searchRepository.getTopHot(paging);
+
+      final models = mapToSearchResultModelFromTopHotResponse(response);
+
+      return Result.success(models);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: e as Exception,
+          stackTrace: s,
+        ),
+      );
+    }
   }
 }
