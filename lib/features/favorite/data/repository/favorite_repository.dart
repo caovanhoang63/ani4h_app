@@ -34,9 +34,12 @@ final class FavoriteRepository with DioExceptionMapper implements IFavoriteRepos
   }
 
   @override
-  Future<void> addFavorite(int id) async {
+  Future<void> addFavorite(String userId, String filmId) async {
     try {
-      await _favoriteApi.addFavorite(id);
+      await _favoriteApi.addFavorite({
+        "userId": userId,
+        "filmId": filmId,
+      });
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);
     } catch (e, s) {
@@ -49,9 +52,9 @@ final class FavoriteRepository with DioExceptionMapper implements IFavoriteRepos
   }
 
   @override
-  Future<void> deleteFavorite(int id) async {
+  Future<void> deleteFavorite(String userId, String filmId) async {
     try {
-      await _favoriteApi.deleteFavorite(id);
+      await _favoriteApi.deleteFavorite(userId, filmId);
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);
     } catch (e, s) {

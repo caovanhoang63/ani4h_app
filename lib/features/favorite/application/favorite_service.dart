@@ -41,9 +41,9 @@ final class FavoriteService implements IFavoriteService, IFavoriteModelMapper {
   }
 
   @override
-  Future<Result<bool, Failure>> addFavorite(int id) async {
+  Future<Result<bool, Failure>> addFavorite(String userId, String filmId) async {
     try {
-      await _favoriteRepository.addFavorite(id);
+      await _favoriteRepository.addFavorite(userId, filmId);
       return const Result.success(true);
     } on Failure catch (e) {
       return Error(e);
@@ -59,9 +59,9 @@ final class FavoriteService implements IFavoriteService, IFavoriteModelMapper {
   }
 
   @override
-  Future<Result<bool, Failure>> deleteFavorite(int id) async {
+  Future<Result<bool, Failure>> deleteFavorite(String userId, String filmId) async {
     try {
-      await _favoriteRepository.deleteFavorite(id);
+      await _favoriteRepository.deleteFavorite(userId, filmId);
       return const Result.success(true);
     } on Failure catch (e) {
       return Error(e);

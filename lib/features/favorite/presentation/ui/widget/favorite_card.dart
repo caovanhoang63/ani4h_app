@@ -1,4 +1,5 @@
 import 'package:ani4h_app/features/favorite/domain/model/favorite_model.dart';
+import 'package:ani4h_app/features/favorite/presentation/controller/favorite_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -90,7 +91,7 @@ class FavoriteCard extends ConsumerWidget {
                       child: Text(
                         genre.name,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 10,
                           color: Colors.white,
                         ),
                       ),
@@ -101,13 +102,13 @@ class FavoriteCard extends ConsumerWidget {
             ),
           ),
 
-          Container(
+          SizedBox(
             width: 24,
             height: 24,
             child: IconButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  print('Remove ${item.title} from favorite');
+                  ref.read(favoriteControllerProvider.notifier).removeFavorite(item.id);
                 },
                 icon: Icon(Icons.remove_circle_outline, color: Colors.grey, size: 24)
             ),

@@ -24,9 +24,14 @@ abstract class FavoriteApi {
       @Query("pageSize") int pageSize,
   );
 
-  @POST(favoriteEndPoint)
-  Future<void> addFavorite(@Body() int id);
+  @POST("$favoriteEndPoint/add")
+  Future<void> addFavorite(
+      @Body() Map<String, dynamic> body,
+  );
 
-  @DELETE("$favoriteEndPoint/{id}")
-  Future<void> deleteFavorite(@Path("id") int id);
+  @DELETE("$favoriteEndPoint/remove")
+  Future<void> deleteFavorite(
+      @Query("userId") String userId,
+      @Query("filmId") String filmId,
+  );
 }

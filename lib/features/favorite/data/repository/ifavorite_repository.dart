@@ -5,7 +5,7 @@ abstract interface class IFavoriteRepository {
   // get list of favorite
   Future<FavoriteResponse> getFavorites(String userId, Paging paging);
   // add favorite
-  Future<void> addFavorite(int id);
+  Future<void> addFavorite(String userId, String filmId);
   // delete favorite
-  Future<void> deleteFavorite(int id);
+  Future<void> deleteFavorite(String userId, String filmId);
 }

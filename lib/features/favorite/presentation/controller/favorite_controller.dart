@@ -88,19 +88,19 @@ class FavoriteController extends AutoDisposeNotifier<FavoriteState> {
     }
   }
 
-  Future<void> removeFavorite(int id) async {
+  Future<void> removeFavorite(String filmId) async {
     try {
       state = state.copyWith(
         isLoading: true,
         hasError: false,
       );
 
-      final result = await ref.read(favoriteServiceProvider).deleteFavorite(id);
+      final result = await ref.read(favoriteServiceProvider).deleteFavorite(state.userId, filmId);
 
       result.when(
         (success) {
           state = state.copyWith(
-            favorites: state.favorites.where((element) => element.id != id).toList(),
+            favorites: state.favorites.where((element) => element.id != filmId).toList(),
             isLoading: false,
             hasError: false,
           );
