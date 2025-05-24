@@ -1,30 +1,9 @@
+import 'package:ani4h_app/features/history/domain/model/history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HistoryItem {
-  final String id;
-  final String title;
-  final int episodeNumber;
-  final String synopsis;
-  final String imageUrl;
-  final int viewCount;
-  final int duration;
-  final int watchedDuration;
-
-  HistoryItem({
-    required this.id,
-    required this.title,
-    required this.episodeNumber,
-    required this.synopsis,
-    required this.imageUrl,
-    required this.viewCount,
-    required this.duration,
-    required this.watchedDuration,
-  });
-}
-
 class HistoryCard extends ConsumerWidget {
-  final HistoryItem item;
+  final HistoryModel item;
   const HistoryCard({super.key, required this.item});
 
   @override

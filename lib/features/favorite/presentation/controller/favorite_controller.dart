@@ -73,7 +73,7 @@ class FavoriteController extends AutoDisposeNotifier<FavoriteState> {
             );
           }
         },
-            (failure) {
+        (failure) {
           state = state.copyWith(
             hasError: true,
             errorMessage: failure.message,

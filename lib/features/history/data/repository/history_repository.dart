@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
 import 'package:ani4h_app/features/history/data/dto/history_response/history_response.dart';
@@ -17,9 +18,9 @@ final class HistoryRepository with DioExceptionMapper implements IHistoryReposit
   HistoryRepository(this._historyApi);
 
   @override
-  Future<HistoryResponse> getHistories(int page, int pageSize) async {
+  Future<HistoryResponse> getHistories(String userId, Paging paging) async {
     try {
-      final response = await _historyApi.getHistories(page, pageSize);
+      final response = await _historyApi.getHistories(userId, paging.page, paging.pageSize);
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);

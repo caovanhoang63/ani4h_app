@@ -1,4 +1,3 @@
-import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/widget/loading_state_widget.dart';
 import 'package:ani4h_app/features/favorite/presentation/controller/favorite_controller.dart';
 import 'package:ani4h_app/features/favorite/presentation/ui/widget/favorite_card.dart';
