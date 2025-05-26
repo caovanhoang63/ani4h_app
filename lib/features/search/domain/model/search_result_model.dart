@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/genre.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

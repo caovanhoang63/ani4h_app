@@ -46,4 +46,33 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
       );
     }
   }
+
+
+  Future<void> fetchGenres() async {
+    try {
+      final result = await ref.read(exploreServiceProvider).getGenres();
+
+      result.when(
+        (success) {
+          state = state.copyWith(
+            genres: success,
+            hasError: false,
+          );
+        },
+        (failure) {
+          state = state.copyWith(
+            hasError: true,
+            isLoading: false,
+            errorMessage: failure.message,
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        hasError: true,
+        isLoading: false,
+        errorMessage: e.toString(),
+      );
+    }
+  }
 }

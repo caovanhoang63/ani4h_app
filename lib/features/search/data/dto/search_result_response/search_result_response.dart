@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/genre.dart';
 import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -50,14 +51,4 @@ sealed class PagingSearch with _$PagingSearch {
 
   factory PagingSearch.fromJson(Map<String, dynamic> json) =>
       _$PagingSearchFromJson(json);
-}
-
-@freezed
-sealed class Genre with _$Genre {
-  const factory Genre({
-    required String id,
-    required String name,
-  }) = _Genre;
-
-  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
 }
