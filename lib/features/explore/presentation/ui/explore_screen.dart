@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/explore_card.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/tag_selector.dart';
@@ -115,10 +117,44 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
       imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
     ),
   ];
-  final List<String> categories = ["Hot nhất", "Mới nhất", "Đánh giá"];
-  final List<String> genres = ["Tất cả", "Phim truyền hình", "Anime", "Phim điện ảnh", "Phim hoạt hình", "Phim lẻ"];
-  final List<String> years = ["Tất cả", "2024", "2023", "2022", "2021"];
-  final List<String> types = ["Tất cả", "Vip", "Miễn phi"];
+  final List<Map<String,dynamic>> genres = [
+    {"name": "Tất cả", "value": "all"},
+    {"name": "Action", "value": "action"},
+    {"name": "Adventure", "value": "adventure"},
+    {"name": "Comedy", "value": "comedy"},
+    {"name": "Drama", "value": "drama"},
+    {"name": "Fantasy", "value": "fantasy"},
+    {"name": "Horror", "value": "horror"},
+    {"name": "Mystery", "value": "mystery"},
+    {"name": "Romance", "value": "romance"},
+    {"name": "Sci-Fi", "value": "sci-fi"},
+  ];
+
+  final List<Map<String, dynamic>> seasons = [
+    {"name": "Tất cả", "value": "all"},
+    {"name": "Spring", "value": "spring"},
+    {"name": "Summer", "value": "summer"},
+    {"name": "Fall", "value": "fall"},
+    {"name": "winter", "value": "winter"},
+  ];
+
+  final List<Map<String, dynamic>> years = [
+    {"name": "Tất cả", "value": "all"},
+    {"name": "2024", "value": 2024},
+    {"name": "2023", "value": 2023},
+    {"name": "2022", "value": 2022},
+    {"name": "2021", "value": 2021},
+    {"name": "2020", "value": 2020},
+    {"name": "2019", "value": 2019},
+    {"name": "2018", "value": 2018},
+    {"name": "2017", "value": 2017},
+    {"name": "2016", "value": 2016},
+    {"name": "2015", "value": 2015},
+    {"name": "2014", "value": 2014},
+    {"name": "2013", "value": 2013},
+    {"name": "2012", "value": 2012},
+    {"name": "2011", "value": 2011},
+  ];
 
   int selectedCategory = 0;
   int selectedGenre = 0;
@@ -168,6 +204,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             ),
 
             //Debug area
+
             Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -222,26 +259,20 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Category
-                TagSelector(tags: categories, selecetedIndex: selectedCategory, onTagSelected: (index) {
-                  setState(() {
-                    selectedCategory = index;
-                  });
-                }),
                 // Genre
-                TagSelector(tags: genres, selecetedIndex: selectedGenre, onTagSelected: (index) {
+                TagSelector(tags: genres, selectedIndex: selectedGenre, onTagSelected: (index) {
                   setState(() {
                     selectedGenre = index;
                   });
                 }),
                 // Type
-                TagSelector(tags: types, selecetedIndex: selectedType, onTagSelected: (index) {
+                TagSelector(tags: seasons, selectedIndex: selectedType, onTagSelected: (index) {
                   setState(() {
                     selectedType = index;
                   });
                 }),
-                // Year
-                TagSelector(tags: years, selecetedIndex: selectedYear, onTagSelected: (index) {
+                //Year
+                TagSelector(tags: years, selectedIndex: selectedYear, onTagSelected: (index) {
                   setState(() {
                     selectedYear = index;
                   });

@@ -6,6 +6,7 @@ import 'package:ani4h_app/features/explore/data/repository/explore_repository.da
 import 'package:ani4h_app/features/explore/data/repository/iexplore_repository.dart';
 import 'package:ani4h_app/features/explore/domain/mapper/iexplore_model_mapper.dart';
 import 'package:ani4h_app/features/explore/domain/model/explore_model.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -20,9 +21,9 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   ExploreService(this._exploreRepository);
 
   @override
-  Future<Result<List<ExploreModel>, Failure>> getExplore(ExploreParams params, int page, int pageSize) async {
+  Future<Result<List<ExploreModel>, Failure>> getExplore(ExploreParams filter, PagingSearch paging) async {
     try {
-      final response = await _exploreRepository.getExplore(params, page, pageSize);
+      final response = await _exploreRepository.getExplore(filter, paging);
 
       final models = mapToExploreModel(response);
 
@@ -44,8 +45,8 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   List<ExploreModel> mapToExploreModel(ExploreResponse response) {
     return response.data.map((e) => ExploreModel(
       id: e.id,
-      name: e.name,
-      imageUrl: e.imageUrl,
+      title: e.title,
+      imageUrl: e.images[0].url ?? "",
     )).toList();
   }
 }

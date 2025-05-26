@@ -2,6 +2,7 @@
 import 'package:ani4h_app/features/explore/application/explore_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/presentation/state/explore_state.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final exploreControllerProvider = AutoDisposeNotifierProvider<ExploreController, ExploreState>(ExploreController.new);
@@ -12,14 +13,14 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
     return ExploreState();
   }
 
-  Future<void> fetchExplores(ExploreParams params, int page, int pageSize) async {
+  Future<void> fetchExplores(ExploreParams filter, PagingSearch paging) async {
     try {
       state = state.copyWith(
         isLoading: true,
         hasError: false,
       );
 
-      final result = await ref.read(exploreServiceProvider).getExplore(params, page, pageSize);
+      final result = await ref.read(exploreServiceProvider).getExplore(filter, paging);
 
       result.when(
         (success) {

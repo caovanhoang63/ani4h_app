@@ -4,4 +4,5 @@ const String filmEndPoint = '/v1/film';
 const String favoriteEndPoint = '/v1/favorite';
 const String historyEndPoint = '/v1/watch-history';
 const String searchEndPoint = '/v1/search';
-const String exploreEndPoint = '/v1/explore';
+const String exploreEndPoint = '/v1/search';
+const String genreEndPoint = '/v1/genre';

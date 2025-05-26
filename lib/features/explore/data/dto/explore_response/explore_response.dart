@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'explore_response.freezed.dart';
@@ -16,8 +17,8 @@ abstract class ExploreResponse with _$ExploreResponse {
 abstract class ExploreData with _$ExploreData {
   const factory ExploreData({
     required String id,
-    required String name,
-    required String imageUrl,
+    required String title,
+    required List<Image> images,
   }) = _ExploreData;
 
   factory ExploreData.fromJson(Map<String, dynamic> json) => _$ExploreDataFromJson(json);

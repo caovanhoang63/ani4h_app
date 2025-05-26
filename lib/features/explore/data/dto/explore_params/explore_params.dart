@@ -8,7 +8,7 @@ abstract class ExploreParams with _$ExploreParams {
   const factory ExploreParams({
     required String? genreId,
     required int? year,
-    required String? nationalId,
+    required String? season,
   }) = _ExploreParams;
 
   factory ExploreParams.fromJson(Map<String, dynamic> json) => _$ExploreParamsFromJson(json);

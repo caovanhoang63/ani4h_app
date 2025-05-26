@@ -4,6 +4,7 @@ import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_param
 import 'package:ani4h_app/features/explore/data/dto/explore_response/explore_response.dart';
 import 'package:ani4h_app/features/explore/data/repository/iexplore_repository.dart';
 import 'package:ani4h_app/features/explore/data/source/remote/explore_api.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,9 +18,9 @@ final class ExploreRepository with DioExceptionMapper implements IExploreReposit
   ExploreRepository(this._exploreApi);
 
   @override
-  Future<ExploreResponse> getExplore(ExploreParams params, int page, int pageSize) async {
+  Future<ExploreResponse> getExplore(ExploreParams filter, PagingSearch paging) async {
     try {
-      final response = await _exploreApi.getExplore(params, page, pageSize);
+      final response = await _exploreApi.getExplore(filter.toJson(), paging.toJson());
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);
