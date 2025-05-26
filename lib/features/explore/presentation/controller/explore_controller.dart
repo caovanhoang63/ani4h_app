@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:ani4h_app/features/explore/application/explore_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/presentation/state/explore_state.dart';
@@ -56,6 +58,10 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
         (success) {
           state = state.copyWith(
             genres: success,
+            genreSelections: [
+              {"name": "Tất cả", "value": "all"},
+              ...success.map((genre) => {"name": genre.name, "value": genre.id}),
+            ],
             hasError: false,
           );
         },

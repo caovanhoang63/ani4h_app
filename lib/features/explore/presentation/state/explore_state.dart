@@ -11,6 +11,7 @@ sealed class ExploreState with _$ExploreState {
     @Default([]) List<ExploreModel> explores,
     @Default(ExploreParams(genreId: "iUwqRePSWQq3", year: 2025, season: "")) ExploreParams filter,
     @Default([]) List<Genre> genres,
+    @Default([]) List<Map<String, dynamic>> genreSelections,
     @Default(false) bool isLoading,
     @Default(false) bool hasError,
     @Default(true) bool hasMore,

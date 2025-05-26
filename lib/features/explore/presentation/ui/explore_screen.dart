@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/explore/presentation/controller/explore_controller.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/explore_card.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/tag_selector.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
       imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
     ),
   ];
-  final List<Map<String,dynamic>> genres = [
+  List<Map<String,dynamic>> genres = [
     {"name": "Tất cả", "value": "all"},
     {"name": "Action", "value": "action"},
     {"name": "Adventure", "value": "adventure"},
@@ -160,6 +161,18 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   int selectedGenre = 0;
   int selectedYear = 0;
   int selectedType = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedGenre = 0; // Default to "Tất cả"
+    selectedType = 0; // Default to "Tất cả"
+    selectedYear = 0; // Default to "Tất cả"
+
+    Future.microtask(() {
+      ref.read(exploreControllerProvider.notifier).fetchGenres();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +273,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Genre
-                TagSelector(tags: genres, selectedIndex: selectedGenre, onTagSelected: (index) {
+                TagSelector(tags: ref.watch(exploreControllerProvider).genreSelections, selectedIndex: selectedGenre, onTagSelected: (index) {
                   setState(() {
                     selectedGenre = index;
                   });
