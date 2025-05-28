@@ -63,16 +63,21 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     Future.microtask(() {
       ref.read(exploreControllerProvider.notifier).fetchGenres();
 
-      ref.read(exploreControllerProvider.notifier).fetchExplores(
+      firstFetchExplore();
+    });
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void firstFetchExplore(){
+    genres = ref.read(exploreControllerProvider).genreSelections;
+    ref.read(exploreControllerProvider.notifier).fetchExplores(
         ExploreParams(
           genreId: genres.isNotEmpty ? genres[selectedGenre]['value'] : '',
           year: years.isNotEmpty ? years[selectedYear]['value'] : null,
           season: seasons.isNotEmpty ? seasons[selectedType]['value'] : '',
         )
-      );
-    });
-
-    _scrollController.addListener(_scrollListener);
+    );
   }
 
   @override
@@ -190,18 +195,21 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 TagSelector(tags: ref.watch(exploreControllerProvider).genreSelections, selectedIndex: selectedGenre, onTagSelected: (index) {
                   setState(() {
                     selectedGenre = index;
+                    firstFetchExplore();
                   });
                 }),
                 // Type
                 TagSelector(tags: seasons, selectedIndex: selectedType, onTagSelected: (index) {
                   setState(() {
                     selectedType = index;
+                    firstFetchExplore();
                   });
                 }),
                 //Year
                 TagSelector(tags: years, selectedIndex: selectedYear, onTagSelected: (index) {
                   setState(() {
                     selectedYear = index;
+                    firstFetchExplore();
                   });
                 }),
               ],

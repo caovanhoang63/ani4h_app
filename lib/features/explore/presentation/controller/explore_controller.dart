@@ -1,6 +1,7 @@
 import 'package:ani4h_app/features/explore/application/explore_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/presentation/state/explore_state.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final exploreControllerProvider = AutoDisposeNotifierProvider<ExploreController, ExploreState>(ExploreController.new);
@@ -18,6 +19,8 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
         hasError: false,
         filter: filter,
       );
+
+      resetPageCur();
 
       print("Fetching explores with filter: $filter");
       final result = await ref.read(exploreServiceProvider).getExplore(filter, state.paging);
@@ -109,5 +112,16 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
         errorMessage: e.toString(),
       );
     }
+  }
+
+  void resetPageCur() {
+    state = state.copyWith(
+      paging: PagingSearch(
+        cursor: "",
+        nextCursor: "",
+        page: 1,
+        pageSize: 10,
+      ),
+    );
   }
 }
