@@ -1,10 +1,6 @@
-
-import 'dart:math';
-
 import 'package:ani4h_app/features/explore/application/explore_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/presentation/state/explore_state.dart';
-import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final exploreControllerProvider = AutoDisposeNotifierProvider<ExploreController, ExploreState>(ExploreController.new);
@@ -15,19 +11,23 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
     return ExploreState();
   }
 
-  Future<void> fetchExplores(ExploreParams filter, PagingSearch paging) async {
+  Future<void> fetchExplores(ExploreParams filter) async {
     try {
       state = state.copyWith(
         isLoading: true,
         hasError: false,
+        filter: filter,
       );
 
-      final result = await ref.read(exploreServiceProvider).getExplore(filter, paging);
+      print("Fetching explores with filter: $filter");
+      final result = await ref.read(exploreServiceProvider).getExplore(filter, state.paging);
 
       result.when(
         (success) {
+          print("Fetched explores successfully: ${success.data.length} items");
           state = state.copyWith(
-            explores: success,
+            explores: success.data,
+            paging: success.paging,
             isLoading: false,
             hasError: false,
           );
@@ -49,6 +49,36 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
     }
   }
 
+  Future<void> fetchMoreExplores() async {
+    if (!state.hasMore) return;
+
+    try {
+
+      final result = await ref.read(exploreServiceProvider).getExplore(state.filter, state.paging);
+
+      result.when(
+        (success) {
+          state = state.copyWith(
+            explores: [...state.explores, ...success.data],
+            paging: success.paging,
+            hasMore: success.paging.nextCursor != null,
+            hasError: false,
+          );
+        },
+        (failure) {
+          state = state.copyWith(
+            hasError: true,
+            errorMessage: failure.message,
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        hasError: true,
+        errorMessage: e.toString(),
+      );
+    }
+  }
 
   Future<void> fetchGenres() async {
     try {
@@ -59,10 +89,9 @@ class ExploreController extends AutoDisposeNotifier<ExploreState> {
           state = state.copyWith(
             genres: success,
             genreSelections: [
-              {"name": "Tất cả", "value": "all"},
+              {"name": "Tất cả", "value": ""},
               ...success.map((genre) => {"name": genre.name, "value": genre.id}),
             ],
-            hasError: false,
           );
         },
         (failure) {

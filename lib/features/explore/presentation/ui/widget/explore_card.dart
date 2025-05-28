@@ -1,20 +1,10 @@
+import 'package:ani4h_app/features/explore/domain/model/explore_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ExploreItem {
-  final String id;
-  final String name;
-  final String imageUrl;
-
-  ExploreItem({
-    required this.id,
-    required this.name,
-    required this.imageUrl,
-  });
-}
 
 class ExploreCard extends ConsumerWidget {
-  final ExploreItem item;
+  final ExploreCardModel item;
   const ExploreCard({super.key, required this.item});
 
   @override
@@ -61,7 +51,7 @@ class ExploreCard extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
-              item.name,
+              item.title,
               style: TextStyle(
                 fontSize: 12,
               ),

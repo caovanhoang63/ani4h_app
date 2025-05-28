@@ -23,9 +23,16 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   ExploreService(this._exploreRepository);
 
   @override
-  Future<Result<List<ExploreModel>, Failure>> getExplore(ExploreParams filter, PagingSearch paging) async {
+  Future<Result<ExploreModel, Failure>> getExplore(ExploreParams filter, PagingSearch paging) async {
     try {
-      final response = await _exploreRepository.getExplore(filter, paging);
+      PagingSearch pagingRequest = PagingSearch(
+        cursor: paging.nextCursor,
+        nextCursor: paging.nextCursor,
+        page: paging.page,
+        pageSize: paging.pageSize,
+      );
+
+      final response = await _exploreRepository.getExplore(filter, pagingRequest);
 
       final models = mapToExploreModel(response);
 
@@ -44,12 +51,16 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   }
 
   @override
-  List<ExploreModel> mapToExploreModel(ExploreResponse response) {
-    return response.data.map((e) => ExploreModel(
-      id: e.id,
-      title: e.title,
-      imageUrl: e.images[0].url ?? "",
-    )).toList();
+  ExploreModel mapToExploreModel(ExploreResponse response) {
+    ExploreModel exploreModel = ExploreModel(
+      data: response.data.data.map((e) => ExploreCardModel(
+        id: e.id,
+        title: e.title,
+        imageUrl: e.images.isNotEmpty ? e.images[0].url : "",
+      )).toList(),
+      paging: response.data.paging,
+    );
+    return exploreModel;
   }
 
   List<Genre> mapToListGenreResponse(ListGenreResponse response) {

@@ -2,5 +2,5 @@ import 'package:ani4h_app/features/explore/data/dto/explore_response/explore_res
 import 'package:ani4h_app/features/explore/domain/model/explore_model.dart';
 
 abstract class IExploreModelMapper {
-  List<ExploreModel> mapToExploreModel(ExploreResponse exploreRequestDto);
+  ExploreModel mapToExploreModel(ExploreResponse exploreRequestDto);
 }

@@ -1,6 +1,8 @@
 import 'dart:collection';
 
+import 'package:ani4h_app/common/widget/loading_state_widget.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/presentation/controller/explore_controller.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/explore_card.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/tag_selector.dart';
@@ -16,123 +18,12 @@ class ExploreScreen extends ConsumerStatefulWidget {
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
-  final List<ExploreItem> exploreItems = [
-    ExploreItem(
-      id: '1',
-      name: 'Naruto Shippuden Sasuke',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-  ];
-  List<Map<String,dynamic>> genres = [
-    {"name": "Tất cả", "value": "all"},
-    {"name": "Action", "value": "action"},
-    {"name": "Adventure", "value": "adventure"},
-    {"name": "Comedy", "value": "comedy"},
-    {"name": "Drama", "value": "drama"},
-    {"name": "Fantasy", "value": "fantasy"},
-    {"name": "Horror", "value": "horror"},
-    {"name": "Mystery", "value": "mystery"},
-    {"name": "Romance", "value": "romance"},
-    {"name": "Sci-Fi", "value": "sci-fi"},
-  ];
+  final ScrollController _scrollController = ScrollController();
+
+  List<Map<String,dynamic>> genres = [];
 
   final List<Map<String, dynamic>> seasons = [
-    {"name": "Tất cả", "value": "all"},
+    {"name": "Tất cả", "value": ""},
     {"name": "Spring", "value": "spring"},
     {"name": "Summer", "value": "summer"},
     {"name": "Fall", "value": "fall"},
@@ -140,7 +31,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   ];
 
   final List<Map<String, dynamic>> years = [
-    {"name": "Tất cả", "value": "all"},
+    {"name": "Tất cả", "value": null},
     {"name": "2024", "value": 2024},
     {"name": "2023", "value": 2023},
     {"name": "2022", "value": 2022},
@@ -171,7 +62,30 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
     Future.microtask(() {
       ref.read(exploreControllerProvider.notifier).fetchGenres();
+
+      ref.read(exploreControllerProvider.notifier).fetchExplores(
+        ExploreParams(
+          genreId: genres.isNotEmpty ? genres[selectedGenre]['value'] : '',
+          year: years.isNotEmpty ? years[selectedYear]['value'] : null,
+          season: seasons.isNotEmpty ? seasons[selectedType]['value'] : '',
+        )
+      );
     });
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !ref.read(exploreControllerProvider).isLoading) {
+      ref.read(exploreControllerProvider.notifier).fetchMoreExplores();
+    }
   }
 
   @override
@@ -297,20 +211,55 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             const SizedBox(height: 16),
 
             // result
+            // Expanded(
+            //   child: GridView.builder(
+            //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 3,
+            //       crossAxisSpacing: 8,
+            //       childAspectRatio: 5.6/10,
+            //     ),
+            //     itemCount: ref.watch(exploreControllerProvider).explores.length,
+            //     itemBuilder: (context, index) {
+            //       return ExploreCard(item: ref.watch(exploreControllerProvider).explores[index]);
+            //     },
+            //   ),
+            // ),
+
             Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 5.6/10,
-                ),
-                itemCount: exploreItems.length,
-                itemBuilder: (context, index) {
-                  return ExploreCard(item: exploreItems[index]);
-                },
+              child: Consumer(
+                  builder: (context, ref, child) {
+                    final state = ref.watch(exploreControllerProvider);
+
+                    return
+                    LoadingStateWidget(
+                        isLoading: state.isLoading,
+                        hasError: false,
+                        errorMessage: state.errorMessage,
+                        dataIsEmpty: state.explores.isEmpty,
+                        child: GridView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 8,
+                            childAspectRatio: 5.6 / 10,
+                          ),
+                          itemCount: state.explores.length + (state.isLoading ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == state.explores.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final item = state.explores[index];
+                            return ExploreCard(item: item);
+                          },
+                        )
+                    );
+                  }
               ),
-            ),
+            )
           ]
         ),
       ),

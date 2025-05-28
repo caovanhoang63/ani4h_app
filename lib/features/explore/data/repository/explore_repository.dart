@@ -21,7 +21,7 @@ final class ExploreRepository with DioExceptionMapper implements IExploreReposit
   @override
   Future<ExploreResponse> getExplore(ExploreParams filter, PagingSearch paging) async {
     try {
-      final response = await _exploreApi.getExplore(filter.toJson() , paging.toJson());
+      final response = await _exploreApi.getExplore(filter.toCleanJson() , paging.toJson());
       return response;
     } on DioException catch (e, s) {
       throw mapDioExceptionToFailure(e, s);
