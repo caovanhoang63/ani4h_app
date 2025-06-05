@@ -17,12 +17,21 @@ final favoriteApiProvider = Provider<FavoriteApi>((ref) {
 abstract class FavoriteApi {
   factory FavoriteApi(Dio dio) => _FavoriteApi(dio);
 
-  @GET(favoriteEndPoint)
-  Future<FavoriteResponse> getFavorites(@Query("page") int page, @Query("pageSize") int pageSize);
+  @GET("$favoriteEndPoint/list")
+  Future<FavoriteResponse> getFavorites(
+      @Query("userId") String userId,
+      @Query("page") int page,
+      @Query("pageSize") int pageSize,
+  );
 
-  @POST(favoriteEndPoint)
-  Future<void> addFavorite(@Body() int id);
+  @POST("$favoriteEndPoint/add")
+  Future<void> addFavorite(
+      @Body() Map<String, dynamic> body,
+  );
 
-  @DELETE("$favoriteEndPoint/{id}")
-  Future<void> deleteFavorite(@Path("id") int id);
+  @DELETE("$favoriteEndPoint/remove")
+  Future<void> deleteFavorite(
+      @Query("userId") String userId,
+      @Query("filmId") String filmId,
+  );
 }

@@ -1,3 +1,6 @@
+import 'package:ani4h_app/common/widget/loading_state_widget.dart';
+import 'package:ani4h_app/features/history/domain/model/history_model.dart';
+import 'package:ani4h_app/features/history/presentation/controller/history_controller.dart';
 import 'package:ani4h_app/features/history/presentation/ui/widget/history_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,90 +13,40 @@ class HistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
-  final List<HistoryItem> historyItems = [
-    HistoryItem(
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(historyControllerProvider.notifier).fetchHistory();
+    });
+    _scrollController.addListener(_scrollListener);
+  }
+  
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !ref.read(historyControllerProvider).isLoading) {
+      ref.read(historyControllerProvider.notifier).fetchMoreHistory();
+    }
+  }
+  
+  final List<HistoryModel> historyItems = [
+    HistoryModel(
     id: '1',
-    name: 'Naruto',
-    nation: 'Japan',
+    title: 'Naruto',
+    synopsis: 'Japan',
     imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    HistoryItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    HistoryItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    HistoryItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    HistoryItem(
-      id: '1',
-      name: 'Naruto',
-      nation: 'Japan',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-      tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '2',
-      name: 'One Piece',
-      nation: 'Japan',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-      tags: ['Action', 'Adventure', 'Fantasy'],
-    ),
-    HistoryItem(
-      id: '3',
-      name: 'Attack on Titan',
-      nation: 'Việt Nam',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-      tags: ['Action', 'Adventure'],
-    ),
-    HistoryItem(
-      id: '4',
-      name: 'My Hero Academia',
-      nation: 'Trung Quốc',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-      tags: ['Action', 'Adventure', 'Fantasy'],
+    episodeNumber: 1,
+    viewCount: 1000,
+    duration: 1500,
+    watchedDuration: 1200,
     ),
   ];
 
@@ -112,13 +65,30 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: historyItems.length,
-          itemBuilder: (context, index){
-            final item = historyItems[index];
-            return HistoryCard(item: item);
-          },
-        ),
+          child: Consumer(builder: (context, ref, child) {
+            final state = ref.watch(historyControllerProvider);
+
+            return
+              LoadingStateWidget(
+                isLoading: state.isLoading,
+                hasError: state.hasError,
+                errorMessage: state.errorMessage,
+                dataIsEmpty: state.histories.isEmpty && !state.isLoading,
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: state.histories.length + (state.isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if(index == state.histories.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      final item = state.histories[index];
+                      return HistoryCard(item: item);
+                    }
+                ),
+              );
+          })
       ),
     );
   }

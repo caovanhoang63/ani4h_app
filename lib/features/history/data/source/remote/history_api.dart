@@ -18,7 +18,11 @@ abstract class HistoryApi {
   factory HistoryApi(Dio dio) => _HistoryApi(dio);
 
   @GET(historyEndPoint)
-  Future<HistoryResponse> getHistories(@Query("page") int page, @Query("pageSize") int pageSize);
+  Future<HistoryResponse> getHistories(
+      @Query("userId") String userId,
+      @Query("page") int page,
+      @Query("pageSize") int pageSize,
+  );
 
   @POST(historyEndPoint)
   Future<void> addHistory(@Query("movieId") int movieId);

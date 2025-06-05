@@ -1,7 +1,9 @@
+import 'package:ani4h_app/common/dtos/genre.dart';
 import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_response/explore_response.dart';
+import 'package:ani4h_app/features/explore/data/dto/explore_response/list_genre_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/error_logger.dart';
@@ -20,8 +22,10 @@ abstract class ExploreApi {
 
   @GET(exploreEndPoint)
   Future<ExploreResponse> getExplore(
-      @Queries() ExploreParams filters,
-      @Query("page") int page,
-      @Query("pageSize") int pageSize
+      @Queries() Map<String, dynamic> filters,
+      @Queries() Map<String, dynamic> pagingParams,
   );
+
+  @GET(genreEndPoint)
+  Future<ListGenreResponse> getGenres();
 }

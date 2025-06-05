@@ -6,6 +6,8 @@ import 'package:ani4h_app/features/search/data/dto/search_result_response/search
 import 'package:ani4h_app/features/search/presentation/state/search_state.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../common/dtos/paging.dart';
+
 final searchControllerProvider = AutoDisposeNotifierProvider<SearchController, SearchState>(SearchController.new);
 
 class SearchController extends AutoDisposeNotifier<SearchState>{
@@ -104,5 +106,47 @@ class SearchController extends AutoDisposeNotifier<SearchState>{
         pageSize: 10,
       ),
     );
+  }
+
+  Future<void> fetchTopHot() async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        hasError: false,
+      );
+
+      Paging paging = Paging(
+        page: 1,
+        pageSize: 10,
+      );
+
+      final result = await ref.read(searchServiceProvider).getTopHot(paging);
+
+      result.when(
+        (success) {
+          log("Top Hot Result: $success");
+          state = state.copyWith(
+            topSearches: success.data,
+            isLoading: false,
+            hasError: false,
+          );
+        },
+        (failure) {
+          log("Failure: $failure");
+          state = state.copyWith(
+            isLoading: false,
+            hasError: true,
+            errorMessage: failure.message,
+          );
+        },
+      );
+    } catch (e) {
+      log("Error: $e");
+      state = state.copyWith(
+        isLoading: false,
+        hasError: true,
+        errorMessage: e.toString(),
+      );
+    }
   }
 }

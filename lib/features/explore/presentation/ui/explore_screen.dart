@@ -1,4 +1,9 @@
+import 'dart:collection';
+
+import 'package:ani4h_app/common/widget/loading_state_widget.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
+import 'package:ani4h_app/features/explore/presentation/controller/explore_controller.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/explore_card.dart';
 import 'package:ani4h_app/features/explore/presentation/ui/widget/tag_selector.dart';
 import 'package:flutter/material.dart';
@@ -13,117 +18,80 @@ class ExploreScreen extends ConsumerStatefulWidget {
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
-  final List<ExploreItem> exploreItems = [
-    ExploreItem(
-      id: '1',
-      name: 'Naruto Shippuden Sasuke',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
-    ExploreItem(
-      id: '1',
-      name: 'Naruto',
-      imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    ),
-    ExploreItem(
-      id: '2',
-      name: 'One Piece',
-      imageUrl: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-    ),
-    ExploreItem(
-      id: '3',
-      name: 'Attack on Titan',
-      imageUrl: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-    ),
-    ExploreItem(
-      id: '4',
-      name: 'My Hero Academia',
-      imageUrl: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-    ),
+  final ScrollController _scrollController = ScrollController();
+
+  List<Map<String,dynamic>> genres = [];
+
+  final List<Map<String, dynamic>> seasons = [
+    {"name": "Tất cả", "value": ""},
+    {"name": "Spring", "value": "spring"},
+    {"name": "Summer", "value": "summer"},
+    {"name": "Fall", "value": "fall"},
+    {"name": "winter", "value": "winter"},
   ];
-  final List<String> categories = ["Hot nhất", "Mới nhất", "Đánh giá"];
-  final List<String> genres = ["Tất cả", "Phim truyền hình", "Anime", "Phim điện ảnh", "Phim hoạt hình", "Phim lẻ"];
-  final List<String> years = ["Tất cả", "2024", "2023", "2022", "2021"];
-  final List<String> types = ["Tất cả", "Vip", "Miễn phi"];
+
+  final List<Map<String, dynamic>> years = [
+    {"name": "Tất cả", "value": null},
+    {"name": "2024", "value": 2024},
+    {"name": "2023", "value": 2023},
+    {"name": "2022", "value": 2022},
+    {"name": "2021", "value": 2021},
+    {"name": "2020", "value": 2020},
+    {"name": "2019", "value": 2019},
+    {"name": "2018", "value": 2018},
+    {"name": "2017", "value": 2017},
+    {"name": "2016", "value": 2016},
+    {"name": "2015", "value": 2015},
+    {"name": "2014", "value": 2014},
+    {"name": "2013", "value": 2013},
+    {"name": "2012", "value": 2012},
+    {"name": "2011", "value": 2011},
+  ];
 
   int selectedCategory = 0;
   int selectedGenre = 0;
   int selectedYear = 0;
   int selectedType = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedGenre = 0; // Default to "Tất cả"
+    selectedType = 0; // Default to "Tất cả"
+    selectedYear = 0; // Default to "Tất cả"
+
+    Future.microtask(() {
+      ref.read(exploreControllerProvider.notifier).fetchGenres();
+
+      firstFetchExplore();
+    });
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void firstFetchExplore(){
+    genres = ref.read(exploreControllerProvider).genreSelections;
+    ref.read(exploreControllerProvider.notifier).fetchExplores(
+        ExploreParams(
+          genreId: genres.isNotEmpty ? genres[selectedGenre]['value'] : '',
+          year: years.isNotEmpty ? years[selectedYear]['value'] : null,
+          season: seasons.isNotEmpty ? seasons[selectedType]['value'] : '',
+        )
+    );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent && !ref.read(exploreControllerProvider).isLoading) {
+      ref.read(exploreControllerProvider.notifier).fetchMoreExplores();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +136,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             ),
 
             //Debug area
+
             Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -222,28 +191,25 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Category
-                TagSelector(tags: categories, selecetedIndex: selectedCategory, onTagSelected: (index) {
-                  setState(() {
-                    selectedCategory = index;
-                  });
-                }),
                 // Genre
-                TagSelector(tags: genres, selecetedIndex: selectedGenre, onTagSelected: (index) {
+                TagSelector(tags: ref.watch(exploreControllerProvider).genreSelections, selectedIndex: selectedGenre, onTagSelected: (index) {
                   setState(() {
                     selectedGenre = index;
+                    firstFetchExplore();
                   });
                 }),
                 // Type
-                TagSelector(tags: types, selecetedIndex: selectedType, onTagSelected: (index) {
+                TagSelector(tags: seasons, selectedIndex: selectedType, onTagSelected: (index) {
                   setState(() {
                     selectedType = index;
+                    firstFetchExplore();
                   });
                 }),
-                // Year
-                TagSelector(tags: years, selecetedIndex: selectedYear, onTagSelected: (index) {
+                //Year
+                TagSelector(tags: years, selectedIndex: selectedYear, onTagSelected: (index) {
                   setState(() {
                     selectedYear = index;
+                    firstFetchExplore();
                   });
                 }),
               ],
@@ -253,20 +219,55 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             const SizedBox(height: 16),
 
             // result
+            // Expanded(
+            //   child: GridView.builder(
+            //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 3,
+            //       crossAxisSpacing: 8,
+            //       childAspectRatio: 5.6/10,
+            //     ),
+            //     itemCount: ref.watch(exploreControllerProvider).explores.length,
+            //     itemBuilder: (context, index) {
+            //       return ExploreCard(item: ref.watch(exploreControllerProvider).explores[index]);
+            //     },
+            //   ),
+            // ),
+
             Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 5.6/10,
-                ),
-                itemCount: exploreItems.length,
-                itemBuilder: (context, index) {
-                  return ExploreCard(item: exploreItems[index]);
-                },
+              child: Consumer(
+                  builder: (context, ref, child) {
+                    final state = ref.watch(exploreControllerProvider);
+
+                    return
+                    LoadingStateWidget(
+                        isLoading: state.isLoading,
+                        hasError: false,
+                        errorMessage: state.errorMessage,
+                        dataIsEmpty: state.explores.isEmpty,
+                        child: GridView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 8,
+                            childAspectRatio: 5.6 / 10,
+                          ),
+                          itemCount: state.explores.length + (state.isLoading ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == state.explores.length) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            final item = state.explores[index];
+                            return ExploreCard(item: item);
+                          },
+                        )
+                    );
+                  }
               ),
-            ),
+            )
           ]
         ),
       ),

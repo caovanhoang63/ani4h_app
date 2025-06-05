@@ -1,11 +1,14 @@
+import 'package:ani4h_app/common/dtos/genre.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/explore/application/iexplore_service.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_params/explore_params.dart';
 import 'package:ani4h_app/features/explore/data/dto/explore_response/explore_response.dart';
+import 'package:ani4h_app/features/explore/data/dto/explore_response/list_genre_response.dart';
 import 'package:ani4h_app/features/explore/data/repository/explore_repository.dart';
 import 'package:ani4h_app/features/explore/data/repository/iexplore_repository.dart';
 import 'package:ani4h_app/features/explore/domain/mapper/iexplore_model_mapper.dart';
 import 'package:ani4h_app/features/explore/domain/model/explore_model.dart';
+import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -20,9 +23,16 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   ExploreService(this._exploreRepository);
 
   @override
-  Future<Result<List<ExploreModel>, Failure>> getExplore(ExploreParams params, int page, int pageSize) async {
+  Future<Result<ExploreModel, Failure>> getExplore(ExploreParams filter, PagingSearch paging) async {
     try {
-      final response = await _exploreRepository.getExplore(params, page, pageSize);
+      PagingSearch pagingRequest = PagingSearch(
+        cursor: paging.nextCursor,
+        nextCursor: paging.nextCursor,
+        page: paging.page,
+        pageSize: paging.pageSize,
+      );
+
+      final response = await _exploreRepository.getExplore(filter, pagingRequest);
 
       final models = mapToExploreModel(response);
 
@@ -41,11 +51,42 @@ final class ExploreService implements IExploreService, IExploreModelMapper {
   }
 
   @override
-  List<ExploreModel> mapToExploreModel(ExploreResponse response) {
-    return response.data.map((e) => ExploreModel(
+  ExploreModel mapToExploreModel(ExploreResponse response) {
+    ExploreModel exploreModel = ExploreModel(
+      data: response.data.data.map((e) => ExploreCardModel(
+        id: e.id,
+        title: e.title,
+        imageUrl: e.images.isNotEmpty ? e.images[0].url : "",
+      )).toList(),
+      paging: response.data.paging,
+    );
+    return exploreModel;
+  }
+
+  List<Genre> mapToListGenreResponse(ListGenreResponse response) {
+    return response.data.map((e) => Genre(
       id: e.id,
       name: e.name,
-      imageUrl: e.imageUrl,
     )).toList();
+  }
+
+  @override
+  Future<Result<List<Genre>, Failure>> getGenres() async {
+    try {
+      final response = await _exploreRepository.getGenres();
+      final genres = mapToListGenreResponse(response);
+
+      return Result.success(genres);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: e as Exception,
+          stackTrace: s,
+        ),
+      );
+    }
   }
 }

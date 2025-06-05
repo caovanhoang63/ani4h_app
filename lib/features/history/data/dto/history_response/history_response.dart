@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/dtos/image.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'history_response.freezed.dart';
@@ -16,10 +17,13 @@ sealed class HistoryResponse with _$HistoryResponse {
 sealed class History with _$History {
   const factory History({
     required String id,
-    required String name,
-    required String national,
-    required String imageUrl,
-    required List<String> tags,
+    required String title,
+    required int episodeNumber,
+    required String synopsis,
+    required Image thumbnail,
+    required int viewCount,
+    required int duration,
+    required int watchedDuration,
   }) = _History;
 
   factory History.fromJson(Map<String, dynamic> json) => _$HistoryFromJson(json);
