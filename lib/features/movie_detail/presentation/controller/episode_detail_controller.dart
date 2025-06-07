@@ -18,20 +18,20 @@ class EpisodeDetailController extends StateNotifier<EpisodeDetailState> {
 
     final result = await _episodeDetailService.getEpisodeDetail(id);
 
-    result.when(
-      success: (episodeDetail) {
-        state = state.copyWith(
-          episodeDetail: episodeDetail,
-          isLoading: false,
-        );
-      },
-      error: (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          hasError: true,
-          errorMessage: failure.message,
-        );
-      },
-    );
+    // result.when(
+    //   success: (episodeDetail) {
+    //     state = state.copyWith(
+    //       episodeDetail: episodeDetail,
+    //       isLoading: false,
+    //     );
+    //   },
+    //   error: (failure) {
+    //     state = state.copyWith(
+    //       isLoading: false,
+    //       hasError: true,
+    //       errorMessage: failure.message,
+    //     );
+    //   },
+    // );
   }
 }
