@@ -1,4 +1,5 @@
 import 'package:ani4h_app/core/route/route_name.dart';
+import 'package:ani4h_app/features/profile/presentation/controller/logout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -114,12 +115,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 onTap: () {
                   context.pushNamed(settingRoute);
                 },
-              )
-              ],
+              )],
             ),
+
           ),
+
         ],
+
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ElevatedButton(
+          onPressed: () {
+            // Get the logout controller and call logout
+            final logoutController = ref.read(logoutControllerProvider);
+            logoutController.logout(GoRouter.of(context));
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromRGBO(255, 255, 255, 0.1),
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(12)
+          ),
+          child: const Text("Log out", style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold)),
+        ),
       ),
     );
+
   }
 }

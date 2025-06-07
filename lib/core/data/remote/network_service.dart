@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final networkServiceProvider = Provider<Dio>((ref) {
   final options = BaseOptions(
     baseUrl: "https://api.ani4h.site",
-    // baseUrl: "http://192.168.0.76:4002",
     connectTimeout: const Duration(seconds: 60),
     receiveTimeout: const Duration(seconds: 60),
     sendTimeout: const Duration(seconds: 60),
