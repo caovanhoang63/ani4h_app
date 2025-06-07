@@ -33,7 +33,7 @@ sealed class Datum with _$Datum {
     required String title,
     required String synopsis,
     required String? synonyms,
-    required String jaName,
+    required String? jaName,
     required String? enName,
     required List<Image> images,
     required List<Genre> genres,
