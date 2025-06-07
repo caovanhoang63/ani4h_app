@@ -63,6 +63,22 @@ final class EpisodeDetailService implements IEpisodeDetailService, IEpisodeModel
 
   @override
   List<EpisodeDetailModel> mapToEpisodeDetailModels(response) {
-    return response.data.map((e) => mapToEpisodeDetailModel(e)).toList();
+    return response.data.map((e) => EpisodeDetailModel(
+        id: e.id,
+        title: e.title,
+        episodeNumber: e.episodeNumber,
+        synopsis: e.synopsis,
+        duration: e.duration,
+        thumbnail: e.thumbnail,
+        videoUrl: e.videoUrl,
+        viewCount: e.viewCount,
+        airDate: e.airDate,
+        state: e.state,
+        status: e.status,
+        createdAt: e.createdAt,
+        updatedAt: e.updatedAt,
+        filmId: e.filmId,
+        watchedDuration: e.watchedDuration,
+    )).toList();
   }
 }
