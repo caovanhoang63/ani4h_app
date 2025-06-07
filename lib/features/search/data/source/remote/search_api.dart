@@ -2,6 +2,7 @@ import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
+import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/error_logger.dart';
@@ -26,6 +27,13 @@ abstract class SearchApi {
 
   @GET("$filmEndPoint/top-hot")
   Future<TopHotResponse> getTopHot(
+      @Query("page") int page,
+      @Query("pageSize") int pageSize,
+  );
+
+  @GET("$searchEndPoint/user-favorite")
+  Future<UserFavoriteResponse> getUserFavorite(
+      @Query("seed") int seed,
       @Query("page") int page,
       @Query("pageSize") int pageSize,
   );

@@ -1,3 +1,4 @@
+import 'package:ani4h_app/core/data/remote/token/token_service.dart';
 import 'package:ani4h_app/features/home/presentation/controller/home_controller.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_carousel.dart';
@@ -19,7 +20,8 @@ class _MainTabState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(homeControllerProvider.notifier).fetchMovies();
+      // ref.read(homeControllerProvider.notifier).fetchMovies();
+      ref.read(homeControllerProvider.notifier).fetchTopHot();
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -88,15 +90,15 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      (homeState.suggestedMovies.isNotEmpty)
+                      (homeState.userFavorite.isNotEmpty)
                           ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: homeState.suggestedMovies.length,
+                          itemCount: homeState.userFavorite.length,
                           itemBuilder: (context, index) {
-                            return MovieCard(item: homeState.suggestedMovies[index]);
+                            return MovieCard(item: homeState.userFavorite[index]);
                           },
                         ),
                       ) : const SizedBox(
@@ -120,15 +122,15 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      (ref.read(homeControllerProvider.select((value) => value.suggestedMovies.length)) > 0)
+                      (ref.read(homeControllerProvider.select((value) => value.topSearches.length)) > 0)
                           ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: ref.read(homeControllerProvider.select((value) => value.suggestedMovies.length)),
+                          itemCount: ref.read(homeControllerProvider.select((value) => value.topSearches.length)),
                           itemBuilder: (context, index) {
-                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.suggestedMovies))[index]);
+                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.topSearches))[index]);
                           },
                         ),
                       ) : const SizedBox(

@@ -8,4 +8,5 @@ import 'package:multiple_result/multiple_result.dart';
 abstract interface class ISearchService {
   Future<Result<SearchResultModel, Failure>> search(SearchRequest request, PagingSearch pageCur);
   Future<Result<SearchResultModel, Failure>> getTopHot(Paging pageCur);
+  Future<Result<SearchResultModel, Failure>> getUserFavorites(int seed, Paging pageCur);
 }
