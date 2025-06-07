@@ -11,7 +11,7 @@ sealed class Image with _$Image {
     required int width,
     required int height,
     required String extension,
-    required String cloudName,
+    required String cloud_name,
   }) = _Image;
 
   factory Image.fromJson(Map<String, dynamic> json) => _$ImageFromJson(json);
