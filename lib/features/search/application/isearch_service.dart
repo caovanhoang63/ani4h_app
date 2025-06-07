@@ -9,4 +9,5 @@ abstract interface class ISearchService {
   Future<Result<SearchResultModel, Failure>> search(SearchRequest request, PagingSearch pageCur);
   Future<Result<SearchResultModel, Failure>> getTopHot(Paging pageCur);
   Future<Result<SearchResultModel, Failure>> getUserFavorites(int seed, Paging pageCur);
+  Future<Result<SearchResultModel, Failure>> getUserHistory(int seed, Paging pageCur);
 }

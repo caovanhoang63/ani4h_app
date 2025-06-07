@@ -1,19 +1,19 @@
-import 'package:ani4h_app/common/dtos/genre.dart';
-import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../../../common/dtos/genre.dart';
 import '../../../../../common/dtos/image.dart';
+import '../../../../../common/dtos/paging.dart';
 
-part 'user_favorite_response.freezed.dart';
-part 'user_favorite_response.g.dart';
+part 'user_history_response.freezed.dart';
+part 'user_history_response.g.dart';
 
 @freezed
-sealed class UserFavoriteResponse with _$UserFavoriteResponse {
-  const factory UserFavoriteResponse({
+sealed class UserHistoryResponse with _$UserHistoryResponse {
+  const factory UserHistoryResponse({
     required Data data,
-  }) = _UserFavoriteResponse;
+  }) = _UserHistoryResponse;
 
-  factory UserFavoriteResponse.fromJson(Map<String, dynamic> json) => _$UserFavoriteResponseFromJson(json);
+  factory UserHistoryResponse.fromJson(Map<String, dynamic> json) => _$UserHistoryResponseFromJson(json);
 }
 
 @freezed

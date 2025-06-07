@@ -7,6 +7,7 @@ import 'package:ani4h_app/features/search/data/dto/search_request/search_request
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
 import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
+import 'package:ani4h_app/features/search/data/dto/user_history_response/user_history_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -71,6 +72,26 @@ final class SearchRepository with DioExceptionMapper implements ISearchRepositor
     } catch (e, s) {
       throw Failure(
         message: e.toString(),
+        exception: toException(e),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  Future<UserHistoryResponse> getUserHistorySuggestion(int seed, Paging paging) {
+    try {
+      log("Get User History Suggestion Response: start");
+
+      final response = _searchApi.getUserHistory(seed, paging.page, paging.pageSize);
+      log("Get User History Suggestion Response: success");
+      return response;
+    } on DioException catch (e, s) {
+      throw mapDioExceptionToFailure(e, s);
+    } catch (e, s) {
+      throw Failure(
+        message: e.toString(),
+        exception: toException(e),
         stackTrace: s,
       );
     }

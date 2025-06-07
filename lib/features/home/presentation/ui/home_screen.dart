@@ -20,9 +20,10 @@ class _MainTabState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(homeControllerProvider.notifier).fetchMovies();
+      ref.read(homeControllerProvider.notifier).fetchCarouselMovies();
       ref.read(homeControllerProvider.notifier).fetchTopHot();
-      // ref.read(homeControllerProvider.notifier).fetchUserFavorite();
+      ref.read(homeControllerProvider.notifier).fetchUserFavorite();
+      ref.read(homeControllerProvider.notifier).fetchUserHistorySuggestion();
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -42,27 +43,6 @@ class _MainTabState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      MovieItem(
-        name: 'Nise Koi',
-        horizontalImage: 'https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-m0b739a84kq595',
-        verticalImage: 'https://m.media-amazon.com/images/M/MV5BMzcxMjBiNWMtNDBmYi00NmFlLWFlOTctZjlkMzExMWU0YTI5XkEyXkFqcGc@._V1_.jpg',
-        type: 'HD Vietsub',
-      ),
-      MovieItem(
-        name: 'Mayonaka Heart Tune',
-        horizontalImage: 'https://vocesabianime.com/wp-content/uploads/2023/09/Mayonaka_Heart_Tune_o_substituto_de-Gotoubun_no_hanayome_1133x637.jpg',
-        verticalImage: 'https://moyashi-japan.com/cdn/shop/files/71eCz6ESqPL._SL1481.jpg?v=1736639005',
-        type: 'HD Vietsub',
-      ),
-      MovieItem(
-        name: 'Isshou Senkin',
-        horizontalImage: 'https://i0.wp.com/www.otakupt.com/wp-content/uploads/2023/04/Isshou-Senkin-manga-teaser-1.jpg?resize=696%2C433&ssl=1',
-        verticalImage: 'https://i.ebayimg.com/images/g/DMkAAOSwBZxl-SQ4/s-l1200.jpg',
-        type: 'HD Vietsub',
-      ),
-    ];
-
     final homeState = ref.watch(homeControllerProvider);
 
     return Scaffold(
@@ -71,16 +51,18 @@ class _MainTabState extends ConsumerState<HomeScreen> {
           // Body content
           RefreshIndicator(
             onRefresh: () async {
-              ref.read(homeControllerProvider.notifier).fetchMovies();
+              ref.read(homeControllerProvider.notifier).fetchCarouselMovies();
               ref.read(homeControllerProvider.notifier).fetchTopHot();
               ref.read(homeControllerProvider.notifier).fetchUserFavorite();
+              ref.read(homeControllerProvider.notifier).fetchUserHistorySuggestion();
+
             },
             child: ListView(
               scrollDirection: Axis.vertical,
               padding: const EdgeInsets.only(top: 0),
               controller: _scrollController,
               children: [
-                MovieCarousel(items: items),
+                MovieCarousel(items: homeState.carouselMovies),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Column(
@@ -125,15 +107,47 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      (ref.read(homeControllerProvider.select((value) => value.topSearches.length)) > 0)
+                      (ref.read(homeControllerProvider.select((value) => value.userFavorite.length)) > 0)
                           ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: ref.read(homeControllerProvider.select((value) => value.topSearches.length)),
+                          itemCount: ref.read(homeControllerProvider.select((value) => value.userFavorite.length)),
                           itemBuilder: (context, index) {
-                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.topSearches))[index]);
+                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.userFavorite))[index]);
+                          },
+                        ),
+                      ) : const SizedBox(
+                        height: 150,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Proposal for you',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      (ref.read(homeControllerProvider.select((value) => value.userHistorySuggestion.length)) > 0)
+                          ? SizedBox(
+                        height: MediaQuery.of(context).size.width * 0.4,
+                        child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: ref.read(homeControllerProvider.select((value) => value.userHistorySuggestion.length)),
+                          itemBuilder: (context, index) {
+                            return MovieCard(item: ref.read(homeControllerProvider.select((value) => value.userHistorySuggestion))[index]);
                           },
                         ),
                       ) : const SizedBox(

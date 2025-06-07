@@ -1,4 +1,5 @@
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
+import 'package:ani4h_app/features/search/domain/model/search_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // Correct import for CarouselSlider v5.0.0
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,7 @@ final carouselIndexProvider = StateProvider<int>((ref) {
 });
 
 class MovieCarousel extends ConsumerStatefulWidget {
-  final List<MovieItem> items;
+  final List<FilmCardModel> items;
 
   const MovieCarousel({super.key, required this.items});
 
@@ -44,7 +45,7 @@ class _CarouselWidgetState extends ConsumerState<MovieCarousel> {
                     Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(item.verticalImage),
+                          image: NetworkImage(item.imageUrl),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -71,7 +72,7 @@ class _CarouselWidgetState extends ConsumerState<MovieCarousel> {
                       bottom: 10,
                       left: 16,
                       child: Text(
-                        item.name,
+                        item.title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
