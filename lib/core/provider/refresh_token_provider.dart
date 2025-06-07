@@ -63,8 +63,9 @@ class RefreshTokenChecker {
         print("API error during token refresh: $apiError");
         throw apiError;
       }
-    } catch (e) {
+    } catch (e,s) {
       print("Error during token refresh: $e");
+      print("stack $s");
       // If refresh token is invalid or expired, clear tokens and return false
       print("Clearing tokens and setting auth state to false");
       await _tokenService.clearToken();
@@ -90,6 +91,23 @@ class RefreshTokenChecker {
     // If the user is already logged in, we can skip the token check
     if (isLoggedIn) {
       print("User is already logged in according to auth state, returning true");
+
+      // Even if the user is logged in according to auth state,
+      // let's verify that we still have a valid refresh token
+      // This is a safety check to ensure the tokens haven't been cleared
+      final hasToken = await hasRefreshToken();
+      print("Verifying refresh token exists: $hasToken");
+
+      if (!hasToken) {
+        print("No refresh token found despite auth state being true. This is unexpected.");
+        print("Setting auth state to false and redirecting to login");
+        _authState.setAuthState(false);
+        if (router != null) {
+          router.go(loginRoute);
+        }
+        return false;
+      }
+
       return true;
     }
 

@@ -59,6 +59,7 @@ class TokenService implements ITokenService {
 
       if (response.statusCode == success) {
         print("TokenService: Refresh token API call successful");
+        print(response.data);
         final parsedResponse = RefreshTokenResponse.fromJson(response.data ?? {});
         print("TokenService: New access token: ${parsedResponse.data.accessToken.isNotEmpty ? 'not empty' : 'empty'}");
         print("TokenService: New refresh token: ${parsedResponse.data.refreshToken.isNotEmpty ? 'not empty' : 'empty'}");

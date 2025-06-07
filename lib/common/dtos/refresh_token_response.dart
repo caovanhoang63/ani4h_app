@@ -6,7 +6,6 @@ part 'refresh_token_response.g.dart';
 @freezed
 sealed class RefreshTokenResponse with _$RefreshTokenResponse {
   const factory RefreshTokenResponse({
-    required String status,
     required Data data,
   }) = _RefreshTokenResponse;
 

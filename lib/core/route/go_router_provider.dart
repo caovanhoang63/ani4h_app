@@ -12,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/movie_detail/presentation/ui/movie_detail_screen.dart';
-import '../data/remote/token/token_service.dart';
 import '../provider/refresh_token_provider.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -31,6 +30,8 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       // For all other routes, check if we have a refresh token
       // If not, redirect to login
       print("Checking for valid token...");
+
+      // Check if we have a valid token
       final hasValidToken = await refreshTokenChecker.checkAndRefreshToken(null);
       print("Token check result: $hasValidToken");
 
