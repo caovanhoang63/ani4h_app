@@ -15,29 +15,39 @@ final class SecureStorage implements ISecureStorage {
 
   @override
   Future<void> delete(String key) async {
+    print("SecureStorage: Deleting value for key: $key");
     try {
        await _secureStorage.delete(key: key);
+       print("SecureStorage: Successfully deleted value for key: $key");
     } catch (e) {
+      print("SecureStorage: Error deleting value for key: $key, error: $e");
       rethrow;
     }
   }
 
   @override
   Future<String?> read(String key) async {
+    print("SecureStorage: Reading value for key: $key");
     try {
-      return await _secureStorage.read(key: key);
+      final value = await _secureStorage.read(key: key);
+      print("SecureStorage: Value for key $key: ${value != null ? 'not null' : 'null'}, ${value?.isNotEmpty == true ? 'not empty' : 'empty'}");
+      return value;
     } catch (e) {
+      print("SecureStorage: Error reading value for key: $key, error: $e");
       rethrow;
     }
   }
 
   @override
   Future<void> write(String key, String value) async {
+    print("SecureStorage: Writing value for key: $key, value length: ${value.length}");
     try {
-      await _secureStorage.write(key: key,value: value );
+      await _secureStorage.write(key: key, value: value);
+      print("SecureStorage: Successfully wrote value for key: $key");
     } catch (e) {
+      print("SecureStorage: Error writing value for key: $key, error: $e");
       rethrow;
     }
   }
-  
+
 }

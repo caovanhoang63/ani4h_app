@@ -17,6 +17,7 @@ sealed class RefreshTokenResponse with _$RefreshTokenResponse {
 @freezed
 sealed class Data with _$Data {
   const factory Data({
+    required String email,
     required String accessToken,
     required String refreshToken,
   }) = _Data;

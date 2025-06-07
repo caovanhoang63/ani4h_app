@@ -12,9 +12,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/movie_detail/presentation/ui/movie_detail_screen.dart';
+import '../data/remote/token/token_service.dart';
+import '../provider/refresh_token_provider.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  return GoRouter(initialLocation: mainRoute, routes: [
+  final refreshTokenChecker = ref.watch(refreshTokenProvider);
+
+  return GoRouter(
+    initialLocation: mainRoute,
+    redirect: (context, state) async {
+      print("GoRouter redirect called for path: ${state.matchedLocation}");
+
+      if (state.matchedLocation == loginRoute || state.matchedLocation == signupRoute) {
+        print("Skipping token check for login/signup route");
+        return null;
+      }
+
+      // For all other routes, check if we have a refresh token
+      // If not, redirect to login
+      print("Checking for valid token...");
+      final hasValidToken = await refreshTokenChecker.checkAndRefreshToken(null);
+      print("Token check result: $hasValidToken");
+
+      if (!hasValidToken) {
+        print("No valid token, redirecting to login page");
+        return loginRoute;
+      }
+
+      print("Valid token found, allowing navigation to: ${state.matchedLocation}");
+      return null;
+    },
+    routes: [
     GoRoute(
       path: loginRoute,
       name: loginRoute,
