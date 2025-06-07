@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MoviePlayer extends ConsumerStatefulWidget {
-  const MoviePlayer({super.key});
+  final String videoUrl;
+
+  const MoviePlayer({super.key, required this.videoUrl});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MoviePlayerState();
 }
 
 class _MoviePlayerState extends ConsumerState<MoviePlayer> {
-  static const movieUrl = "https://d2oh79ptmlqizl.cloudfront.net/output.webm/master.m3u8";
-  static const movieUrl2 = "https://d2oh79ptmlqizl.cloudfront.net/film/12/episode_3/51db36ce-c25e-4836-8e65-ac92fa6d2e7f.webm/master.m3u8";
   late BetterPlayerController _betterPlayerController;
 
   bool _controlsVisible = true; // State to manage control visibility
@@ -79,9 +79,13 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   void initState() {
     super.initState();
 
+    // Use the provided videoUrl if available, otherwise use the default
+    final String videoUrl = widget.videoUrl;
+
+
     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      movieUrl,
+      videoUrl,
       videoFormat: BetterPlayerVideoFormat.hls,
     );
 

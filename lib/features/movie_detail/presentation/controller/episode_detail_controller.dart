@@ -14,24 +14,32 @@ class EpisodeDetailController extends StateNotifier<EpisodeDetailState> {
   EpisodeDetailController(this._episodeDetailService) : super(const EpisodeDetailState());
 
   Future<void> getEpisodeDetail(String id) async {
-    state = state.copyWith(isLoading: true, hasError: false, errorMessage: '');
+    try {
+      state = state.copyWith(isLoading: true, hasError: false, errorMessage: '');
 
-    final result = await _episodeDetailService.getEpisodeDetail(id);
+      final result = await _episodeDetailService.getEpisodeDetail(id);
 
-    // result.when(
-    //   success: (episodeDetail) {
-    //     state = state.copyWith(
-    //       episodeDetail: episodeDetail,
-    //       isLoading: false,
-    //     );
-    //   },
-    //   error: (failure) {
-    //     state = state.copyWith(
-    //       isLoading: false,
-    //       hasError: true,
-    //       errorMessage: failure.message,
-    //     );
-    //   },
-    // );
+      result.when(
+        (episodeDetail) {
+          state = state.copyWith(
+            episodeDetail: episodeDetail,
+            isLoading: false,
+          );
+        },
+        (failure) {
+          state = state.copyWith(
+            isLoading: false,
+            hasError: true,
+            errorMessage: failure.message,
+          );
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        hasError: true,
+        errorMessage: e.toString(),
+      );
+    }
   }
 }

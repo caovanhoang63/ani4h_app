@@ -60,4 +60,9 @@ final class EpisodeDetailService implements IEpisodeDetailService, IEpisodeModel
       watchedDuration: data.watchedDuration,
     );
   }
+
+  @override
+  List<EpisodeDetailModel> mapToEpisodeDetailModels(response) {
+    return response.data.map((e) => mapToEpisodeDetailModel(e)).toList();
+  }
 }
