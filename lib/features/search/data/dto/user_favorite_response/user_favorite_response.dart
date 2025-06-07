@@ -1,4 +1,5 @@
 import 'package:ani4h_app/common/dtos/genre.dart';
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_favorite_response.freezed.dart';
@@ -31,7 +32,7 @@ sealed class Datum with _$Datum {
     required String synopsis,
     required String? synonyms,
     required String jaName,
-    required dynamic enName,
+    required String? enName,
     required List<Image> images,
     required List<Genre> genres,
     required int avgStar,
@@ -81,19 +82,6 @@ final stateValues = EnumValues({
   "finished": State.FINISHED,
   "upcoming": State.UPCOMING
 });
-
-@freezed
-sealed class Paging with _$Paging {
-  const factory Paging({
-    required dynamic cursor,
-    required String nextCursor,
-    required int pageSize,
-    required int page,
-    required int offset,
-  }) = _Paging;
-
-  factory Paging.fromJson(Map<String, dynamic> json) => _$PagingFromJson(json);
-}
 
 class EnumValues<T> {
   Map<String, T> map;

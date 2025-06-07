@@ -4,7 +4,7 @@ import 'package:ani4h_app/features/search/application/isearch_service.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
-import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart' hide Paging;
+import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:ani4h_app/features/search/data/repository/search_repository.dart';
 import 'package:ani4h_app/features/search/domain/mapper/isearch_result_model_mapper.dart';

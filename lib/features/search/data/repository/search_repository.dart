@@ -6,7 +6,7 @@ import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
-import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart' hide Paging;
+import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
 import 'package:ani4h_app/features/search/data/repository/isearch_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

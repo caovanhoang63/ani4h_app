@@ -20,8 +20,9 @@ class _MainTabState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      // ref.read(homeControllerProvider.notifier).fetchMovies();
+      ref.read(homeControllerProvider.notifier).fetchMovies();
       ref.read(homeControllerProvider.notifier).fetchTopHot();
+      // ref.read(homeControllerProvider.notifier).fetchUserFavorite();
     });
     _scrollController.addListener(_scrollListener);
   }
@@ -71,6 +72,8 @@ class _MainTabState extends ConsumerState<HomeScreen> {
           RefreshIndicator(
             onRefresh: () async {
               ref.read(homeControllerProvider.notifier).fetchMovies();
+              ref.read(homeControllerProvider.notifier).fetchTopHot();
+              ref.read(homeControllerProvider.notifier).fetchUserFavorite();
             },
             child: ListView(
               scrollDirection: Axis.vertical,
@@ -90,15 +93,15 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      (homeState.userFavorite.isNotEmpty)
+                      (homeState.topSearches.isNotEmpty)
                           ? SizedBox(
                         height: MediaQuery.of(context).size.width * 0.4,
                         child: ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
-                          itemCount: homeState.userFavorite.length,
+                          itemCount: homeState.topSearches.length,
                           itemBuilder: (context, index) {
-                            return MovieCard(item: homeState.userFavorite[index]);
+                            return MovieCard(item: homeState.topSearches[index]);
                           },
                         ),
                       ) : const SizedBox(
