@@ -1,12 +1,12 @@
 import 'package:ani4h_app/common/utils/capitalize.dart';
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/route/route_name.dart';
-import '../../../data/dto/movie_response/movie_response.dart' as response;
-import '../../../domain/model/movie_model.dart';
+import '../../../../home/data/dto/movies_response/movies_response.dart' as response;
 
 class MovieItem {
   final String name;
@@ -18,7 +18,7 @@ class MovieItem {
 }
 
 class MovieCard extends ConsumerWidget {
-  final MovieModel item;
+  final MovieDetailModel item;
 
   const MovieCard({super.key, required this.item});
 

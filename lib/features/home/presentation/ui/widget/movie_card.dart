@@ -8,15 +8,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/provider/current_movie_state/current_movie_controller.dart';
 import '../../../../../core/route/route_name.dart';
 
-class MovieItem {
-  final String name;
-  final String horizontalImage;
-  final String verticalImage;
-  final String type;
-
-  MovieItem({required this.name, required this.horizontalImage, required this.verticalImage, required this.type});
-}
-
 class MovieCard extends ConsumerWidget {
   final FilmCardModel item;
 
@@ -30,7 +21,6 @@ class MovieCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
-        ref.read(currentMovieControllerProvider.notifier).fetchSuggestedMovies();
         context.pushNamed(movieDetailRoute);
       },
       child: Container(

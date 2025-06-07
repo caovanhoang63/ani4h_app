@@ -1,7 +1,6 @@
+import 'package:ani4h_app/common/dtos/genre.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../data/dto/movie_response/movie_response.dart';
 
 class MovieTag extends ConsumerWidget {
   final Genre tag;

@@ -1,12 +1,10 @@
 import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/movie_detail_response/movie_detail_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
-
-import '../../dto/movie_response/movie_response.dart';
-import '../../dto/movies_response/movies_response.dart';
 
 part 'movie_detail_api.g.dart';
 
@@ -20,11 +18,5 @@ abstract class MovieDetailApi {
   factory MovieDetailApi(Dio dio) => _MovieDetailApi(dio);
 
   @GET("$filmEndPoint/{id}")
-  Future<MovieResponse> getMovieDetail(@Path("id") String id);
-
-  @GET(filmEndPoint)
-  Future<MoviesResponse> getMovies(
-    @Query("page") int page,
-    @Query("pageSize") int pageSize,
-  );
+  Future<MovieDetailResponse> getMovieDetail(@Path("id") String id);
 }
