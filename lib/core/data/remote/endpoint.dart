@@ -6,3 +6,4 @@ const String historyEndPoint = '/v1/watch-history';
 const String searchEndPoint = '/v1/search';
 const String exploreEndPoint = '/v1/search';
 const String genreEndPoint = '/v1/genre';
+const String episodeEndPoint = '/v1/episode';
