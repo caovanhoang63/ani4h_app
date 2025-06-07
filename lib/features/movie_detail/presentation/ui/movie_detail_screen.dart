@@ -1,5 +1,5 @@
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
-import 'package:ani4h_app/features/movie_detail/domain/model/movie_model.dart';
+import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_player.dart';
@@ -43,8 +43,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MovieModel? currentMovie = ref.watch(currentMovieControllerProvider.select((state) => state.movieDetail));
-    List<MovieModel> suggestedMovies = ref.watch(currentMovieControllerProvider.select((state) => state.suggestedMovies));
+    MovieDetailModel? currentMovie = ref.watch(currentMovieControllerProvider.select((state) => state.movieDetail));
 
     bool isIntroVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isIntroPanelOn));
     bool isPlaylistVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isPlaylistPanelOn));
@@ -236,23 +235,23 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              (suggestedMovies.isNotEmpty)
-                                  ? SizedBox(
-                                height: MediaQuery.of(context).size.width * 0.4,
-                                child: ListView.builder(
-                                  physics: const AlwaysScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: suggestedMovies.length,
-                                  itemBuilder: (context, index) {
-                                    return MovieCard(item: suggestedMovies[index]);
-                                  },
-                                ),
-                              ) : const SizedBox(
-                                height: 150,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
+                              // (suggestedMovies.isNotEmpty)
+                              //     ? SizedBox(
+                              //   height: MediaQuery.of(context).size.width * 0.4,
+                              //   child: ListView.builder(
+                              //     physics: const AlwaysScrollableScrollPhysics(),
+                              //     scrollDirection: Axis.horizontal,
+                              //     itemCount: suggestedMovies.length,
+                              //     itemBuilder: (context, index) {
+                              //       return MovieCard(item: suggestedMovies[index]);
+                              //     },
+                              //   ),
+                              // ) : const SizedBox(
+                              //   height: 150,
+                              //   child: Center(
+                              //     child: CircularProgressIndicator(),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],

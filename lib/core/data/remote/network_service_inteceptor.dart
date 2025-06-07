@@ -22,7 +22,8 @@ final class NetworkServiceInterceptor extends Interceptor {
     options.headers["Content-Type"]= "application/json";
     options.headers["Accept"] = "application/json";
     if (accessToken != null) {
-      options.headers["Authorization"] = "Bearer $accessToken";
+      // options.headers["Authorization"] = "Bearer $accessToken";
+      options.headers["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJraWQiOiJteS1rZXktaWQiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIzbU1vM2hWR1RFNFZUTSIsImlhdCI6MTc0OTI4MzgwMCwiZXhwIjoxNzQ5Mjg1NjAwLCJpc3MiOiJodHRwczovL2FuaTRoLWF1dGguczMuYXAtc291dGhlYXN0LTEuYW1hem9uYXdzLmNvbS8iLCJhdWQiOiJteS1hdWRpZW5jZSIsImVtYWlsIjoiYnVpdGhhaWhvYW5nMDRAZ21haWwuY29tIiwic2NvcGUiOiJ1c2VyIn0.d2-30b_U6bhoDj3fZcIHRIJ2wShiQ_knPfa560zwYfsTMZ7ind8QPFQlmtUxJ9oZe7mls76aGJR16wudqKh4aKs4n5z6bmTVzryYcKSonq0ZNqzFdkNf-KAFSjScv-gZJDuCUQd1COMHhULTL_44dt2D8jTz3PbwXVGV_TXTiP80oP48OK9hx6PViwyNIV-d6jQXBZKStlSTyz8w3HjukfmmrBEysuEsBLSXjiCUESWQKZe1C-ocvgti0wwBZRvk4B2XwqviJNWEniCeMGRaNSAnduqIAytiHMUcknCR_Q0q0PYBLqisUIluw8aTSx9XKj42e6_1HwfvOyEdCJsxd8IinWw6UKNOnYQxHox_TM0clM9KfmYNJsCYNSzAkLh8X3foz0JsOnq7JAHvjI_9KytPToKU25TZuv0KZJK-8RSy9kxbBsfHIqvbqltt9fPfjOLzj0UV9Pt7KMH9Thbg8sCMrRdqEW7OQeX0skedIEQSsKzlz076DscLps4LEEUPCisgggNXJfH25lB0wimfAabX772YFk-XZt2FJw8WpzRhaWqFE5nTddDacs8TnAbedjVAivxIR2mGaTc_JLZP2VX-CNct-Pw5icXxzsXYAnQwIBsdktbLah7blWX20WU6rMvqYSwJDqJeHVW5O_futEmrUqpukqzpIG_lxs0IsRs";
     }
     super.onRequest(options, handler);
   }

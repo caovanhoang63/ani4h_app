@@ -1,6 +1,6 @@
 import 'package:ani4h_app/common/utils/capitalize.dart';
 import 'package:ani4h_app/features/home/data/dto/movies_response/movies_response.dart' as response;
-import 'package:ani4h_app/features/home/domain/model/movie_model.dart';
+import 'package:ani4h_app/features/search/domain/model/search_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,17 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/provider/current_movie_state/current_movie_controller.dart';
 import '../../../../../core/route/route_name.dart';
 
-class MovieItem {
-  final String name;
-  final String horizontalImage;
-  final String verticalImage;
-  final String type;
-
-  MovieItem({required this.name, required this.horizontalImage, required this.verticalImage, required this.type});
-}
-
 class MovieCard extends ConsumerWidget {
-  final MovieModel item;
+  final FilmCardModel item;
 
   const MovieCard({super.key, required this.item});
 
@@ -30,7 +21,6 @@ class MovieCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
-        ref.read(currentMovieControllerProvider.notifier).fetchSuggestedMovies();
         context.pushNamed(movieDetailRoute);
       },
       child: Container(
@@ -46,9 +36,8 @@ class MovieCard extends ConsumerWidget {
             // Background Image
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: item.images != null && item.images!.isNotEmpty
-                  ? Image.network(
-                item.images![0].url,
+              child: Image.network(
+                item.imageUrl,
                 width: cardWidth,
                 height: cardHeight * 0.8,
                 fit: BoxFit.cover,
@@ -70,34 +59,34 @@ class MovieCard extends ConsumerWidget {
                     ),
                   );
                 },
-              ) : Container(
-                color: Colors.grey[300],
-                height: cardHeight * 0.8,
-                child: const Center(
-                  child: Icon(Icons.broken_image, color: Colors.red, size: 50),
-                ),
+              // ) : Container(
+              //   color: Colors.grey[300],
+              //   height: cardHeight * 0.8,
+              //   child: const Center(
+              //     child: Icon(Icons.broken_image, color: Colors.red, size: 50),
+              //   ),
               ),
             ),
 
             // Type Badge
-            Positioned(
-              top: 8,
-              left: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  capitalizeSentence(response.stateValues.reverse[item.state] ?? ""),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   top: 8,
+            //   left: 8,
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            //     decoration: BoxDecoration(
+            //       color: Colors.red,
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: Text(
+            //       capitalizeSentence(response.stateValues.reverse[item.state] ?? ""),
+            //       style: const TextStyle(
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
 
             // Title
             Positioned(
