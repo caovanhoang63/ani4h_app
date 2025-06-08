@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:ani4h_app/features/movie_detail/domain/model/episode_detail_model.dart';
 import 'package:better_player_plus/better_player_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MoviePlayer extends ConsumerStatefulWidget {
-  final String videoUrl;
+  final EpisodeDetailModel episode;
 
-  const MoviePlayer({super.key, required this.videoUrl});
+  const MoviePlayer({super.key, required this.episode});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MoviePlayerState();
@@ -79,9 +80,15 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   void initState() {
     super.initState();
 
-    // Use the provided videoUrl if available, otherwise use the default
-    final String videoUrl = widget.videoUrl;
+    _initializePlayer(); // Initialize the BetterPlayerController
 
+    // Initialize timer to hide controls
+    _startHideControlsTimer();
+  }
+
+  void _initializePlayer() {
+
+    final String videoUrl = widget.episode.videoUrl;
 
     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
@@ -89,11 +96,9 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
       videoFormat: BetterPlayerVideoFormat.hls,
     );
 
-    // Use the default configuration (with built-in controls)
     _betterPlayerController = BetterPlayerController(
       const BetterPlayerConfiguration(
-        autoPlay: true,
-        // Disable built-in controls to use custom ones
+        autoPlay: false,
         controlsConfiguration: BetterPlayerControlsConfiguration(
           showControls: false,
           showControlsOnInitialize: false,
@@ -101,12 +106,29 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
       ),
       betterPlayerDataSource: betterPlayerDataSource,
     );
-
-    // Listen to player events to update UI states
     _betterPlayerController.addEventsListener(_onPlayerEvent);
+  }
 
-    // Initialize timer to hide controls
-    _startHideControlsTimer();
+  @override
+
+  void didUpdateWidget(MoviePlayer oldWidget) {
+
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.episode.videoUrl != oldWidget.episode.videoUrl) {
+      // Dispose old controller and re-initialize with new videoUrl
+      _betterPlayerController.removeEventsListener(_onPlayerEvent);
+      _betterPlayerController.dispose();
+
+      setState(() {
+        _isLoading = true; // Show loading indicator while new video loads
+        _currentPosition = Duration.zero; // Reset position
+        _totalDuration = Duration.zero; // Reset duration
+        _isPlaying = false; // Reset play state
+      });
+
+      _initializePlayer();
+    }
   }
 
   // Start the timer to hide controls
@@ -274,6 +296,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
     _betterPlayerController.seekTo(
         newPosition.isNegative ? Duration.zero : newPosition);
     _showSeekOverlay(isForward: false);
+    _startHideControlsTimer();
   }
 
   // Seek forward by 10 seconds
@@ -282,6 +305,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
     _betterPlayerController.seekTo(
         newPosition > _totalDuration ? _totalDuration : newPosition);
     _showSeekOverlay(isForward: true);
+    _startHideControlsTimer();
   }
 
   // Toggle mute/unmute
@@ -871,6 +895,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggleControlsVisibility,
+      onDoubleTap: _togglePlayPause, // Double tap to play/pause
       child: Stack(
         children: [
           // Video Player
@@ -891,8 +916,6 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                   // Transparent overlay to capture taps and gestures
                   Positioned.fill(
                     child: GestureDetector(
-                      onDoubleTap: _togglePlayPause,
-                      // Double tap anywhere to play/pause
                       child: Row( // Row to define left and right double-tap areas
                         children: [
                           // Left double-tap area for seeking backward
@@ -1010,6 +1033,32 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                     ),
                   ),
 
+                  // Loading Indicator (always visible if loading, independent of controls visibility)
+
+                  if (_isLoading) // Only render if loading
+                    Align(
+                      alignment: Alignment.center,
+                      child: AnimatedOpacity(
+                        opacity: _isLoading ? 1.0 : 0.0, // Fade based on loading state
+                        duration: const Duration(milliseconds: 300),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.black54, // Semi-transparent background
+                            shape: BoxShape.circle,
+                          ),
+                          child: const SizedBox(
+                            width: 48, // Match icon size
+                            height: 48, // Match icon size
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 4,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
                   // Floating Play/Pause Button (Middle)
                   Align(
                     alignment: Alignment.center,
@@ -1028,17 +1077,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                               shape: BoxShape.circle,
                             ),
                             // Conditionally show loading indicator or play/pause icon
-                            child: _isLoading
-                                ? const SizedBox( // Use SizedBox to give CircularProgressIndicator a size
-                              width: 48, // Match icon size
-                              height: 48, // Match icon size
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white), // White color
-                                strokeWidth: 4, // Adjust thickness
-                              ),
-                            )
-                                : Icon(
+                            child: Icon(
                               _isPlaying ? Icons.pause : Icons.play_arrow,
                               color: Colors.white,
                               size: 48, // Large icon size
