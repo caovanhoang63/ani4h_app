@@ -43,10 +43,13 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
     MovieDetailModel? currentMovie = ref.watch(currentMovieControllerProvider.select((state) => state.movieDetail));
     List<EpisodeDetailModel> episodes = ref.watch(currentMovieControllerProvider.select((state) => state.episodes));
 
-    // Find the currently selected episode directly from the episodes list
-    // final EpisodeDetailModel selectedEpisode = episodes.firstWhere((ep) => ep.id == selectedIndex);
-    final EpisodeDetailModel? selectedEpisode = episodes.firstOrNull;
-
+    EpisodeDetailModel? selectedEpisode;
+    for (var ep in episodes) {
+      if (ep.id == selectedIndex) {
+        selectedEpisode = ep;
+        break;
+      }
+    }
 
     // Initialize selectedIndex if episodes are loaded and selectedIndex is still default or invalid
     // This ensures an episode is selected when the screen loads or episodes become available.
@@ -84,7 +87,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                 selectedEpisode == null
                     ? const Center(child: CircularProgressIndicator())
                     : MoviePlayer(
-                  videoUrl: selectedEpisode.videoUrl,
+                  episode: selectedEpisode,
                 ),
               ),
               Expanded(
@@ -205,7 +208,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         selectedIndex = episode.id;
                                       });
 
-                                      print('Tapped on item with ID: ${episode.id}, Index: ${episode.episodeNumber}');
+                                      print('Tapped on item with ID: ${episode.id}, Index: ${episode.episodeNumber}, Url: ${episode.videoUrl}');
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Added const
