@@ -25,6 +25,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   // States for player progress and duration
   Duration _currentPosition = Duration.zero;
   Duration _totalDuration = Duration.zero;
+  Duration _bufferedDuration = Duration.zero; // State for buffered duration
   bool _isPlaying = false; // State for play/pause button icon
   bool _isLoading = true; // State for loading indicator
 
@@ -80,22 +81,18 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   void initState() {
     super.initState();
 
-    _initializePlayer(); // Initialize the BetterPlayerController
+    _initializePlayerController(widget.episode.videoUrl); // Initialize the BetterPlayerController
 
     // Initialize timer to hide controls
     _startHideControlsTimer();
   }
 
-  void _initializePlayer() {
-
-    final String videoUrl = widget.episode.videoUrl;
-
+  void _initializePlayerController(String videoUrl) {
     BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       videoUrl,
       videoFormat: BetterPlayerVideoFormat.hls,
     );
-
     _betterPlayerController = BetterPlayerController(
       const BetterPlayerConfiguration(
         autoPlay: false,
@@ -107,28 +104,79 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
       betterPlayerDataSource: betterPlayerDataSource,
     );
     _betterPlayerController.addEventsListener(_onPlayerEvent);
+    // Reset player specific states when a new video is being loaded
+    if (mounted) {
+      setState(() {
+        _currentPosition = Duration.zero;
+        _totalDuration = Duration.zero;
+        _bufferedDuration = Duration.zero; // Reset buffered duration
+        _isPlaying = false;
+        _isLoading = true; // Assume loading for the new video
+        _leftSeekOverlayOpacity = 0.0;
+        _rightSeekOverlayOpacity = 0.0;
+        _hideSeekOverlayTimer?.cancel();
+        _selectedQualityIndex = -1; // Reset quality selection
+        _qualityOptions = []; // Clear quality options
+      });
+    }
   }
 
   @override
-
-  void didUpdateWidget(MoviePlayer oldWidget) {
-
+  void didUpdateWidget(covariant MoviePlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    if (widget.episode.videoUrl != oldWidget.episode.videoUrl) {
-      // Dispose old controller and re-initialize with new videoUrl
-      _betterPlayerController.removeEventsListener(_onPlayerEvent);
-      _betterPlayerController.dispose();
-
-      setState(() {
-        _isLoading = true; // Show loading indicator while new video loads
-        _currentPosition = Duration.zero; // Reset position
-        _totalDuration = Duration.zero; // Reset duration
-        _isPlaying = false; // Reset play state
-      });
-
-      _initializePlayer();
+    // Check if the episode or its videoUrl has changed
+    if (widget.episode.id != oldWidget.episode.id ||
+        widget.episode.videoUrl != oldWidget.episode.videoUrl) {
+      final String newVideoUrl = widget.episode.videoUrl ?? '';
+      if (newVideoUrl.isNotEmpty) {
+        // Setup new data source for the existing controller
+        _betterPlayerController.setupDataSource(
+          BetterPlayerDataSource(
+            BetterPlayerDataSourceType.network,
+            newVideoUrl,
+            videoFormat: BetterPlayerVideoFormat.hls,
+          ),
+        );
+        _betterPlayerController.play(); // Auto-play the new video
+        // Reset player states for the new video
+        if (mounted) {
+          setState(() {
+            _currentPosition = Duration.zero;
+            _totalDuration = Duration.zero;
+            _bufferedDuration = Duration.zero; // Reset buffered duration
+            _isPlaying = true;
+            _isLoading = true; // Set to true while the new video loads
+            _leftSeekOverlayOpacity = 0.0;
+            _rightSeekOverlayOpacity = 0.0;
+            _hideSeekOverlayTimer?.cancel();
+            _selectedQualityIndex = -1; // Reset quality selection
+            _qualityOptions = []; // Clear quality options
+          });
+        }
+      } else {
+        // Handle case where the new episode has no videoUrl
+        _betterPlayerController.pause();
+        print("New episode has no video URL. Player paused.");
+        if (mounted) {
+          setState(() {
+            _isPlaying = false;
+            _isLoading = false;
+            _currentPosition = Duration.zero;
+            _totalDuration = Duration.zero;
+            _bufferedDuration = Duration.zero; // Reset buffered duration
+          });
+        }
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    _hideControlsTimer?.cancel(); // Cancel timer
+    _hideSeekOverlayTimer?.cancel(); // Cancel seek overlay timer
+    _betterPlayerController.removeEventsListener(_onPlayerEvent); // Remove listener
+    _betterPlayerController.dispose(); // Dispose player controller
+    super.dispose();
   }
 
   // Start the timer to hide controls
@@ -191,11 +239,15 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
           _selectedQualityIndex = -1;
         }
       });
-      _isLoading = false; // Not loading after initialization
     } else if (event.betterPlayerEventType == BetterPlayerEventType.progress) {
       setState(() {
-        _currentPosition =
-            _betterPlayerController.videoPlayerController!.value.position;
+        _currentPosition = _betterPlayerController.videoPlayerController!.value.position;
+        if (_betterPlayerController.videoPlayerController!.value.buffered.isNotEmpty) {
+          // Get the end of the last buffered range
+          _bufferedDuration = _betterPlayerController.videoPlayerController!.value.buffered.last.end;
+        } else {
+          _bufferedDuration = Duration.zero;
+        }
       });
     } else if (event.betterPlayerEventType == BetterPlayerEventType.changedTrack) {
       // Handle explicit track changes (user selection or automatic adaptation)
@@ -882,16 +934,6 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
   }
 
   @override
-  void dispose() {
-    _hideControlsTimer?.cancel(); // Cancel timer
-    _hideSeekOverlayTimer?.cancel(); // Cancel seek overlay timer
-    _betterPlayerController.removeEventsListener(
-        _onPlayerEvent); // Remove listener
-    _betterPlayerController.dispose(); // Dispose player controller
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _toggleControlsVisibility,
@@ -906,6 +948,32 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
               controller: _betterPlayerController,
             ),
           ),
+
+          // Loading Indicator (Moved here to be independent of _controlsVisible)
+          if (_isLoading)
+            Align(
+              alignment: Alignment.center,
+              child: AnimatedOpacity(
+                opacity: _isLoading ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 4,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
           // --- Custom Controls Overlay ---
           Positioned.fill(
             child: AnimatedOpacity(
@@ -1033,32 +1101,6 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                     ),
                   ),
 
-                  // Loading Indicator (always visible if loading, independent of controls visibility)
-
-                  if (_isLoading) // Only render if loading
-                    Align(
-                      alignment: Alignment.center,
-                      child: AnimatedOpacity(
-                        opacity: _isLoading ? 1.0 : 0.0, // Fade based on loading state
-                        duration: const Duration(milliseconds: 300),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.black54, // Semi-transparent background
-                            shape: BoxShape.circle,
-                          ),
-                          child: const SizedBox(
-                            width: 48, // Match icon size
-                            height: 48, // Match icon size
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 4,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
                   // Floating Play/Pause Button (Middle)
                   Align(
                     alignment: Alignment.center,
@@ -1120,39 +1162,52 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                               ),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: SliderTheme( // Customize slider appearance
-                                  data: SliderTheme.of(context).copyWith(
-                                    activeTrackColor: Colors.red,
-                                    // Active part color
-                                    inactiveTrackColor: Colors.white30,
-                                    // Inactive part color
-                                    thumbColor: Colors.red,
-                                    // Thumb color
-                                    overlayColor: Colors.red.withOpacity(0.2),
-                                    // Overlay color on press
-                                    thumbShape: const RoundSliderThumbShape(
-                                        enabledThumbRadius: 6.0),
-                                    // Thumb size
-                                    overlayShape: const RoundSliderOverlayShape(
-                                        overlayRadius: 12.0), // Overlay size
-                                  ),
-                                  child: Slider(
-                                    value: _currentPosition.inSeconds
-                                        .toDouble(),
-                                    max: _totalDuration.inSeconds.toDouble(),
-                                    onChanged: (value) {
-                                      // Update UI while sliding (optional, can be heavy)
-                                      setState(() {
-                                        _currentPosition =
-                                            Duration(seconds: value.toInt());
-                                      });
-                                    },
-                                    onChangeEnd: (value) {
-                                      // Seek to the new position when sliding ends
-                                      _betterPlayerController.seekTo(
-                                          Duration(seconds: value.toInt()));
-                                    },
-                                  ),
+                                child: Stack( // Use Stack to layer the buffer bar and the slider
+                                  alignment: Alignment.centerLeft, // Align to left for progress indicator
+                                  children: [
+                                    // Buffer Bar (LinearProgressIndicator)
+                                    // Only show if total duration is greater than 0 to avoid division by zero
+                                    if (_totalDuration.inSeconds > 0)
+                                      LinearProgressIndicator(
+                                        value: _bufferedDuration.inSeconds / _totalDuration.inSeconds,
+                                        backgroundColor: Colors.white30, // Background for the total duration
+                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white70), // Buffer color (e.g., white/gray)
+                                      ),
+                                    // Current Playback Slider
+                                    SliderTheme( // Customize slider appearance
+                                      data: SliderTheme.of(context).copyWith(
+                                        activeTrackColor: Colors.red,
+                                        // Active part color
+                                        inactiveTrackColor: Colors.transparent, // Make inactive track transparent so buffer bar shows
+                                        thumbColor: Colors.red,
+                                        // Thumb color
+                                        overlayColor: Colors.red.withOpacity(0.2),
+                                        // Overlay color on press
+                                        thumbShape: const RoundSliderThumbShape(
+                                            enabledThumbRadius: 6.0),
+                                        // Thumb size
+                                        overlayShape: const RoundSliderOverlayShape(
+                                            overlayRadius: 12.0), // Overlay size
+                                      ),
+                                      child: Slider(
+                                        value: _currentPosition.inSeconds
+                                            .toDouble(),
+                                        max: _totalDuration.inSeconds.toDouble(),
+                                        onChanged: (value) {
+                                          // Update UI while sliding (optional, can be heavy)
+                                          setState(() {
+                                            _currentPosition =
+                                                Duration(seconds: value.toInt());
+                                          });
+                                        },
+                                        onChangeEnd: (value) {
+                                          // Seek to the new position when sliding ends
+                                          _betterPlayerController.seekTo(
+                                              Duration(seconds: value.toInt()));
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 8),
