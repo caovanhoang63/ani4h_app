@@ -81,4 +81,25 @@ final class EpisodeDetailService implements IEpisodeDetailService, IEpisodeModel
         watchedDuration: e.watchedDuration,
     )).toList();
   }
+
+  @override
+  Future<Result<List<EpisodeDetailModel>, Failure>> getListEpisodes(String id) {
+    try {
+      final response = _episodeDetailRepository.getListEpisodes(id);
+
+      return response.then((value) => Result.success(mapToEpisodeDetailModels(value)));
+    } on Failure catch (e) {
+      return Future.value(Error(e));
+    } catch (e, s) {
+      return Future.value(
+        Error(
+          Failure(
+            message: "An unexpected error occurred, ${e.toString()}",
+            exception: toException(e),
+            stackTrace: s,
+          ),
+        ),
+      );
+    }
+  }
 }

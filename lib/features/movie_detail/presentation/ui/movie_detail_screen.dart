@@ -1,4 +1,5 @@
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/features/movie_detail/domain/model/episode_detail_model.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/controller/episode_detail_controller.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
@@ -17,17 +18,8 @@ class MovieDetailScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _MovieDetailScreenState();
 }
 
-class PlaylistItem {
-  final String id;
-  final String index;
-
-  PlaylistItem({required this.id, required this.index});
-}
-
 class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   final TextEditingController _commentController = TextEditingController();
-
-  late List<PlaylistItem> playlistItems;
 
   // Since we don't have specific data for playlist parts, we'll keep this hardcoded
   final List<String> playlistParts = ['All Episodes'];
@@ -38,15 +30,6 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Load the first episode by default if there are episodes
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final currentMovie = ref.read(currentMovieControllerProvider).movieDetail;
-      if (currentMovie != null && currentMovie.numEpisodes > 0) {
-        // Fetch the first episode details
-        ref.read(episodeDetailControllerProvider.notifier).getEpisodeDetail(selectedIndex);
-      }
-    });
   }
 
   @override
@@ -58,19 +41,21 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
   @override
   Widget build(BuildContext context) {
     MovieDetailModel? currentMovie = ref.watch(currentMovieControllerProvider.select((state) => state.movieDetail));
+    List<EpisodeDetailModel> episodes = ref.watch(currentMovieControllerProvider.select((state) => state.episodes));
 
-    // Get the current episode details from the episode detail controller
-    final episodeDetailState = ref.watch(episodeDetailControllerProvider);
-    final currentEpisode = episodeDetailState.episodeDetail;
+    // Find the currently selected episode directly from the episodes list
+    // final EpisodeDetailModel selectedEpisode = episodes.firstWhere((ep) => ep.id == selectedIndex);
+    final EpisodeDetailModel? selectedEpisode = episodes.firstOrNull;
 
-    // Initialize playlistItems based on numEpisodes from currentMovie
-    if (currentMovie != null) {
-      playlistItems = List.generate(
-        currentMovie.numEpisodes, 
-        (i) => PlaylistItem(id: (i + 1).toString(), index: (i + 1).toString())
-      );
-    } else {
-      playlistItems = [];
+
+    // Initialize selectedIndex if episodes are loaded and selectedIndex is still default or invalid
+    // This ensures an episode is selected when the screen loads or episodes become available.
+    if (episodes.isNotEmpty && (selectedIndex == "1")) {
+      Future.microtask(() {
+        setState(() {
+          selectedIndex = episodes.first.id;
+        });
+      });
     }
 
     bool isIntroVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isIntroPanelOn));
@@ -81,17 +66,14 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
       Comment(id: 'c1', userAvatarUrl: '', username: 'Huy Bui', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(seconds: 5))),
       Comment(id: 'c2', userAvatarUrl: '', username: 'Royal', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(minutes: 5))),
       Comment(id: 'c3', userAvatarUrl: '', username: 'Thai Hoang', text: 'GoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGooddddddddddddddd', time: DateTime.now().subtract(const Duration(hours: 5))),
-      // Comment(id: 'c3', userAvatarUrl: '', username: 'Thai Hoang', text: 'GoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGooddddddddddddddd', time: DateTime.now().subtract(const Duration(hours: 5))),
     ];
 
     return Scaffold(
       body: Stack(
         children: [
           currentMovie == null
-              ?
-          const Center(child: CircularProgressIndicator())
-              :
-          Column(
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
             children: [
               const SizedBox(height: 50),
               // Wrap in SizedBox to ensure consistent height
@@ -99,34 +81,11 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                 width: double.infinity,
                 height: 225, // Match the height in MoviePlayer
                 child: // Show loading indicator when episode details are being fetched
-                  episodeDetailState.isLoading
+                selectedEpisode == null
                     ? const Center(child: CircularProgressIndicator())
-                    : (episodeDetailState.hasError || episodeDetailState.episodeDetail == null || currentEpisode == null)
-                      ? Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.error, color: Colors.red, size: 48),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Error: ${episodeDetailState.errorMessage}',
-                                style: const TextStyle(color: Colors.red),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 16),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Retry fetching the episode details
-                                  ref.read(episodeDetailControllerProvider.notifier).getEpisodeDetail(selectedIndex);
-                                },
-                                child: const Text('Retry'),
-                              ),
-                            ],
-                          ),
-                        )
-                      : MoviePlayer(
-                          videoUrl: currentEpisode.videoUrl,
-                        ),
+                    : MoviePlayer(
+                  videoUrl: selectedEpisode.videoUrl,
+                ),
               ),
               Expanded(
                 child: Stack(
@@ -153,9 +112,9 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
                                       maxLines: 1,  // Ensures the text stays on a single line
                                     ),
-                                    if (currentEpisode != null)
+                                    if (selectedEpisode  != null)
                                       Text(
-                                        'Episode ${currentEpisode.episodeNumber}: ${currentEpisode.title}',
+                                        'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
                                         style: TextStyle(
                                           color: Colors.white70,
                                           fontSize: 12,
@@ -187,17 +146,17 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          (currentMovie.genres == null || currentMovie.genres!.isEmpty)
+                          (currentMovie.genres.isEmpty)
                               ? const SizedBox(height: 8)
                               : SizedBox(
                               height: 30,
                               child: ListView.separated(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
-                                itemCount: currentMovie.genres?.length ?? 0, // Ensure itemCount is safe
+                                itemCount: currentMovie.genres.length ?? 0, // Ensure itemCount is safe
                                 itemBuilder: (context, index) {
                                   // Safely access the genre data and ensure we don't use movie data mistakenly
-                                  final genre = currentMovie.genres![index]; // Assuming genres is not null here
+                                  final genre = currentMovie.genres[index]; // Assuming genres is not null here
 
                                   return MovieTag(tag: genre);
                                 },
@@ -217,7 +176,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Playlist (${currentMovie.numEpisodes} episodes)',
+                                  'Playlist (${episodes.length} episodes)',
                                   style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
@@ -232,10 +191,10 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             height: 45, // Adjust height as needed
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
-                              itemCount: playlistItems.length, // Use playlistItems here
+                              itemCount: episodes.length, // Use playlistItems here
                               itemBuilder: (context, index) {
-                                final item = playlistItems[index]; // Get the PlaylistItem
-                                final isSelected = item.id == selectedIndex;
+                                final episode = episodes[index]; // Get the PlaylistItem
+                                final isSelected = episode.id == selectedIndex;
 
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8),
@@ -243,13 +202,10 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     onTap: () {
                                       // Update the selected index
                                       setState(() {
-                                        selectedIndex = item.id;
+                                        selectedIndex = episode.id;
                                       });
 
-                                      // Fetch the episode details
-                                      ref.read(episodeDetailControllerProvider.notifier).getEpisodeDetail(item.id);
-
-                                      print('Tapped on item with ID: ${item.id}, Index: ${item.index}');
+                                      print('Tapped on item with ID: ${episode.id}, Index: ${episode.episodeNumber}');
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16), // Added const
@@ -261,7 +217,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         ),
                                       ),
                                       child: Text(
-                                        item.index, // Display the item index
+                                        episode.episodeNumber.toString(), // Display the item index
                                         style: const TextStyle( // Added const
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -390,16 +346,16 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             ),
                             const SizedBox(height: 8),
                             // Genres List (Horizontal Scrollable)
-                            (currentMovie.genres == null || currentMovie.genres!.isEmpty)
+                            (currentMovie.genres.isEmpty)
                               ? const SizedBox(height: 8) // Placeholder if no genres
                               : SizedBox(
                               height: 30, // Fixed height for horizontal list
                               child: ListView.separated(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
-                                itemCount: currentMovie.genres?.length ?? 0,
+                                itemCount: currentMovie.genres.length ?? 0,
                                 itemBuilder: (context, index) {
-                                  final genre = currentMovie.genres![index];
+                                  final genre = currentMovie.genres[index];
                                   return MovieTag(tag: genre);
                                 },
                                 separatorBuilder: (context, index) {
@@ -455,7 +411,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Playlist (${currentMovie.numEpisodes} episodes)',
+                                    'Playlist (${episodes.length} episodes)',
                                     style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
@@ -500,30 +456,30 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   mainAxisSpacing: 8,
                                   childAspectRatio: 1,
                                 ),
-                                itemCount: playlistItems.length,
+                                itemCount: episodes.length,
                                 itemBuilder: (context, index) {
-                                  final item = playlistItems[index];
-                                  final isSelected = index == 0; // Default to first episode
+                                  final episode = episodes[index];
+                                  final isSelected = episode.id == selectedIndex;
                                   return InkWell( // Make the grid item clickable
                                     onTap: () {
-                                      print('Tapped on grid item with ID: ${item.id}');
+                                      print('Tapped on grid item with ID: ${episode.id}');
                                       setState(() {
-                                        selectedIndex = item.id;
+                                        selectedIndex = episode.id;
                                       });
                                     },
                                     borderRadius: BorderRadius.circular(6), // Match container border radius for ripple effect
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: selectedIndex == item.id ? Colors.red : Colors.grey[800], // Highlight selected item
+                                        color: isSelected ? Colors.red : Colors.grey[800], // Highlight selected item
                                         borderRadius: BorderRadius.circular(6),
                                         border: Border.all(
-                                          color: selectedIndex == item.id ? Colors.red : Colors.transparent,
-                                          width: selectedIndex == item.id ? 2 : 0, // Thicker border for selected
+                                          color: isSelected ? Colors.red : Colors.transparent,
+                                          width: isSelected ? 2 : 0, // Thicker border for selected
                                         ),
                                       ),
                                       child: Center( // Center the text inside the container
                                         child: Text(
-                                          item.index, // Display the item index (e.g., '1', '2')
+                                          episode.episodeNumber.toString(), // Display the item index (e.g., '1', '2')
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,

@@ -4,4 +4,5 @@ import 'package:multiple_result/multiple_result.dart';
 
 abstract interface class IEpisodeDetailService {
   Future<Result<EpisodeDetailModel, Failure>> getEpisodeDetail(String id);
+  Future<Result<List<EpisodeDetailModel>, Failure>> getListEpisodes(String id);
 }
