@@ -104,52 +104,63 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      currentMovie.title,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ref.read(movieDetailControllerProvider.notifier).openIntroPanel();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            currentMovie.title,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                            maxLines: 1,  // Ensures the text stays on a single line
+                                          ),
+                                          if (selectedEpisode  != null)
+                                            Text(
+                                              'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                        ],
                                       ),
-                                      overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                      maxLines: 1,  // Ensures the text stays on a single line
-                                    ),
-                                    if (selectedEpisode  != null)
-                                      Text(
-                                        'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 14,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
+                                      Expanded(
+                                        child: SizedBox()
                                       ),
-                                  ],
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Introduce',
+                                            style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
+                                        ]
+                                      ),
+                                    ]
+                                  ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  ref.read(movieDetailControllerProvider.notifier).openIntroPanel();
-                                },
-                                child: Row(
-                                    children: [
-                                      Text(
-                                        'Introduce',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12
-                                        ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
-                                    ]
-                                ),
-                              )
+                              IconButton(
+                                onPressed: () {},
+                                iconSize: 35,
+                                icon: Icon(Icons.favorite_border_outlined, color: Colors.white),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -255,16 +266,6 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          // Bottom icon buttons
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.add_circle_outline, color: Colors.white),
-                              ),
-                            ],
-                          ),
                           // Suggested Movies
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,33 +323,62 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.65,
-                                  child: Text(
-                                    currentMovie.title,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              currentMovie.title,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                              maxLines: 1,  // Ensures the text stays on a single line
+                                            ),
+                                            if (selectedEpisode  != null)
+                                              Text(
+                                                'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 14,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                          ],
+                                        ),
+                                        Expanded(
+                                            child: SizedBox()
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Introduce',
+                                              style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 14
+                                              ),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
+                                          ]
+                                        ),
+                                      ]
                                     ),
-                                    overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                    maxLines: 1,  // Ensures the text stays on a single line
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Introduce',
-                                        style: TextStyle(color: Colors.white70, fontSize: 12),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
-                                    ]
-                                  ),
+                                IconButton(
+                                  onPressed: () {},
+                                  iconSize: 35,
+                                  icon: Icon(Icons.favorite_border_outlined, color: Colors.white),
                                 ),
                               ],
                             ),
