@@ -68,6 +68,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
     bool isCharacterExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isCharacterExpandOn));
     bool isProducerExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isProducerExpandOn));
     bool isStudioExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isStudioExpandOn));
+    bool isFavorite = ref.watch(currentMovieControllerProvider.select((state) => state.isFavorite));
 
     final List<Comment> _comments = [
       Comment(id: 'c1', userAvatarUrl: '', username: 'Huy Bui', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(seconds: 5))),
@@ -159,7 +160,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               IconButton(
                                 onPressed: () {},
                                 iconSize: 35,
-                                icon: Icon(Icons.favorite_border_outlined, color: Colors.white),
+                                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: Colors.white),
                               ),
                             ],
                           ),
@@ -378,7 +379,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 IconButton(
                                   onPressed: () {},
                                   iconSize: 35,
-                                  icon: Icon(Icons.favorite_border_outlined, color: Colors.white),
+                                  icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: Colors.white),
                                 ),
                               ],
                             ),

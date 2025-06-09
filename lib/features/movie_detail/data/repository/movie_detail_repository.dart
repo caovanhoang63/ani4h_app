@@ -32,4 +32,19 @@ final class MovieDetailRepository with DioExceptionMapper implements IMovieDetai
       );
     }
   }
+
+  @override
+  Future<bool> getIsFavorite(String userId, String filmId) async {
+    try {
+      return await _movieDetailApi.isFavorite(userId, filmId);
+    } on DioException catch (e, s) {
+      throw mapDioExceptionToFailure(e, s);
+    } catch (e, s) {
+      throw Failure(
+        message: "An unexpected error occurred",
+        exception: toException(e),
+        stackTrace: s,
+      );
+    }
+  }
 }

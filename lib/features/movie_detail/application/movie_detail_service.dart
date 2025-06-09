@@ -70,4 +70,22 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
       view: data.view,
     );
   }
+
+  @override
+  Future<Result<bool, Failure>> getIsFavorite(String userId, String movieId) async {
+    try {
+      final response = await _movieDetailRepository.getIsFavorite(userId, movieId);
+      return Result.success(response);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: toException(e),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
 }

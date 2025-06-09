@@ -11,6 +11,7 @@ sealed class CurrentMovieState with _$CurrentMovieState {
     @Default(null) MovieDetailModel? movieDetail,
     @Default([]) List<EpisodeDetailModel> episodes,
     @Default([]) List<FilmCardModel> similarMovies,
+    @Default(false) bool isFavorite,
     @Default(false) bool isLoading,
     @Default(false) bool hasError,
     @Default('') String errorMessage,

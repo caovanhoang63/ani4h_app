@@ -19,4 +19,7 @@ abstract class MovieDetailApi {
 
   @GET("$filmEndPoint/{id}")
   Future<MovieDetailResponse> getMovieDetail(@Path("id") String id);
+
+  @GET("$favoriteEndPoint/is-favorite")
+  Future<bool> isFavorite(@Query("userId") String id, @Query("filmId") String filmId);
 }

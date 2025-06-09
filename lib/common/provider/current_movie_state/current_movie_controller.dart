@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_state.dart';
+import 'package:ani4h_app/core/data/local/secure_storage/secure_storage.dart';
 import 'package:ani4h_app/features/movie_detail/application/episode_detail_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,6 +23,8 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
   }
 
   Future<void> fetchCurrentMovie(String id) async {
+    final userId = await ref.read(secureStorageProvider).read("userIdState");
+
     try {
       state = state.copyWith(
         isLoading: true,
@@ -36,6 +39,23 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
             isLoading: false,
             hasError: false,
           );
+          if (userId != null) {
+            final isFavoriteRes = await ref.read(movieDetailServiceProvider).getIsFavorite(userId, success.id);
+            isFavoriteRes.when(
+              (isFavorite) {
+                state = state.copyWith(
+                  isFavorite: isFavorite,
+                );
+              },
+              (failure) {
+                state = state.copyWith(
+                  hasError: true,
+                  errorMessage: failure.message,
+                );
+              },
+            );
+          }
+
           final similarMoviesRes = await ref.read(searchServiceProvider).getContentBasedSuggestion(success.id, 1, Paging(page: 1, pageSize: 10));
           similarMoviesRes.when(
             (similarMovies) {

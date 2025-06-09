@@ -4,4 +4,5 @@ import 'package:multiple_result/multiple_result.dart';
 
 abstract interface class IMovieDetailService {
   Future<Result<MovieDetailModel, Failure>> getMovieDetail(String id);
+  Future<Result<bool, Failure>> getIsFavorite(String userId, String movieId);
 }
