@@ -76,6 +76,34 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
       Comment(id: 'c3', userAvatarUrl: '', username: 'Thai Hoang', text: 'GoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGooddddddddddddddd', time: DateTime.now().subtract(const Duration(hours: 5))),
     ];
 
+    void _playNextEpisode(List<EpisodeDetailModel> episodes, String currentEpisodeId) {
+      if (episodes.isEmpty) {
+        return; // No episodes to play
+      }
+
+      final currentEpisodeIndex = episodes.indexWhere((e) => e.id == currentEpisodeId);
+
+      if (currentEpisodeIndex != -1 && currentEpisodeIndex < episodes.length - 1) {
+        // There's a next episode
+        final nextEpisode = episodes[currentEpisodeIndex + 1];
+        setState(() {
+          selectedIndex = nextEpisode.id;
+        });
+        // You might also want to scroll the playlist to the new episode if it's a long list
+      } else {
+        // No more episodes (end of list)
+        // You could show a toast, alert, or navigate back.
+        print('End of episodes or no next episode found.');
+        // Example: show a snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No more episodes!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -93,6 +121,9 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : MoviePlayer(
                   episode: selectedEpisode,
+                    onNextEpisode: () { // Pass the callback here
+                      _playNextEpisode(episodes, selectedIndex);
+                    }
                 ),
               ),
               Expanded(

@@ -31,10 +31,13 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
         isLoading: true,
         hasError: false,
       );
+      print("Fetching movie detail for ID: $id, User ID: $userId");
 
       final result = await ref.read(movieDetailServiceProvider).getMovieDetail(id);
       result.when(
         (success) async {
+          print("Fetched movie detail: ${success.title}");
+
           state = state.copyWith(
             movieDetail: success,
             isLoading: false,
@@ -50,7 +53,6 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
               },
               (failure) {
                 state = state.copyWith(
-                  hasError: true,
                   errorMessage: failure.message,
                 );
               },
@@ -66,7 +68,6 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
             },
             (failure) {
               state = state.copyWith(
-                hasError: true,
                 errorMessage: failure.message,
               );
             },
@@ -81,13 +82,13 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
             },
             (failure) {
               state = state.copyWith(
-                hasError: true,
                 errorMessage: failure.message,
               );
             },
           );
         },
         (failure) {
+          print("Failed to fetch movie detail: ${failure.stackTrace}");
           state = state.copyWith(
             isLoading: false,
             hasError: true,
