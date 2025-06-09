@@ -1,6 +1,7 @@
 import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/search/application/isearch_service.dart';
+import 'package:ani4h_app/features/search/data/dto/content_based_response/content_based_response.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
@@ -178,6 +179,46 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
         title: e.title,
         synopsis: e.synopsis,
         imageUrl: e.images.length > 0 ? e.images[0].url : "",
+        genres: e.genres ?? const [],
+      )).toList(),
+      paging: PagingSearch(
+        cursor: "",
+        nextCursor: "",
+        page: 1,
+        pageSize: 10,
+      ),
+    );
+  }
+
+  @override
+  Future<Result<SearchResultModel, Failure>> getContentBasedSuggestion(String filmId, int seed, Paging pageCur) async {
+    try {
+      final response = await _searchRepository.getContentBasedSuggestion(filmId, seed, pageCur);
+
+      final models = mapToSearchResultModelFromContentBasedResponse(response);
+
+      return Result.success(models);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: e as Exception,
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  SearchResultModel mapToSearchResultModelFromContentBasedResponse(ContentBasedResponse response) {
+    return SearchResultModel(
+      data: response.data.data.map((e) => FilmCardModel(
+        id: e.id,
+        title: e.title,
+        synopsis: e.synopsis,
+        imageUrl: e.images.isNotEmpty ? e.images[0].url : "",
         genres: e.genres ?? const [],
       )).toList(),
       paging: PagingSearch(

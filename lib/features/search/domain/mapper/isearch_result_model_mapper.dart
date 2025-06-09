@@ -1,3 +1,4 @@
+import 'package:ani4h_app/features/search/data/dto/content_based_response/content_based_response.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
 import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
@@ -12,4 +13,6 @@ abstract class ISearchResultModelMapper {
       UserFavoriteResponse response);
   SearchResultModel mapToSearchResultModelFromUserHistoryResponse(
       UserHistoryResponse response);
+  SearchResultModel mapToSearchResultModelFromContentBasedResponse(
+      ContentBasedResponse response);
 }

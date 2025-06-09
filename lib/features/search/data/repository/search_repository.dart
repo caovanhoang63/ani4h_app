@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
+import 'package:ani4h_app/features/search/data/dto/content_based_response/content_based_response.dart';
 import 'package:ani4h_app/features/search/data/dto/search_request/search_request.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
@@ -97,5 +98,22 @@ final class SearchRepository with DioExceptionMapper implements ISearchRepositor
     }
   }
 
+  @override
+  Future<ContentBasedResponse> getContentBasedSuggestion(String filmId, int seed, Paging paging) {
+    try {
+      log("Get Content Based Suggestion Response: start");
 
+      final response = _searchApi.getContentBasedSuggestion(filmId, seed, paging.page, paging.pageSize);
+      log("Get Content Based Suggestion Response: success");
+      return response;
+    } on DioException catch (e, s) {
+      throw mapDioExceptionToFailure(e, s);
+    } catch (e, s) {
+      throw Failure(
+        message: e.toString(),
+        exception: toException(e),
+        stackTrace: s,
+      );
+    }
+  }
 }

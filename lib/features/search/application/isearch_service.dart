@@ -10,4 +10,5 @@ abstract interface class ISearchService {
   Future<Result<SearchResultModel, Failure>> getTopHot(Paging pageCur);
   Future<Result<SearchResultModel, Failure>> getUserFavorites(String? userId, int seed, Paging pageCur);
   Future<Result<SearchResultModel, Failure>> getUserHistory(String? userId, int seed, Paging pageCur);
+  Future<Result<SearchResultModel, Failure>> getContentBasedSuggestion(String filmId, int seed, Paging pageCur);
 }
