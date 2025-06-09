@@ -448,6 +448,32 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                           }).toList(),
                                         ),
                                       ),
+                                    const SizedBox(height: 16),
+                                    // Studios Section
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleStudioPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Studios',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isStudioExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isStudioExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: Wrap(
+                                          spacing: 12,
+                                          runSpacing: 12,
+                                          children: currentMovie.studios.map((studio) {
+                                            return ProducerCard(producer: studio); // Reusing ProducerCard for studios
+                                          }).toList(),
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),
