@@ -1,5 +1,6 @@
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/movie_detail/application/imovie_detail_service.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/favorite_add_request/favorite_add_request.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/movie_detail_response/movie_detail_response.dart';
 import 'package:ani4h_app/features/movie_detail/domain/mapper/imovie_model_mapper.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
@@ -76,6 +77,42 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
     try {
       final response = await _movieDetailRepository.getIsFavorite(userId, movieId);
       return Result.success(response);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: toException(e),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void, Failure>> addToFavorite(FavoriteAddRequest request) async {
+    try {
+      await _movieDetailRepository.addToFavorite(request);
+      return const Success(null);
+    } on Failure catch (e) {
+      return Error(e);
+    } catch (e, s) {
+      return Error(
+        Failure(
+          message: "An unexpected error occurred, ${e.toString()}",
+          exception: toException(e),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void, Failure>> removeFromFavorite(String userId, String movieId) async {
+    try {
+      await _movieDetailRepository.removeFromFavorite(userId, movieId);
+      return const Success(null);
     } on Failure catch (e) {
       return Error(e);
     } catch (e, s) {

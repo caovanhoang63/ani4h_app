@@ -115,15 +115,18 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            currentMovie.title,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.5, // Adjust width as needed
+                                            child: Text(
+                                              currentMovie.title,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                              maxLines: 1,  // Ensures the text stays on a single line
                                             ),
-                                            overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                            maxLines: 1,  // Ensures the text stays on a single line
                                           ),
                                           if (selectedEpisode  != null)
                                             Text(
@@ -158,7 +161,13 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (isFavorite) {
+                                    ref.read(currentMovieControllerProvider.notifier).removeFavorite(currentMovie.id);
+                                  } else {
+                                    ref.read(currentMovieControllerProvider.notifier).addFavorite(currentMovie.id);
+                                  }
+                                },
                                 iconSize: 35,
                                 icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: Colors.white),
                               ),
@@ -334,15 +343,18 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              currentMovie.title,
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 0.5, // Adjust width as needed
+                                              child: Text(
+                                                currentMovie.title,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                                maxLines: 1,  // Ensures the text stays on a single line
                                               ),
-                                              overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                              maxLines: 1,  // Ensures the text stays on a single line
                                             ),
                                             if (selectedEpisode  != null)
                                               Text(

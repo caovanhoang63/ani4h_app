@@ -4,6 +4,7 @@ import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_state.dart';
 import 'package:ani4h_app/core/data/local/secure_storage/secure_storage.dart';
 import 'package:ani4h_app/features/movie_detail/application/episode_detail_service.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/favorite_add_request/favorite_add_request.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/movie_detail/application/movie_detail_service.dart';
@@ -101,5 +102,55 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
         errorMessage: e.toString()
       );
     }
+  }
+
+  Future<void> addFavorite(String filmId) async {
+    final userId = await ref.read(secureStorageProvider).read("userIdState");
+    if (userId == null) {
+      log("User ID is null, cannot add favorite.");
+      return;
+    }
+
+    final req = FavoriteAddRequest(
+      userId: userId,
+      filmId: filmId,
+    );
+    print("Adding favorite for userId: $userId, filmId: $filmId");
+
+    final result = await ref.read(movieDetailServiceProvider).addToFavorite(req);
+    result.when(
+      (success) {
+        state = state.copyWith(isFavorite: true);
+        log("Favorite added successfully for userId: $userId, filmId: $filmId");
+      },
+      (failure) {
+        print("Failed to add favorite: ${failure.message}");
+        state = state.copyWith(
+          hasError: true,
+          errorMessage: failure.message,
+        );
+      },
+    );
+  }
+
+  Future<void> removeFavorite(String filmId) async {
+    final userId = await ref.read(secureStorageProvider).read("userIdState");
+    if (userId == null) {
+      log("User ID is null, cannot remove favorite.");
+      return;
+    }
+
+    final result = await ref.read(movieDetailServiceProvider).removeFromFavorite(userId, filmId);
+    result.when(
+      (success) {
+        state = state.copyWith(isFavorite: false);
+      },
+      (failure) {
+        state = state.copyWith(
+          hasError: true,
+          errorMessage: failure.message,
+        );
+      },
+    );
   }
 }
