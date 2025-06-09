@@ -14,9 +14,6 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: true,
       isPlaylistPanelOn: false,
       isCommentPanelOn: false,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: false,
-      isStudioPanelOn: false,
     );
   }
 
@@ -25,9 +22,6 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: true,
       isCommentPanelOn: false,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: false,
-      isStudioPanelOn: false,
     );
   }
 
@@ -36,42 +30,24 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: false,
       isCommentPanelOn: true,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: false,
-      isStudioPanelOn: false,
     );
   }
 
-  void openCharacterPanel() {
+  void toggleCharacterPanel() {
     state = state.copyWith(
-      isIntroPanelOn: false,
-      isPlaylistPanelOn: false,
-      isCommentPanelOn: false,
-      isCharacterPanelOn: true,
-      isProducerPanelOn: false,
-      isStudioPanelOn: false,
+      isCharacterExpandOn: !state.isCharacterExpandOn,
     );
   }
 
-  void openProducerPanel() {
+  void toggleProducerPanel() {
     state = state.copyWith(
-      isIntroPanelOn: false,
-      isPlaylistPanelOn: false,
-      isCommentPanelOn: false,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: true,
-      isStudioPanelOn: false,
+      isProducerExpandOn: !state.isProducerExpandOn,
     );
   }
 
-  void openStudioPanel() {
+  void toggleStudioPanel() {
     state = state.copyWith(
-      isIntroPanelOn: false,
-      isPlaylistPanelOn: false,
-      isCommentPanelOn: false,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: false,
-      isStudioPanelOn: true,
+      isStudioExpandOn: !state.isStudioExpandOn,
     );
   }
 
@@ -80,8 +56,6 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: false,
       isCommentPanelOn: false,
-      isCharacterPanelOn: false,
-      isProducerPanelOn: false,
     );
   }
 }

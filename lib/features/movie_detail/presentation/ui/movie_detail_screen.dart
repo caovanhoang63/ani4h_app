@@ -2,6 +2,7 @@ import 'package:ani4h_app/common/provider/current_movie_state/current_movie_cont
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/episode_detail_model.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
+import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/character_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_player.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_tag.dart';
@@ -63,6 +64,9 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
     bool isIntroVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isIntroPanelOn));
     bool isPlaylistVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isPlaylistPanelOn));
     bool isCommentVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isCommentPanelOn));
+    bool isCharacterExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isCharacterExpandOn));
+    bool isProducerExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isProducerExpandOn));
+    bool isStudioExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isStudioExpandOn));
 
     final List<Comment> _comments = [
       Comment(id: 'c1', userAvatarUrl: '', username: 'Huy Bui', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(seconds: 5))),
@@ -382,7 +386,40 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         height: 1.5,
                                       ),
                                       overflow: TextOverflow.visible, // Ensure all text is visible
-                                    )
+                                    ),
+                                    const SizedBox(height: 16),
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleCharacterPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Characters & Cast',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isCharacterExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isCharacterExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: GridView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: currentMovie.characters.length,
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12,
+                                            mainAxisSpacing: 12,
+                                            childAspectRatio: 2.25 / 2,
+                                          ),
+                                          itemBuilder: (context, index) {
+                                            final character = currentMovie.characters[index];
+                                            return CharacterCard(character: character);
+                                          },
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),

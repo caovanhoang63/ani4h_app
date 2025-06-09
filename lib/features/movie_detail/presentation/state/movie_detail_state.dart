@@ -11,8 +11,8 @@ sealed class MovieDetailState with _$MovieDetailState {
     @Default(false) bool isIntroPanelOn,
     @Default(false) bool isPlaylistPanelOn,
     @Default(false) bool isCommentPanelOn,
-    @Default(false) bool isCharacterPanelOn,
-    @Default(false) bool isProducerPanelOn,
-    @Default(false) bool isStudioPanelOn,
+    @Default(false) bool isCharacterExpandOn,
+    @Default(false) bool isProducerExpandOn,
+    @Default(false) bool isStudioExpandOn,
   }) = _MovieDetailState;
 }
