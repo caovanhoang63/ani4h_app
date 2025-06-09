@@ -1,8 +1,11 @@
+import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/search/domain/model/search_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart'; // Correct import for CarouselSlider v5.0.0
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 final carouselIndexProvider = StateProvider<int>((ref) {
   return 0; // Default to the first item
@@ -39,51 +42,57 @@ class _CarouselWidgetState extends ConsumerState<MovieCarousel> {
             CarouselSlider(
               items: widget.items.map((item) {
                 // final index = widget.items.indexOf(item);
-                return Stack(
-                  children: [
-                    // Background image container
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(item.imageUrl),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      height: MediaQuery.of(context).size.width * 1.3, // Adjust height for large image
-                    ),
-                    // Gradient at the bottom
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        height: 80,
+                return GestureDetector(
+                  onTap: () {
+                    ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
+                    context.pushNamed(movieDetailRoute);
+                  },
+                  child: Stack(
+                    children: [
+                      // Background image container
+                      Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [Colors.black87, Colors.transparent],
+                          image: DecorationImage(
+                            image: NetworkImage(item.imageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        height: MediaQuery.of(context).size.width * 1.3, // Adjust height for large image
+                      ),
+                      // Gradient at the bottom
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [Colors.black87, Colors.transparent],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // Movie name on the left (moves with the image)
-                    Positioned(
-                      bottom: 10,
-                      left: 16,
-                      child: Text(
-                        item.title,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(0, 0)),
-                          ],
+                      // Movie name on the left (moves with the image)
+                      Positioned(
+                        bottom: 10,
+                        left: 16,
+                        child: Text(
+                          item.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(blurRadius: 10.0, color: Colors.black, offset: Offset(0, 0)),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 );
               }).toList(),
               carouselController: _carouselController,
