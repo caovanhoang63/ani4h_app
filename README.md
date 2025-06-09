@@ -1,60 +1,107 @@
-# ani4h_app
+# ani4h\_app
 
-A new Flutter project.
+A modern Flutter application using Riverpod for state management and Freezed for data modeling.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📁 Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+Make sure you have the following installed:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* [Flutter SDK](https://docs.flutter.dev/get-started/install) (version `>=3.x.x`)
+* Android Studio or VS Code
+* A device or emulator (Android/iOS/Chrome)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-````
+---
 
+## 📦 1. Install Dependencies
+
+```bash
+flutter pub get
+```
+
+---
+
+## 🧪 2. Run Code Generation
+
+The project uses `freezed`, so code generation is required:
+
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+For continuous development:
+
+```bash
+flutter pub run build_runner watch --delete-conflicting-outputs
+```
+
+---
+
+## 📱 3. Run the App
+
+To launch the app:
+
+```bash
+flutter run
+```
+
+To target a specific platform:
+
+```bash
+flutter run -d android
+flutter run -d ios
+flutter run -d chrome
+```
+
+---
+
+## 🪠 4. Clean Build (Optional)
+
+Run this if you encounter build issues:
+
+```bash
+flutter clean
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+---
+
+## 📅 Project Structure Overview
+
+```text
 lib
-├── ui
-│   ├── core
-│   │   ├── ui
-│   │   │   └── <shared widgets>
-│   │   └── themes
-│   ├── <FEATURE NAME>
-│   │   ├── view_model
-│   │   │   └── <view_model class>.dart
-│   │   └── widgets
-│   │       ├── <feature name>_screen.dart
-│   │       └── <other widgets>
-├── domain
-│   ├── models
-│   │   └── <model name>.dart
-├── data
-│   ├── repositories
-│   │   └── <repository class>.dart
-│   ├── services
-│   │   └── <service class>.dart
-│   └── model
-│       └── <api model class>.dart
+├── common
+├── core
+├── features
+│   ├── feature
+│   │   ├── application
+│   │   ├── data
+│   │   │   ├── dto
+│   │   │   ├── repository
+│   │   │   └── source
+│   │   ├── domain
+│   │   │   ├── mapper
+│   │   │   └── model
+│   │   └── presentation
+│   │       ├── controller
+│   │       ├── state
+│   │       └── ui
 ├── config
 ├── utils
 ├── routing
-├── main_staging.dart
+├── main.dart
 ├── main_development.dart
-└── main.dart
+└── main_staging.dart
 
-// The test folder contains unit and widget tests
 test
 ├── data
 ├── domain
 ├── ui
 └── utils
 
-// The testing folder contains mocks other classes need to execute tests
 testing
 ├── fakes
 └── models
-
-````
+```
