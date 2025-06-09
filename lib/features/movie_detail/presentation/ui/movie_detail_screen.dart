@@ -6,6 +6,7 @@ import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/character
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_player.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_tag.dart';
+import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/producer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -388,6 +389,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       overflow: TextOverflow.visible, // Ensure all text is visible
                                     ),
                                     const SizedBox(height: 16),
+                                    // Characters & Cast Section
                                     GestureDetector(
                                       onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleCharacterPanel(),
                                       child: Row(
@@ -418,6 +420,32 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                             final character = currentMovie.characters[index];
                                             return CharacterCard(character: character);
                                           },
+                                        ),
+                                      ),
+                                    const SizedBox(height: 16),
+                                    // Producers Section
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleProducerPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Producers',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isProducerExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isProducerExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: Wrap(
+                                          spacing: 12,
+                                          runSpacing: 12,
+                                          children: currentMovie.producers.map((producer) {
+                                            return ProducerCard(producer: producer);
+                                          }).toList(),
                                         ),
                                       ),
                                   ],
