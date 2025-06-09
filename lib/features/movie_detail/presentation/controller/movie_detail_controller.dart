@@ -14,6 +14,9 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: true,
       isPlaylistPanelOn: false,
       isCommentPanelOn: false,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: false,
+      isStudioPanelOn: false,
     );
   }
 
@@ -22,6 +25,9 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: true,
       isCommentPanelOn: false,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: false,
+      isStudioPanelOn: false,
     );
   }
 
@@ -30,6 +36,42 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: false,
       isCommentPanelOn: true,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: false,
+      isStudioPanelOn: false,
+    );
+  }
+
+  void openCharacterPanel() {
+    state = state.copyWith(
+      isIntroPanelOn: false,
+      isPlaylistPanelOn: false,
+      isCommentPanelOn: false,
+      isCharacterPanelOn: true,
+      isProducerPanelOn: false,
+      isStudioPanelOn: false,
+    );
+  }
+
+  void openProducerPanel() {
+    state = state.copyWith(
+      isIntroPanelOn: false,
+      isPlaylistPanelOn: false,
+      isCommentPanelOn: false,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: true,
+      isStudioPanelOn: false,
+    );
+  }
+
+  void openStudioPanel() {
+    state = state.copyWith(
+      isIntroPanelOn: false,
+      isPlaylistPanelOn: false,
+      isCommentPanelOn: false,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: false,
+      isStudioPanelOn: true,
     );
   }
 
@@ -38,6 +80,8 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
       isIntroPanelOn: false,
       isPlaylistPanelOn: false,
       isCommentPanelOn: false,
+      isCharacterPanelOn: false,
+      isProducerPanelOn: false,
     );
   }
 }

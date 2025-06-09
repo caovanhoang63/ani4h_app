@@ -108,7 +108,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       currentMovie.title,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
@@ -119,7 +119,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
                                         style: TextStyle(
                                           color: Colors.white70,
-                                          fontSize: 12,
+                                          fontSize: 14,
                                         ),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
@@ -137,7 +137,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         'Introduce',
                                         style: TextStyle(
                                           color: Colors.white70,
-                                          fontSize: 10
+                                          fontSize: 12
                                         ),
                                       ),
                                       const SizedBox(width: 4),
@@ -179,7 +179,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               children: [
                                 Text(
                                   'Playlist (${episodes.length} episodes)',
-                                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
                               ],
@@ -243,7 +243,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               children: [
                                 Text(
                                   'Comment',
-                                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
                               ],
@@ -258,16 +258,6 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 iconSize: 35,
                                 icon: Icon(Icons.add_circle_outline, color: Colors.white),
                               ),
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.download_outlined, color: Colors.white),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.share_outlined, color: Colors.white),
-                              ),
                             ],
                           ),
                           // Suggested Movies
@@ -277,7 +267,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               Text(
                                 'You may also like',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -301,7 +291,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     'No suggestions available',
                                     style: TextStyle(
                                       color: Colors.white70,
-                                      fontSize: 12,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -333,7 +323,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     currentMovie.title,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
@@ -348,7 +338,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     children: [
                                       Text(
                                         'Introduce',
-                                        style: TextStyle(color: Colors.white70, fontSize: 10),
+                                        style: TextStyle(color: Colors.white70, fontSize: 12),
                                       ),
                                       const SizedBox(width: 4),
                                       Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
@@ -384,17 +374,15 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
                                   children: [
                                     // Synopsis Text
-                                    currentMovie.synopsis != null
-                                        ? Text(
-                                      currentMovie.synopsis!,
+                                    Text(
+                                      currentMovie.synopsis,
                                       style: const TextStyle( // Added const
                                         color: Colors.white,
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         height: 1.5,
                                       ),
                                       overflow: TextOverflow.visible, // Ensure all text is visible
                                     )
-                                        : const SizedBox(height: 8), // Placeholder if no synopsis
                                   ],
                                 ),
                               ),
@@ -425,7 +413,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 children: [
                                   Text(
                                     'Playlist (${episodes.length} episodes)',
-                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
                                 ],
@@ -451,7 +439,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         partName,
                                         style: TextStyle(
                                           color: isPartSelected ? Colors.red : Colors.white70, // Highlight selected part
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontWeight: isPartSelected ? FontWeight.bold : FontWeight.normal,
                                         ),
                                       ),
@@ -530,7 +518,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 children: [
                                   Text(
                                     'Comment',
-                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
                                 ],
@@ -561,7 +549,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     style: const TextStyle(color: Colors.white), // Text color
                                     decoration: InputDecoration(
                                       hintText: 'Add a comment...',
-                                      hintStyle: TextStyle(color: Colors.white54, fontSize: 10),
+                                      hintStyle: TextStyle(color: Colors.white54, fontSize: 12),
                                       filled: true,
                                       fillColor: Colors.grey[800], // Background color
                                       border: OutlineInputBorder(
@@ -590,7 +578,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   ),
                                   child: const Text(
                                     'Comment',
-                                    style: TextStyle(color: Colors.white, fontSize: 10),
+                                    style: TextStyle(color: Colors.white, fontSize: 12),
                                   ),
                                 ),
                               ],
