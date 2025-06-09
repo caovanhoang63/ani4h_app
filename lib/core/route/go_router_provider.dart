@@ -11,7 +11,7 @@ import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/terms_of_service_screen.dart';
 import 'package:ani4h_app/features/search/presentation/ui/search_screen.dart';
-import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/signup/presentation/ui/sign_up_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

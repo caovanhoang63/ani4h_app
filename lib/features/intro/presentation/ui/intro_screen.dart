@@ -171,3 +171,5 @@ class IntroPage {
     required this.image,
   });
 }
+
+
