@@ -1168,26 +1168,24 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                                     // Buffer Bar (LinearProgressIndicator)
                                     // Only show if total duration is greater than 0 to avoid division by zero
                                     if (_totalDuration.inSeconds > 0)
-                                      LinearProgressIndicator(
-                                        value: _bufferedDuration.inSeconds / _totalDuration.inSeconds,
-                                        backgroundColor: Colors.white30, // Background for the total duration
-                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white70), // Buffer color (e.g., white/gray)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                        child: LinearProgressIndicator(
+                                          value: _bufferedDuration.inSeconds / _totalDuration.inSeconds,
+                                          backgroundColor: Colors.white30, // Background for the total duration
+                                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.white70), // Buffer color (e.g., white/gray)
+                                        ),
                                       ),
                                     // Current Playback Slider
                                     SliderTheme( // Customize slider appearance
                                       data: SliderTheme.of(context).copyWith(
                                         activeTrackColor: Colors.red,
-                                        // Active part color
                                         inactiveTrackColor: Colors.transparent, // Make inactive track transparent so buffer bar shows
                                         thumbColor: Colors.red,
-                                        // Thumb color
                                         overlayColor: Colors.red.withOpacity(0.2),
-                                        // Overlay color on press
-                                        thumbShape: const RoundSliderThumbShape(
-                                            enabledThumbRadius: 6.0),
-                                        // Thumb size
-                                        overlayShape: const RoundSliderOverlayShape(
-                                            overlayRadius: 12.0), // Overlay size
+                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+                                        overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0), // Overlay size
+                                        trackShape: const RectangularSliderTrackShape()
                                       ),
                                       child: Slider(
                                         value: _currentPosition.inSeconds
