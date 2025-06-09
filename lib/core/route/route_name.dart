@@ -8,3 +8,4 @@ const String termsOfServiceRoute = "/terms-of-service";
 const String favoriteRoute = "/favorite";
 const String historyRoute = "/history";
 const String searchRoute = "/search";
+const String introRoute = "/intro";
