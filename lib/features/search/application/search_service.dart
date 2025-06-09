@@ -129,9 +129,9 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
   }
 
   @override
-  Future<Result<SearchResultModel, Failure>> getUserFavorites(int seed, Paging pageCur) async {
+  Future<Result<SearchResultModel, Failure>> getUserFavorites(String? userId, int seed, Paging pageCur) async {
     try {
-      final response = await _searchRepository.getUserFavorites(seed, pageCur);
+      final response = await _searchRepository.getUserFavorites(userId, seed, pageCur);
 
       final models = mapToSearchResultModelFromUserFavoriteResponse(response);
 
@@ -150,9 +150,9 @@ final class SearchService implements ISearchService, ISearchResultModelMapper {
   }
 
   @override
-  Future<Result<SearchResultModel, Failure>> getUserHistory(int seed, Paging pageCur) async {
+  Future<Result<SearchResultModel, Failure>> getUserHistory(String? userId, int seed, Paging pageCur) async {
     try {
-      final response = await _searchRepository.getUserHistorySuggestion(seed, pageCur);
+      final response = await _searchRepository.getUserHistorySuggestion(userId, seed, pageCur);
 
       final models = mapToSearchResultModelFromUserHistoryResponse(response);
 

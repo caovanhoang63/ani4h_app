@@ -60,11 +60,11 @@ final class SearchRepository with DioExceptionMapper implements ISearchRepositor
   }
 
   @override
-  Future<UserFavoriteResponse> getUserFavorites(int seed, Paging paging) async {
+  Future<UserFavoriteResponse> getUserFavorites(String? userId, int seed, Paging paging) async {
     try {
       log("Get User Favorites Response: start");
 
-      final response = await _searchApi.getUserFavorite(seed, paging.page, paging.pageSize);
+      final response = await _searchApi.getUserFavorite(userId, seed, paging.page, paging.pageSize);
       log("Get User Favorites Response: success");
       return response;
     } on DioException catch (e, s) {
@@ -79,11 +79,11 @@ final class SearchRepository with DioExceptionMapper implements ISearchRepositor
   }
 
   @override
-  Future<UserHistoryResponse> getUserHistorySuggestion(int seed, Paging paging) {
+  Future<UserHistoryResponse> getUserHistorySuggestion(String? userId, int seed, Paging paging) {
     try {
       log("Get User History Suggestion Response: start");
 
-      final response = _searchApi.getUserHistory(seed, paging.page, paging.pageSize);
+      final response = _searchApi.getUserHistory(userId, seed, paging.page, paging.pageSize);
       log("Get User History Suggestion Response: success");
       return response;
     } on DioException catch (e, s) {

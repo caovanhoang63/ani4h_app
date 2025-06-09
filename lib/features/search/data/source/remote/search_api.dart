@@ -34,6 +34,7 @@ abstract class SearchApi {
 
   @GET("$searchEndPoint/user-favorite")
   Future<UserFavoriteResponse> getUserFavorite(
+      @Query("userId") String? userId,
       @Query("seed") int seed,
       @Query("page") int page,
       @Query("pageSize") int pageSize,
@@ -41,8 +42,9 @@ abstract class SearchApi {
 
   @GET("$searchEndPoint/user-history")
   Future<UserHistoryResponse> getUserHistory(
+      @Query("userId") String? userId,
       @Query("seed") int seed,
       @Query("page") int page,
       @Query("pageSize") int pageSize,
-      );
+  );
 }

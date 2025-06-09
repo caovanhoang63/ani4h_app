@@ -9,8 +9,9 @@ abstract interface class ISearchRepository {
   Future<SearchResultResponse> search(SearchRequest request, PagingSearch paging);
   Future<TopHotResponse> getTopHot(Paging paging);
   Future<UserFavoriteResponse> getUserFavorites(
+    String? userId,
     int seed,
     Paging paging,
   );
-  Future<UserHistoryResponse> getUserHistorySuggestion(int seed, Paging paging);
+  Future<UserHistoryResponse> getUserHistorySuggestion(String? userId, int seed, Paging paging);
 }
