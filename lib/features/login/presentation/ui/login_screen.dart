@@ -1,3 +1,4 @@
+import 'package:ani4h_app/common/provider/user_id_state/user_id_state_provider.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/login/presentation/controller/login_controller.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen<LoginState>(loginControllerProvider, (previous, current) {
       if (current.isLoggedIn) {
         print("Hello");
+        ref.watch(userIdStateProvider.notifier).gerUserIdByEmail(loginController.emailController.text);
         context.go(mainRoute);
       }
     });
