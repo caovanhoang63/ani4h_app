@@ -10,8 +10,9 @@ import '../../../../../core/route/route_name.dart';
 
 class MovieCard extends ConsumerWidget {
   final FilmCardModel item;
+  final bool isPush;
 
-  const MovieCard({super.key, required this.item});
+  const MovieCard({super.key, required this.item, this.isPush = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,7 +22,11 @@ class MovieCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
-        context.pushNamed(movieDetailRoute);
+        if (isPush) {
+          context.pushNamed(movieDetailRoute);
+        } else {
+          context.replaceNamed(movieDetailRoute);
+        }
       },
       child: Container(
         width: cardWidth,

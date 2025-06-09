@@ -1,8 +1,12 @@
+import 'dart:developer';
+
+import 'package:ani4h_app/common/dtos/paging.dart';
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_state.dart';
 import 'package:ani4h_app/features/movie_detail/application/episode_detail_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/movie_detail/application/movie_detail_service.dart';
+import '../../../features/search/application/search_service.dart';
 
 
 final currentMovieControllerProvider = NotifierProvider<CurrentMovieController, CurrentMovieState>(CurrentMovieController.new);
@@ -31,6 +35,20 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
             movieDetail: success,
             isLoading: false,
             hasError: false,
+          );
+          final similarMoviesRes = await ref.read(searchServiceProvider).getContentBasedSuggestion(success.id, 1, Paging(page: 1, pageSize: 10));
+          similarMoviesRes.when(
+            (similarMovies) {
+              state = state.copyWith(
+                similarMovies: similarMovies.data,
+              );
+            },
+            (failure) {
+              state = state.copyWith(
+                hasError: true,
+                errorMessage: failure.message,
+              );
+            },
           );
 
           final episodesRes =  await ref.read(episodeDetailServiceProvider).getListEpisodes(success.id);
