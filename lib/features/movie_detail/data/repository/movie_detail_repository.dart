@@ -1,6 +1,7 @@
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/common/mixin/dio_exception_mapper.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/favorite_add_request/favorite_add_request.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/is_favorite_response/is_favorite_response.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/movie_detail_response/movie_detail_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +36,7 @@ final class MovieDetailRepository with DioExceptionMapper implements IMovieDetai
   }
 
   @override
-  Future<bool> getIsFavorite(String userId, String filmId) async {
+  Future<IsFavoriteResponse> getIsFavorite(String userId, String filmId) async {
     try {
       return await _movieDetailApi.isFavorite(userId, filmId);
     } on DioException catch (e, s) {

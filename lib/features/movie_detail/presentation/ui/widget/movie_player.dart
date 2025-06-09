@@ -1351,7 +1351,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                                     // Fullscreen Button
                                     InkWell(
                                       onTap: () {
-                                        // _toggleFullscreen();
+                                        _toggleFullscreen();
                                       },
                                       // Use Better Player's fullscreen toggle
                                       child: const Padding(

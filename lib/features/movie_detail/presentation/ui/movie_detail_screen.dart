@@ -191,16 +191,19 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   ),
                                 ),
                               ),
-                              IconButton(
+                              if (isFavorite) IconButton(
                                 onPressed: () {
-                                  if (isFavorite) {
-                                    ref.read(currentMovieControllerProvider.notifier).removeFavorite(currentMovie.id);
-                                  } else {
-                                    ref.read(currentMovieControllerProvider.notifier).addFavorite(currentMovie.id);
-                                  }
+                                  ref.read(currentMovieControllerProvider.notifier).removeFavorite(currentMovie.id);
                                 },
                                 iconSize: 35,
-                                icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: Colors.white),
+                                icon: Icon(Icons.favorite, color: Colors.white),
+                              ),
+                              if (!isFavorite) IconButton(
+                                onPressed: () {
+                                  ref.read(currentMovieControllerProvider.notifier).addFavorite(currentMovie.id);
+                                },
+                                iconSize: 35,
+                                icon: const Icon(Icons.favorite_border_outlined, color: Colors.white),
                               ),
                             ],
                           ),

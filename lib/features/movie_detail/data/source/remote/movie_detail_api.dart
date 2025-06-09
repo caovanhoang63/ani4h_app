@@ -1,6 +1,7 @@
 import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/favorite_add_request/favorite_add_request.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/is_favorite_response/is_favorite_response.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/movie_detail_response/movie_detail_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +23,7 @@ abstract class MovieDetailApi {
   Future<MovieDetailResponse> getMovieDetail(@Path("id") String id);
 
   @GET("$favoriteEndPoint/is-favorite")
-  Future<bool> isFavorite(@Query("userId") String id, @Query("filmId") String filmId);
+  Future<IsFavoriteResponse> isFavorite(@Query("userId") String id, @Query("filmId") String filmId);
 
   @POST("$favoriteEndPoint/add")
   Future<void> addToFavorite(@Body() FavoriteAddRequest request);

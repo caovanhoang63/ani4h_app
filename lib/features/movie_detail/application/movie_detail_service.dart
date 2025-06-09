@@ -1,6 +1,7 @@
 import 'package:ani4h_app/common/exception/failure.dart';
 import 'package:ani4h_app/features/movie_detail/application/imovie_detail_service.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/favorite_add_request/favorite_add_request.dart';
+import 'package:ani4h_app/features/movie_detail/data/dto/is_favorite_response/is_favorite_response.dart';
 import 'package:ani4h_app/features/movie_detail/data/dto/movie_detail_response/movie_detail_response.dart';
 import 'package:ani4h_app/features/movie_detail/domain/mapper/imovie_model_mapper.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
@@ -76,7 +77,7 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
   Future<Result<bool, Failure>> getIsFavorite(String userId, String movieId) async {
     try {
       final response = await _movieDetailRepository.getIsFavorite(userId, movieId);
-      return Result.success(response);
+      return Result.success(mapToIsFavoriteModel(response));
     } on Failure catch (e) {
       return Error(e);
     } catch (e, s) {
@@ -124,5 +125,10 @@ final class MovieDetailService implements IMovieDetailService, IMovieModelMapper
         ),
       );
     }
+  }
+
+  @override
+  bool mapToIsFavoriteModel(IsFavoriteResponse response) {
+    return response.data;
   }
 }
