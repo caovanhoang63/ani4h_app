@@ -75,7 +75,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              context.push(loginRoute);
             },
             child: Container(
               margin: const EdgeInsets.fromLTRB(16,20,16,20),
