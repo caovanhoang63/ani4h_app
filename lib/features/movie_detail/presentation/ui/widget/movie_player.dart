@@ -7,8 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MoviePlayer extends ConsumerStatefulWidget {
   final EpisodeDetailModel episode;
+  final VoidCallback? onNextEpisode;
 
-  const MoviePlayer({super.key, required this.episode});
+  const MoviePlayer({super.key, required this.episode, this.onNextEpisode});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _MoviePlayerState();
@@ -293,6 +294,14 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
         _isLoading = false; // Hide loading indicator when buffering ends
       });
       // You can listen to other events like finished, error, etc.
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
+      setState(() {
+        _isPlaying = false; // Reset play state when video finishes
+      });
+      // Optionally, trigger next episode if available
+      if (widget.onNextEpisode != null) {
+        widget.onNextEpisode!();
+      }
     }
   }
 
@@ -1318,8 +1327,7 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                                     // Next Episode Button (Placeholder)
                                     InkWell(
                                       onTap: () {
-                                        print('Next Episode button pressed');
-                                        // Add logic to load the next episode
+                                        widget.onNextEpisode?.call();
                                       },
                                       child: const Padding(
                                         padding: EdgeInsets.symmetric(
@@ -1342,7 +1350,9 @@ class _MoviePlayerState extends ConsumerState<MoviePlayer> {
                                     // ),
                                     // Fullscreen Button
                                     InkWell(
-                                      onTap: _toggleFullscreen,
+                                      onTap: () {
+                                        _toggleFullscreen();
+                                      },
                                       // Use Better Player's fullscreen toggle
                                       child: const Padding(
                                         padding: EdgeInsets.symmetric(

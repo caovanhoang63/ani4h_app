@@ -1,5 +1,6 @@
 import 'package:ani4h_app/core/data/remote/endpoint.dart';
 import 'package:ani4h_app/core/data/remote/network_service.dart';
+import 'package:ani4h_app/features/search/data/dto/content_based_response/content_based_response.dart';
 import 'package:ani4h_app/features/search/data/dto/search_result_response/search_result_response.dart';
 import 'package:ani4h_app/features/search/data/dto/top_hot_response/top_hot_response.dart';
 import 'package:ani4h_app/features/search/data/dto/user_favorite_response/user_favorite_response.dart';
@@ -34,6 +35,7 @@ abstract class SearchApi {
 
   @GET("$searchEndPoint/user-favorite")
   Future<UserFavoriteResponse> getUserFavorite(
+      @Query("userId") String? userId,
       @Query("seed") int seed,
       @Query("page") int page,
       @Query("pageSize") int pageSize,
@@ -41,6 +43,15 @@ abstract class SearchApi {
 
   @GET("$searchEndPoint/user-history")
   Future<UserHistoryResponse> getUserHistory(
+      @Query("userId") String? userId,
+      @Query("seed") int seed,
+      @Query("page") int page,
+      @Query("pageSize") int pageSize,
+  );
+
+  @GET("$searchEndPoint/content-based")
+  Future<ContentBasedResponse> getContentBasedSuggestion(
+      @Query("filmId") String filmId,
       @Query("seed") int seed,
       @Query("page") int page,
       @Query("pageSize") int pageSize,

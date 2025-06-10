@@ -20,7 +20,7 @@ class MovieTag extends ConsumerWidget {
         tag.name,
         style: TextStyle(
           color: Colors.white70,
-          fontSize: 8
+          fontSize: 10
         ),
       ),
     );

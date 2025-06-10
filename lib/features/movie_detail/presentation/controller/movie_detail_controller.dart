@@ -33,6 +33,24 @@ class MovieDetailController extends AutoDisposeNotifier<MovieDetailState> {
     );
   }
 
+  void toggleCharacterPanel() {
+    state = state.copyWith(
+      isCharacterExpandOn: !state.isCharacterExpandOn,
+    );
+  }
+
+  void toggleProducerPanel() {
+    state = state.copyWith(
+      isProducerExpandOn: !state.isProducerExpandOn,
+    );
+  }
+
+  void toggleStudioPanel() {
+    state = state.copyWith(
+      isStudioExpandOn: !state.isStudioExpandOn,
+    );
+  }
+
   void closeAllPanels() {
     state = state.copyWith(
       isIntroPanelOn: false,

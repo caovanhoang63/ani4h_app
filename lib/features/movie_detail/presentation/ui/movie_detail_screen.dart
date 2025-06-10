@@ -1,11 +1,12 @@
 import 'package:ani4h_app/common/provider/current_movie_state/current_movie_controller.dart';
+import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/episode_detail_model.dart';
 import 'package:ani4h_app/features/movie_detail/domain/model/movie_detail_model.dart';
-import 'package:ani4h_app/features/movie_detail/presentation/controller/episode_detail_controller.dart';
+import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/character_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/comment_card.dart';
-import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_player.dart';
 import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/movie_tag.dart';
+import 'package:ani4h_app/features/movie_detail/presentation/ui/widget/producer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -64,12 +65,44 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
     bool isIntroVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isIntroPanelOn));
     bool isPlaylistVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isPlaylistPanelOn));
     bool isCommentVisible = ref.watch(movieDetailControllerProvider.select((state) => state.isCommentPanelOn));
+    bool isCharacterExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isCharacterExpandOn));
+    bool isProducerExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isProducerExpandOn));
+    bool isStudioExpandOn = ref.watch(movieDetailControllerProvider.select((state) => state.isStudioExpandOn));
+    bool isFavorite = ref.watch(currentMovieControllerProvider.select((state) => state.isFavorite));
 
     final List<Comment> _comments = [
       Comment(id: 'c1', userAvatarUrl: '', username: 'Huy Bui', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(seconds: 5))),
       Comment(id: 'c2', userAvatarUrl: '', username: 'Royal', text: 'Good movie Combat', time: DateTime.now().subtract(const Duration(minutes: 5))),
       Comment(id: 'c3', userAvatarUrl: '', username: 'Thai Hoang', text: 'GoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGoodddddddddddddddGooddddddddddddddd', time: DateTime.now().subtract(const Duration(hours: 5))),
     ];
+
+    void _playNextEpisode(List<EpisodeDetailModel> episodes, String currentEpisodeId) {
+      if (episodes.isEmpty) {
+        return; // No episodes to play
+      }
+
+      final currentEpisodeIndex = episodes.indexWhere((e) => e.id == currentEpisodeId);
+
+      if (currentEpisodeIndex != -1 && currentEpisodeIndex < episodes.length - 1) {
+        // There's a next episode
+        final nextEpisode = episodes[currentEpisodeIndex + 1];
+        setState(() {
+          selectedIndex = nextEpisode.id;
+        });
+        // You might also want to scroll the playlist to the new episode if it's a long list
+      } else {
+        // No more episodes (end of list)
+        // You could show a toast, alert, or navigate back.
+        print('End of episodes or no next episode found.');
+        // Example: show a snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No more episodes!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
 
     return Scaffold(
       body: Stack(
@@ -88,6 +121,9 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : MoviePlayer(
                   episode: selectedEpisode,
+                    onNextEpisode: () { // Pass the callback here
+                      _playNextEpisode(episodes, selectedIndex);
+                    }
                 ),
               ),
               Expanded(
@@ -100,52 +136,75 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      currentMovie.title,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ref.read(movieDetailControllerProvider.notifier).openIntroPanel();
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context).size.width * 0.5, // Adjust width as needed
+                                            child: Text(
+                                              currentMovie.title,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                              maxLines: 1,  // Ensures the text stays on a single line
+                                            ),
+                                          ),
+                                          if (selectedEpisode  != null)
+                                            Text(
+                                              'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
+                                              style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                        ],
                                       ),
-                                      overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                      maxLines: 1,  // Ensures the text stays on a single line
-                                    ),
-                                    if (selectedEpisode  != null)
-                                      Text(
-                                        'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 12,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
+                                      Expanded(
+                                        child: SizedBox()
                                       ),
-                                  ],
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Introduce',
+                                            style: TextStyle(
+                                                color: Colors.white70,
+                                                fontSize: 14
+                                            ),
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
+                                        ]
+                                      ),
+                                    ]
+                                  ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  ref.read(movieDetailControllerProvider.notifier).openIntroPanel();
+                              if (isFavorite) IconButton(
+                                onPressed: () {
+                                  ref.read(currentMovieControllerProvider.notifier).removeFavorite(currentMovie.id);
                                 },
-                                child: Row(
-                                    children: [
-                                      Text(
-                                        'Introduce',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 10
-                                        ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
-                                    ]
-                                ),
-                              )
+                                iconSize: 35,
+                                icon: Icon(Icons.favorite, color: Colors.white),
+                              ),
+                              if (!isFavorite) IconButton(
+                                onPressed: () {
+                                  ref.read(currentMovieControllerProvider.notifier).addFavorite(currentMovie.id);
+                                },
+                                iconSize: 35,
+                                icon: const Icon(Icons.favorite_border_outlined, color: Colors.white),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
@@ -180,7 +239,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               children: [
                                 Text(
                                   'Playlist (${episodes.length} episodes)',
-                                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
                               ],
@@ -244,33 +303,13 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               children: [
                                 Text(
                                   'Comment',
-                                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
                               ],
                             ),
                           ),
                           const SizedBox(height: 20),
-                          // Bottom icon buttons
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.add_circle_outline, color: Colors.white),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.download_outlined, color: Colors.white),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                iconSize: 35,
-                                icon: Icon(Icons.share_outlined, color: Colors.white),
-                              ),
-                            ],
-                          ),
                           // Suggested Movies
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,20 +317,31 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                               Text(
                                 'You may also like',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              const SizedBox(
+                              (ref.read(currentMovieControllerProvider.select((value) => value.similarMovies.length)) > 0)
+                                  ? SizedBox(
+                                height: MediaQuery.of(context).size.width * 0.4,
+                                child: ListView.builder(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: ref.read(currentMovieControllerProvider.select((value) => value.similarMovies.length)),
+                                  itemBuilder: (context, index) {
+                                    return MovieCard(item: ref.read(currentMovieControllerProvider.select((value) => value.similarMovies))[index], isPush: false);
+                                  },
+                                ),
+                              ) : const SizedBox(
                                 height: 150,
                                 child: Center(
                                   child: Text(
                                     'No suggestions available',
                                     style: TextStyle(
                                       color: Colors.white70,
-                                      fontSize: 12,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -317,33 +367,65 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.65,
-                                  child: Text(
-                                    currentMovie.title,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context).size.width * 0.5, // Adjust width as needed
+                                              child: Text(
+                                                currentMovie.title,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
+                                                maxLines: 1,  // Ensures the text stays on a single line
+                                              ),
+                                            ),
+                                            if (selectedEpisode  != null)
+                                              Text(
+                                                'Episode ${selectedEpisode.episodeNumber}: ${selectedEpisode.title}',
+                                                style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 14,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                          ],
+                                        ),
+                                        Expanded(
+                                            child: SizedBox()
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Introduce',
+                                              style: TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 14
+                                              ),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Icon(Icons.keyboard_arrow_right, color: Colors.white70, size: 24),
+                                          ]
+                                        ),
+                                      ]
                                     ),
-                                    overflow: TextOverflow.ellipsis,  // Adds the ellipsis when the text overflows
-                                    maxLines: 1,  // Ensures the text stays on a single line
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    ref.read(movieDetailControllerProvider.notifier).closeAllPanels();
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Introduce',
-                                        style: TextStyle(color: Colors.white70, fontSize: 10),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
-                                    ]
-                                  ),
+                                IconButton(
+                                  onPressed: () {},
+                                  iconSize: 35,
+                                  icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border_outlined, color: Colors.white),
                                 ),
                               ],
                             ),
@@ -374,17 +456,101 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start, // Align content to the start
                                   children: [
                                     // Synopsis Text
-                                    currentMovie.synopsis != null
-                                        ? Text(
-                                      currentMovie.synopsis!,
+                                    Text(
+                                      currentMovie.synopsis,
                                       style: const TextStyle( // Added const
                                         color: Colors.white,
-                                        fontSize: 10,
+                                        fontSize: 12,
                                         height: 1.5,
                                       ),
                                       overflow: TextOverflow.visible, // Ensure all text is visible
-                                    )
-                                        : const SizedBox(height: 8), // Placeholder if no synopsis
+                                    ),
+                                    const SizedBox(height: 16),
+                                    // Characters & Cast Section
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleCharacterPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Characters & Cast',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isCharacterExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isCharacterExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: GridView.builder(
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: currentMovie.characters.length,
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12,
+                                            mainAxisSpacing: 12,
+                                            childAspectRatio: 2.25 / 2,
+                                          ),
+                                          itemBuilder: (context, index) {
+                                            final character = currentMovie.characters[index];
+                                            return CharacterCard(character: character);
+                                          },
+                                        ),
+                                      ),
+                                    const SizedBox(height: 16),
+                                    // Producers Section
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleProducerPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Producers',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isProducerExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isProducerExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: Wrap(
+                                          spacing: 12,
+                                          runSpacing: 12,
+                                          children: currentMovie.producers.map((producer) {
+                                            return ProducerCard(producer: producer);
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    const SizedBox(height: 16),
+                                    // Studios Section
+                                    GestureDetector(
+                                      onTap: () => ref.read(movieDetailControllerProvider.notifier).toggleStudioPanel(),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Studios',
+                                            style: Theme.of(context).textTheme.titleMedium,
+                                          ),
+                                          Icon(isStudioExpandOn ? Icons.expand_less : Icons.expand_more),
+                                        ],
+                                      ),
+                                    ),
+                                    if (isStudioExpandOn)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12.0),
+                                        child: Wrap(
+                                          spacing: 12,
+                                          runSpacing: 12,
+                                          children: currentMovie.studios.map((studio) {
+                                            return ProducerCard(producer: studio); // Reusing ProducerCard for studios
+                                          }).toList(),
+                                        ),
+                                      ),
                                   ],
                                 ),
                               ),
@@ -415,7 +581,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 children: [
                                   Text(
                                     'Playlist (${episodes.length} episodes)',
-                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
                                 ],
@@ -441,7 +607,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                         partName,
                                         style: TextStyle(
                                           color: isPartSelected ? Colors.red : Colors.white70, // Highlight selected part
-                                          fontSize: 12,
+                                          fontSize: 14,
                                           fontWeight: isPartSelected ? FontWeight.bold : FontWeight.normal,
                                         ),
                                       ),
@@ -520,7 +686,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                 children: [
                                   Text(
                                     'Comment',
-                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.keyboard_arrow_down, color: Colors.white70, size: 24),
                                 ],
@@ -551,7 +717,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                     style: const TextStyle(color: Colors.white), // Text color
                                     decoration: InputDecoration(
                                       hintText: 'Add a comment...',
-                                      hintStyle: TextStyle(color: Colors.white54, fontSize: 10),
+                                      hintStyle: TextStyle(color: Colors.white54, fontSize: 12),
                                       filled: true,
                                       fillColor: Colors.grey[800], // Background color
                                       border: OutlineInputBorder(
@@ -580,7 +746,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                   ),
                                   child: const Text(
                                     'Comment',
-                                    style: TextStyle(color: Colors.white, fontSize: 10),
+                                    style: TextStyle(color: Colors.white, fontSize: 12),
                                   ),
                                 ),
                               ],

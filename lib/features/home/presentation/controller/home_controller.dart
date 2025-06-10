@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:ani4h_app/common/dtos/paging.dart';
+import 'package:ani4h_app/common/provider/user_id_state/user_id_state_provider.dart';
+import 'package:ani4h_app/core/data/local/secure_storage/secure_storage.dart';
 import 'package:ani4h_app/features/search/application/search_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../state/home_state.dart';
@@ -24,7 +26,7 @@ class HomeController extends AutoDisposeNotifier<HomeState> {
         page: 1,
         pageSize: 6,
       );
-
+     
       final result = await ref.read(searchServiceProvider).getTopHot(paging);
       result.when(
         (success) {
@@ -94,6 +96,8 @@ class HomeController extends AutoDisposeNotifier<HomeState> {
   }
 
   Future<void> fetchUserFavorite() async {
+    final userId = await ref.read(secureStorageProvider).read("userIdState");
+    
     try {
       state = state.copyWith(
         isLoading: true,
@@ -105,7 +109,7 @@ class HomeController extends AutoDisposeNotifier<HomeState> {
         pageSize: 10,
       );
 
-      final result = await ref.read(searchServiceProvider).getUserFavorites(1, paging);
+      final result = await ref.read(searchServiceProvider).getUserFavorites(userId, 1, paging);
 
       result.when(
             (success) {
@@ -136,6 +140,8 @@ class HomeController extends AutoDisposeNotifier<HomeState> {
   }
 
   Future<void> fetchUserHistorySuggestion() async {
+    final userId = await ref.read(secureStorageProvider).read("userIdState");
+
     try {
       state = state.copyWith(
         isLoading: true,
@@ -147,7 +153,7 @@ class HomeController extends AutoDisposeNotifier<HomeState> {
         pageSize: 10,
       );
 
-      final result = await ref.read(searchServiceProvider).getUserHistory(1, paging);
+      final result = await ref.read(searchServiceProvider).getUserHistory(userId, 1, paging);
 
       result.when(
             (success) {

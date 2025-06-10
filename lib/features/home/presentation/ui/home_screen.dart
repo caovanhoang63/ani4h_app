@@ -1,9 +1,11 @@
 import 'package:ani4h_app/core/data/remote/token/token_service.dart';
+import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/home/presentation/controller/home_controller.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_card.dart';
 import 'package:ani4h_app/features/home/presentation/ui/widget/movie_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -182,7 +184,7 @@ class _MainTabState extends ConsumerState<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
                 child: GestureDetector(
                   onTap: () {
-                    // context.pushNamed();
+                    context.push(searchRoute);
                   },
                   child: Container(
                     height: 40,
