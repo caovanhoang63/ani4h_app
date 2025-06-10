@@ -1,9 +1,13 @@
+import 'package:ani4h_app/common/provider/subscription_state/subscription_state_provider.dart';
 import 'package:ani4h_app/common/provider/user_id_state/user_id_state_provider.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/login/presentation/controller/login_controller.dart';
+import 'package:ani4h_app/features/plan/presentation/controller/subscription_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../core/data/local/secure_storage/secure_storage.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -19,10 +23,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final loginState = ref.watch(loginControllerProvider);
 
     // If login is successful, navigate to main screen
-    ref.listen<LoginState>(loginControllerProvider, (previous, current) {
+    ref.listen<LoginState>(loginControllerProvider, (previous, current) async {
       if (current.isLoggedIn) {
         print("Hello");
         ref.watch(userIdStateProvider.notifier).gerUserIdByEmail(loginController.emailController.text);
+        final secureStorage = ref.watch(secureStorageProvider);
+        final userId = await secureStorage.read("userIdState") ;
+        ref.watch(hasSubscriptionStateProvider.notifier).hasSubscription(userId ?? "");
+        print("Subscription status: ${ref.watch(subscriptionControllerProvider).hasSubscription}");
         context.go(mainRoute);
       }
     });

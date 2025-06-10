@@ -25,7 +25,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       final userId = await secureStorage.read(userIdState);
       print("User ID profile screen: $userId");
       if(userId == null || userId.isEmpty) {
-        context.push(loginRoute);
+        context.push(introRoute);
         return;
       }
       ref.read(profileControllerProvider.notifier).getProfile(userId);

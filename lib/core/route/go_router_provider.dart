@@ -1,28 +1,34 @@
+import 'package:ani4h_app/common/provider/subscription_state/subscription_state_provider.dart';
+import 'package:ani4h_app/core/data/local/secure_storage/secure_storage.dart';
 import 'package:ani4h_app/core/route/route_name.dart';
 import 'package:ani4h_app/features/favorite/presentation/ui/favorite_screen.dart';
 import 'package:ani4h_app/features/history/presentation/ui/history_screen.dart';
+import 'package:ani4h_app/features/intro/presentation/ui/intro_screen.dart';
 import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/payment/presentation/ui/payment_screen.dart';
+import 'package:ani4h_app/features/plan/presentation/ui/plan_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/terms_of_service_screen.dart';
 import 'package:ani4h_app/features/search/presentation/ui/search_screen.dart';
-import 'package:ani4h_app/features/signup/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/signup/presentation/ui/sign_up_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/movie_detail/presentation/ui/movie_detail_screen.dart';
+import '../../features/plan/presentation/controller/subscription_controller.dart';
 import '../provider/refresh_token_provider.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final refreshTokenChecker = ref.watch(refreshTokenProvider);
-
+  final subscriptionChecker = ref.watch(hasSubscriptionStateProvider);
   return GoRouter(
     initialLocation: mainRoute,
     redirect: (context, state) async {
       print("GoRouter redirect called for path: ${state.matchedLocation}");
 
-      if (state.matchedLocation == loginRoute || state.matchedLocation == signupRoute) {
+      if (state.matchedLocation == loginRoute || state.matchedLocation == signupRoute || state.matchedLocation == introRoute || state.matchedLocation == planRoute) {
         print("Skipping token check for login/signup route");
         return null;
       }
@@ -37,9 +43,14 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       if (!hasValidToken) {
         print("No valid token, redirecting to login page");
-        return loginRoute;
+        return introRoute;
       }
-
+      /*final secureStorage = ref.watch(secureStorageProvider);
+      final hasSubscription = await secureStorage.read("hasSubscriptionState") ;
+      if (hasSubscription==null || hasSubscription == "false") {
+        print("No active subscription, redirecting to plan page");
+        return planRoute;
+      }*/
       print("Valid token found, allowing navigation to: ${state.matchedLocation}");
       return null;
     },
@@ -98,5 +109,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: searchRoute,
         builder: (context, state) => const SearchScreen()
     ),
+    GoRoute(
+      path: introRoute,
+      name: introRoute,
+      builder: (context, state) => const IntroScreen()
+    ),
+    GoRoute(
+      path: planRoute,
+      name: planRoute,
+      builder: (context, state) => const PlanScreen()
+    ),
+      GoRoute(path: paymentRoute,name: paymentRoute, builder: (context, state) => const PaymentScreen())
   ]);
 });

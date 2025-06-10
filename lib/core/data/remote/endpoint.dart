@@ -7,3 +7,5 @@ const String searchEndPoint = '/v1/search';
 const String exploreEndPoint = '/v1/search';
 const String genreEndPoint = '/v1/genre';
 const String episodeEndPoint = '/v1/episode';
+const String subscriptionEndPoint = '/v1/subscription';
+const String paymentEndPoint = '/v1/payment';

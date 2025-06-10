@@ -26,7 +26,6 @@ class ProfileService implements IProfileService, IProfileModelMapper, IProfileSi
   Future<Result<ProfileModel, Failure>> getProfile(String id) async {
     try{
       final response = await _repository.getProfile(id);
-      print("profilerepo: getProfile response: $response");
       final model = mapToProfileModel(response);
       return Result.success(model);
     } on Failure catch (e) {

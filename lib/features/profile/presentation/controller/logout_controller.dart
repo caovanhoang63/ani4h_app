@@ -31,7 +31,7 @@ class LogoutController {
       _authState.setAuthState(false);
       
       // Navigate to login screen
-      router.go(loginRoute);
+      router.go(introRoute);
     } catch (e) {
       print("Error during logout: $e");
       // Even if there's an error, try to navigate to login
