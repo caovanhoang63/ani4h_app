@@ -11,7 +11,6 @@ sealed class SignUpRequest with _$SignUpRequest {
     required String password,
      String? firstName,
      String? lastName,
-     String? role,
      String? dateOfBirth,
   }) = _SignUpRequest;
 

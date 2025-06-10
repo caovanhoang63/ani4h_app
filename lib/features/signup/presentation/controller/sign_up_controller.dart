@@ -71,9 +71,8 @@ class SignUpController extends Notifier<SignUpState> {
 
       final signUpRequest = SignUpRequest(
         firstName: nameController.text,
-        lastName: '',
+        lastName: 'cao',
         email: emailController.text,
-        role: 'user',
         dateOfBirth: "2004-03-12",
         password: passwordController.text,
       );

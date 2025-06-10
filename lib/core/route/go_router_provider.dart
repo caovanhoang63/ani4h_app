@@ -28,7 +28,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) async {
       print("GoRouter redirect called for path: ${state.matchedLocation}");
 
-      if (state.matchedLocation == loginRoute || state.matchedLocation == signupRoute || state.matchedLocation == introRoute || state.matchedLocation == planRoute) {
+      if (state.matchedLocation == loginRoute || state.matchedLocation == paymentRoute ||state.matchedLocation == signupRoute || state.matchedLocation == introRoute || state.matchedLocation == planRoute) {
         print("Skipping token check for login/signup route");
         return null;
       }
@@ -45,12 +45,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         print("No valid token, redirecting to login page");
         return introRoute;
       }
-      /*final secureStorage = ref.watch(secureStorageProvider);
+      final secureStorage = ref.watch(secureStorageProvider);
       final hasSubscription = await secureStorage.read("hasSubscriptionState") ;
       if (hasSubscription==null || hasSubscription == "false") {
         print("No active subscription, redirecting to plan page");
         return planRoute;
-      }*/
+      }
       print("Valid token found, allowing navigation to: ${state.matchedLocation}");
       return null;
     },

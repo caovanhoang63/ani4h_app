@@ -19,6 +19,6 @@ final paymentApiProvider = Provider<PaymentApi>((ref) {
 abstract class PaymentApi {
   factory PaymentApi(Dio dio) => _PaymentApi(dio);
 
-  @GET("$userEndPoint/create")
+  @POST("$paymentEndPoint/create")
   Future<PaymentResponse> getPaymentUrl(@Body() PaymentRequest request);
 }
