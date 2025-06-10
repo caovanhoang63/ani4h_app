@@ -114,7 +114,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 contentPadding: const EdgeInsets.fromLTRB(16,0,16,0),
                 title: const Text("History", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
-                onTap: () {
+                onTap: ()  {
+                  context.pushNamed(historyRoute);
                 },
               ),
                 ListTile(
@@ -122,6 +123,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 title: const Text("Favorite", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 onTap: () {
+                  context.pushNamed(favoriteRoute);
                 },
               ),
                 ListTile(
