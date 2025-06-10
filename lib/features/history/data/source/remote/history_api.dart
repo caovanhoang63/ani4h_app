@@ -1,5 +1,6 @@
 import 'package:ani4h_app/core/data/remote/network_service.dart';
 import 'package:ani4h_app/features/history/data/dto/history_response/history_response.dart';
+import 'package:ani4h_app/features/history/data/dto/upsert_request/upsert_request.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:retrofit/http.dart';
@@ -29,4 +30,9 @@ abstract class HistoryApi {
 
   @DELETE(historyEndPoint)
   Future<void> deleteHistory(@Query("movieId") int movieId);
+
+  @POST(historyEndPoint + "/upsert")
+  Future<void> upsertHistory(
+      @Body() UpsertRequest request,
+  );
 }

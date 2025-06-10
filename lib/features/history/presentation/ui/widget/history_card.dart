@@ -20,7 +20,7 @@ class HistoryCard extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.id);
+        ref.read(currentMovieControllerProvider.notifier).fetchCurrentMovie(item.filmId);
         context.replaceNamed(movieDetailRoute);
       },
       child: Container(

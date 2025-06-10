@@ -43,6 +43,8 @@ class CurrentMovieController extends Notifier<CurrentMovieState> {
             isLoading: false,
             hasError: false,
           );
+
+
           if (userId != null) {
             final isFavoriteRes = await ref.read(movieDetailServiceProvider).getIsFavorite(userId, success.id);
             isFavoriteRes.when(

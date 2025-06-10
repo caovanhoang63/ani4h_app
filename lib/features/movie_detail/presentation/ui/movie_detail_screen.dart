@@ -59,6 +59,8 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
         setState(() {
           selectedIndex = episodes.first.id;
         });
+
+        ref.read(movieDetailControllerProvider.notifier).startWatch(episodes.first.id);
       });
     }
 
@@ -88,6 +90,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
         final nextEpisode = episodes[currentEpisodeIndex + 1];
         setState(() {
           selectedIndex = nextEpisode.id;
+          ref.read(movieDetailControllerProvider.notifier).startWatch(nextEpisode.id);
         });
         // You might also want to scroll the playlist to the new episode if it's a long list
       } else {
@@ -265,6 +268,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       // Update the selected index
                                       setState(() {
                                         selectedIndex = episode.id;
+                                        ref.read(movieDetailControllerProvider.notifier).startWatch(episode.id);
                                       });
 
                                       print('Tapped on item with ID: ${episode.id}, Index: ${episode.episodeNumber}, Url: ${episode.videoUrl}');
@@ -634,6 +638,7 @@ class _MovieDetailScreenState extends ConsumerState<MovieDetailScreen> {
                                       print('Tapped on grid item with ID: ${episode.id}');
                                       setState(() {
                                         selectedIndex = episode.id;
+                                        ref.read(movieDetailControllerProvider.notifier).startWatch(episode.id);
                                       });
                                     },
                                     borderRadius: BorderRadius.circular(6), // Match container border radius for ripple effect

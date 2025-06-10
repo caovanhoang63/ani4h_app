@@ -83,6 +83,7 @@ final class HistoryService implements IHistoryService, IHistoryModelMapper {
         viewCount: e.viewCount,
         duration: e.duration,
         watchedDuration: e.watchedDuration,
+        filmId: e.filmId,
       )
     ).toList();
   }

@@ -13,5 +13,6 @@ sealed class HistoryModel with _$HistoryModel {
     required int viewCount,
     required int duration,
     required int watchedDuration,
+    required String filmId
   }) = _HistoryModel;
 }

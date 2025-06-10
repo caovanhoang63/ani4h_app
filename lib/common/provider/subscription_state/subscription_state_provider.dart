@@ -18,7 +18,7 @@ class HasSubscriptionState extends Notifier<bool> {
       subscription.when(
             (data) async {
           final secureStorage = ref.read(secureStorageProvider);
-          await secureStorage.write(hasSubscriptionState, data as String);
+          await secureStorage.write(hasSubscriptionState, data.toString());
         },
             (failure) {
           print("Error fetching user ID: ${failure.message}");

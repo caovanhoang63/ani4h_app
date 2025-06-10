@@ -36,19 +36,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       ref.read(historyControllerProvider.notifier).fetchMoreHistory();
     }
   }
-  
-  final List<HistoryModel> historyItems = [
-    HistoryModel(
-    id: '1',
-    title: 'Naruto',
-    synopsis: 'Japan',
-    imageUrl: 'https://photo.znews.vn/w660/Uploaded/piqbzcvo/2024_01_19/Screenshot_2024_01_19_at_21.34.40.png',
-    episodeNumber: 1,
-    viewCount: 1000,
-    duration: 1500,
-    watchedDuration: 1200,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context){

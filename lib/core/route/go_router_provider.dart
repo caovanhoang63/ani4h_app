@@ -47,6 +47,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
       final secureStorage = ref.watch(secureStorageProvider);
       final hasSubscription = await secureStorage.read("hasSubscriptionState") ;
+      print("Has subscription state: $hasSubscription");
       if (hasSubscription==null || hasSubscription == "false") {
         print("No active subscription, redirecting to plan page");
         return planRoute;

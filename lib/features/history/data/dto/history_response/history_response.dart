@@ -24,6 +24,7 @@ sealed class History with _$History {
     required int viewCount,
     required int duration,
     required int watchedDuration,
+    required String filmId,
   }) = _History;
 
   factory History.fromJson(Map<String, dynamic> json) => _$HistoryFromJson(json);
