@@ -45,6 +45,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   multiple_result: ^5.1.0
   better_player_plus: ^1.0.8
+  flutter_inappwebview: ^6.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

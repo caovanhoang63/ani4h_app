@@ -62,7 +62,7 @@ class PlanScreen extends StatelessWidget {
                     'Multi-device access',
                   ],
                   isPopular: true,
-                  onSelect: () => (),
+                  onSelect: () => (context.pushNamed(paymentRoute)),
                 ),
                 const SizedBox(height: 24),
               ],

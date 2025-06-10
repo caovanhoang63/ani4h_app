@@ -6,6 +6,7 @@ import 'package:ani4h_app/features/history/presentation/ui/history_screen.dart';
 import 'package:ani4h_app/features/intro/presentation/ui/intro_screen.dart';
 import 'package:ani4h_app/features/main/presentation/ui/main_screen.dart';
 import 'package:ani4h_app/features/login/presentation/ui/login_screen.dart';
+import 'package:ani4h_app/features/payment/presentation/ui/payment_screen.dart';
 import 'package:ani4h_app/features/plan/presentation/ui/plan_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/account_screen.dart';
 import 'package:ani4h_app/features/profile/presentation/ui/setting_screen.dart';
@@ -44,12 +45,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         print("No valid token, redirecting to login page");
         return introRoute;
       }
-      final secureStorage = ref.watch(secureStorageProvider);
+      /*final secureStorage = ref.watch(secureStorageProvider);
       final hasSubscription = await secureStorage.read("hasSubscriptionState") ;
       if (hasSubscription==null || hasSubscription == "false") {
         print("No active subscription, redirecting to plan page");
         return planRoute;
-      }
+      }*/
       print("Valid token found, allowing navigation to: ${state.matchedLocation}");
       return null;
     },
@@ -118,5 +119,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       name: planRoute,
       builder: (context, state) => const PlanScreen()
     ),
+      GoRoute(path: paymentRoute,name: paymentRoute, builder: (context, state) => const PaymentScreen())
   ]);
 });
